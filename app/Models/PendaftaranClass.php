@@ -10,10 +10,12 @@ class PendaftaranClass extends Model
     protected $table = 'pendaftaran_class';
 
     protected $fillable = [
-        'nama', 'email', 'nohp', 'id_jeniskelas', 'kelas', 'jenjang_pendidikan',
-        'mata_pelajaran', 'jadwal_konfirmasi', 'jadwal_pilihan', 'harga',
-        'bukti_pembayaran', 'status_pembayaran'
-    ];
+    'nama', 'email', 'nohp', 'id_jeniskelas', 'kelas',
+    'id_jenjang_pendidikan', 'id_mata_pelajaran', // <- ganti di sini
+    'jadwal_konfirmasi', 'jadwal_pilihan', 'harga',
+    'bukti_pembayaran', 'status_pembayaran'
+];
+
 
 
     protected $casts = [
@@ -27,13 +29,19 @@ class PendaftaranClass extends Model
 
     public function mataPelajaran()
     {
-        return $this->belongsTo(MataPelajaran::class, 'id_mata_pelajaran');
+        return $this->belongsTo(MataPelajaran::class, 'mata_pelajaran', 'id_mata_pelajaran');
     }
+
+    public function jenjangPendidikan()
+    {
+        return $this->belongsTo(JenjangPendidikan::class, 'jenjang_pendidikan', 'id_jenjang_pendidikan');
+    }
+
+
 
     public function jadwalKelas()
     {
         return $this->belongsTo(JadwalKelas::class, 'jadwal_konfirmasi');
     }
-
 
 }

@@ -24,7 +24,7 @@
                 <h5 class="card-title">Data Promosi Class</h5>
                 <div>
                     <a href="{{ route('admin.promosi_class.create') }}" class="btn btn-primary btn-sm">+ Tambah Promosi Class</a>
-                    <a href="{{ route('admin.pendaftaran_class.index') }}" class="btn btn-success btn-sm">Pendaftaran</a>
+                    {{-- <a href="{{ route('admin.pendaftaran_class.index') }}" class="btn btn-success btn-sm">Pendaftaran</a> --}}
                 </div>
             </div>
             <div class="card-body">

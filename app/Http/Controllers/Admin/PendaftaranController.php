@@ -12,7 +12,8 @@ class PendaftaranController extends Controller
     // Tampilkan semua data pendaftar
     public function index()
     {
-        $pendaftaranList = PendaftaranClass::all();
+        // >>> Tambahkan eager loading relasi jenjangPendidikan dan mataPelajaran
+        $pendaftaranList = PendaftaranClass::with(['jenjangPendidikan', 'mataPelajaran'])->get();
 
         // Set status default jika kosong
         foreach ($pendaftaranList as $item) {
@@ -27,7 +28,8 @@ class PendaftaranController extends Controller
     // Tampilkan detail dari satu pendaftaran
     public function show($id)
     {
-        $pendaftaran = PendaftaranClass::findOrFail($id);
+        // >>> Tambahkan eager loading relasi juga di sini
+        $pendaftaran = PendaftaranClass::with(['jenjangPendidikan', 'mataPelajaran'])->findOrFail($id);
 
         // Decode jadwal_pilihan jika dalam format JSON string
         if (is_string($pendaftaran->jadwal_pilihan)) {
@@ -64,7 +66,8 @@ class PendaftaranController extends Controller
     // Tampilkan form verifikasi pembayaran
     public function showVerifikasiPembayaranForm($id)
     {
-        $pendaftaran = PendaftaranClass::findOrFail($id);
+        // >>> Tambahkan eager loading relasi supaya tampil lengkap kalau butuh nama jenjang/mapel
+        $pendaftaran = PendaftaranClass::with(['jenjangPendidikan', 'mataPelajaran'])->findOrFail($id);
 
         return view('admin.pendaftaran.verifikasi_pembayaran', compact('pendaftaran'));
     }

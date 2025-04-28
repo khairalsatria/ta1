@@ -72,46 +72,26 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('promosi_class', PromosiClassController::class);
 });
 
-// use App\Http\Controllers\Siswa\PendaftaranController as SiswaPendaftaranController;
-// use App\Http\Controllers\Admin\PendaftaranController as AdminPendaftaranController;
+use App\Http\Controllers\Admin\MentorController;
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('mentor', MentorController::class);
+});
 
-// // Route siswa
-// Route::prefix('siswa')->name('siswa.')->group(function () {
-//     Route::get('/pendaftaran', [SiswaPendaftaranController::class, 'create'])->name('pendaftaran.form');
-//     Route::post('/pendaftaran', [SiswaPendaftaranController::class, 'store'])->name('pendaftaran.store');
-//     Route::get('/upload-bukti/{id}', [SiswaPendaftaranController::class, 'uploadForm'])->name('pendaftaran.uploadForm');
-//     Route::post('/upload-bukti/{id}', [SiswaPendaftaranController::class, 'uploadBukti'])->name('pendaftaran.uploadBukti');
-// });
-
-// Route admin
-// Route::prefix('admin')->name('admin.')->group(function () {
-//     Route::get('/pendaftaran/{id}/konfirmasi-jadwal', [AdminPendaftaranController::class, 'konfirmasiJadwalForm'])->name('pendaftaran.konfirmasiJadwalForm');
-//     Route::post('/pendaftaran/{id}/konfirmasi-jadwal', [AdminPendaftaranController::class, 'konfirmasiJadwal'])->name('pendaftaran.konfirmasiJadwal');
-// });
-
-// AJAX
-// Route::get('/mata-pelajaran/by-jenjang/{id}', [SiswaPendaftaranController::class, 'mataPelajaranByJenjang']);
-
-// Route::get('/pendaftaran/{id}/verifikasi-pembayaran', [AdminPendaftaranController::class, 'verifikasiPembayaranForm'])->name('pendaftaran.verifikasiPembayaranForm');
-// Route::post('/pendaftaran/{id}/verifikasi-pembayaran', [AdminPendaftaranController::class, 'verifikasiPembayaran'])->name('pendaftaran.verifikasiPembayaran');
-
-// Route::get('/siswa/dashboard/email', [SiswaPendaftaranController::class, 'formEmail'])->name('siswa.dashboard.form');
-// Route::post('/siswa/dashboard', [SiswaPendaftaranController::class, 'dashboard'])->name('siswa.dashboard');
+use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
+Route::prefix('mentor')->name('mentor.')->group(function () {
+    Route::get('/dashboard', [MentorDashboardController::class, 'index'])->name('dashboard');
+});
+// Route admin dashboard tanpa middleware auth
+Route::prefix('admin')->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+});
 
 Route::get('/mata-pelajaran/by-jenjang/{id}', function ($id) {
     $mataPelajaran = \App\Models\MataPelajaran::where('jenjang_pendidikan', $id)->get();
     return response()->json($mataPelajaran);
 });
 
-// use App\Http\Controllers\Admin\PendaftaranController;
-
-// Route::post('/admin/pendaftaran/verifikasi-pembayaran/{id}', [PendaftaranController::class, 'verifikasiPembayaran'])
-//     ->name('admin.pendaftaran.verifikasiPembayaran');
-
-// routes/web.php
-
 use App\Http\Controllers\Admin\PendaftaranController;
-
 Route::prefix('admin')->group(function () {
     Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('admin.pendaftaran.index');
     Route::get('/pendaftaran/{id}', [PendaftaranController::class, 'show'])->name('admin.pendaftaran.show');
@@ -121,11 +101,8 @@ Route::prefix('admin')->group(function () {
 });
 
 
-
 use App\Http\Controllers\Siswa\PendaftaranController as SiswaPendaftaranController;
-
 use App\Http\Controllers\Siswa\DashboardController as SiswaDashboardController;
-// Route siswa dashboard tanpa middleware auth
 Route::prefix('siswa')->group(function () {
     Route::get('/dashboard', [SiswaDashboardController::class, 'index'])->name('siswa.dashboard');
     Route::get('/pendaftaran', [SiswaPendaftaranController::class, 'create'])->name('siswa.pendaftaran.form');
@@ -135,3 +112,40 @@ Route::post('/pendaftaran/dashboard/{id}', [SiswaPendaftaranController::class, '
 Route::get('/pendaftaran/upload/{id}', [SiswaPendaftaranController::class, 'uploadForm'])->name('siswa.pendaftaran.uploadForm');
 Route::post('/pendaftaran/upload/{id}', [SiswaPendaftaranController::class, 'uploadBukti'])->name('siswa.pendaftaran.uploadBukti');
 });
+
+use App\Http\Controllers\Landing\HomeController;
+Route::get('/home', [HomeController::class, 'home'])->name(name: 'landing.home');
+Route::get('/about', [HomeController::class, 'about'])->name(name: 'landing.about');
+Route::get('/detail-course  ', [HomeController::class, 'detailCourse'])->name(name: 'landing.detail-course');
+
+use App\Http\Controllers\Auth\GoogleController;
+// Google Login
+Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
+
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
+
+Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+Route::post('login', [LoginController::class, 'login']);
+
+Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+Route::post('register', [RegisterController::class, 'register']);
+
+Route::get('/home', function () {
+    return view('landing.page.home');  // Atau sesuaikan dengan halaman utama kamu.
+})->name('home');
+
+
+
+// Dashboard setelah login
+// Route::get('/home', function () {
+//     return view('home');
+// })->middleware('auth');
+
+use Illuminate\Support\Facades\Auth;
+
+// Route::post('logout', function () {
+//     Auth::logout();
+//     return redirect()->route('login');
+// })->name('logout');
