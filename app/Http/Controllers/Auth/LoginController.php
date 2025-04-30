@@ -44,16 +44,16 @@ protected function redirectBasedOnRole()
     $role = Auth::user()->role;
 
     if ($role == 'user') {
-        return redirect()->route('home'); // Redirect ke halaman home untuk user
+        return redirect()->route('landing.page.home'); // Ganti dari 'home' ke 'landing.page.home'
     } elseif ($role == 'mentor') {
-        return redirect()->route('mentor.dashboard'); // Redirect ke halaman mentor.dashboard untuk mentor
+        return redirect()->route('mentor.dashboard');
     } elseif ($role == 'admin') {
-        return redirect()->route('admin.dashboard'); // Redirect ke halaman admin.dashboard untuk admin
+        return redirect()->route('admin.dashboard');
     }
 
-    // Default redirect if no role matches (this is optional, depending on your app's logic)
-    return redirect()->route('home');
+    return redirect()->route('landing.page.home'); // Default redirect
 }
+
 
 
 }

@@ -1,10 +1,10 @@
 @extends('mentor.layout.main')
 
-@section('title', 'Dashboard Admin')
+@section('title', 'Dashboard Mentor')
 
 @section('content')
 <div class="page-heading">
-    <h3>Horizontal Layout</h3>
+    <h3>Profile Statistics</h3>
 </div>
 <div class="page-content">
     <section class="row">
@@ -99,7 +99,7 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-7">
                                     <div class="d-flex align-items-center">
                                         <svg class="bi text-primary" width="32" height="32" fill="blue"
                                             style="width:10px">
@@ -109,15 +109,15 @@
                                         <h5 class="mb-0 ms-3">Europe</h5>
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <h5 class="mb-0">862</h5>
+                                <div class="col-5">
+                                    <h5 class="mb-0 text-end">862</h5>
                                 </div>
                                 <div class="col-12">
                                     <div id="chart-europe"></div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-7">
                                     <div class="d-flex align-items-center">
                                         <svg class="bi text-success" width="32" height="32" fill="blue"
                                             style="width:10px">
@@ -127,15 +127,15 @@
                                         <h5 class="mb-0 ms-3">America</h5>
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <h5 class="mb-0">375</h5>
+                                <div class="col-5">
+                                    <h5 class="mb-0 text-end">375</h5>
                                 </div>
                                 <div class="col-12">
                                     <div id="chart-america"></div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-7">
                                     <div class="d-flex align-items-center">
                                         <svg class="bi text-danger" width="32" height="32" fill="blue"
                                             style="width:10px">
@@ -145,8 +145,8 @@
                                         <h5 class="mb-0 ms-3">Indonesia</h5>
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <h5 class="mb-0">1025</h5>
+                                <div class="col-5">
+                                    <h5 class="mb-0 text-end">1025</h5>
                                 </div>
                                 <div class="col-12">
                                     <div id="chart-indonesia"></div>
@@ -176,7 +176,7 @@
                                                     <div class="avatar avatar-md">
                                                         <img src="./assets/compiled/jpg/5.jpg">
                                                     </div>
-                                                    <p class="font-bold ms-3 mb-0">Cantik</p>
+                                                    <p class="font-bold ms-3 mb-0">Si Cantik</p>
                                                 </div>
                                             </td>
                                             <td class="col-auto">
@@ -189,7 +189,7 @@
                                                     <div class="avatar avatar-md">
                                                         <img src="./assets/compiled/jpg/2.jpg">
                                                     </div>
-                                                    <p class="font-bold ms-3 mb-0">Ganteng</p>
+                                                    <p class="font-bold ms-3 mb-0">Si Ganteng</p>
                                                 </div>
                                             </td>
                                             <td class="col-auto">
@@ -207,8 +207,7 @@
         </div>
         <div class="col-12 col-lg-3">
             <div class="card">
-                <div class="card-body py-4 px-5">
-
+                <div class="card-body py-4 px-4">
                     <div class="d-flex align-items-center">
                         <div class="avatar avatar-xl">
                             <img src="./assets/compiled/jpg/1.jpg" alt="Face 1">
@@ -253,8 +252,7 @@
                         </div>
                     </div>
                     <div class="px-4">
-                        <button class='btn btn-block btn-xl btn-light-primary font-bold mt-3'>Start
-                            Conversation</button>
+                        <button class='btn btn-block btn-xl btn-outline-primary font-bold mt-3'>Start Conversation</button>
                     </div>
                 </div>
             </div>

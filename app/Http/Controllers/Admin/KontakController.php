@@ -27,7 +27,7 @@ class KontakController extends Controller
         $request->validate([
             'kontak' => 'required|max:255',
             'isi' => 'nullable|max:255',
-            'link' => 'nullable|max:255',
+            'link' => 'nullable|max:1000',
         ]);
 
         Kontak::create($request->all());
@@ -49,7 +49,7 @@ class KontakController extends Controller
         $request->validate([
             'kontak' => 'required|max:255',
             'isi' => 'nullable|max:255',
-            'link' => 'nullable|max:255',
+            'link' => 'nullable|max:1000',
         ]);
 
         $kontak = Kontak::findOrFail($id);

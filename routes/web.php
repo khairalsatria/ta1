@@ -62,6 +62,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('blog', BlogController::class);
 });
 
+use App\Http\Controllers\Admin\MediaPartnerController;
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('media-partners', MediaPartnerController::class);
+});
+
 use App\Http\Controllers\Admin\GenzeGuideController;
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('genze_guides', GenzeGuideController::class);
@@ -77,10 +82,24 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('mentor', MentorController::class);
 });
 
+use App\Http\Controllers\Admin\UserController;
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('user', UserController::class);
+});
+
+
+use App\Http\Controllers\Admin\ProgramController;
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('program', ProgramController::class);
+});
+
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
 Route::prefix('mentor')->name('mentor.')->group(function () {
-    Route::get('/dashboard', [MentorDashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', [MentorDashboardController::class, 'index'])->name('mwntor.dashboard');
 });
+
+
+
 // Route admin dashboard tanpa middleware auth
 Route::prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
@@ -113,10 +132,13 @@ Route::get('/pendaftaran/upload/{id}', [SiswaPendaftaranController::class, 'uplo
 Route::post('/pendaftaran/upload/{id}', [SiswaPendaftaranController::class, 'uploadBukti'])->name('siswa.pendaftaran.uploadBukti');
 });
 
-use App\Http\Controllers\Landing\HomeController;
-Route::get('/home', [HomeController::class, 'home'])->name(name: 'landing.home');
-Route::get('/about', [HomeController::class, 'about'])->name(name: 'landing.about');
-Route::get('/detail-course  ', [HomeController::class, 'detailCourse'])->name(name: 'landing.detail-course');
+
+
+use App\Http\Controllers\Landing\PageController;
+Route::get('/home', [PageController::class, 'home'])->name('landing.page.home');
+Route::get('/about', [PageController::class, 'about'])->name(name: 'landing.page.about');
+Route::get('/program', [PageController::class, 'program'])->name(name: 'landing.page.program');
+Route::get('/program/{id}', [PageController::class, 'detailProgram'])->name(name: 'landing.page.detail-program');
 
 use App\Http\Controllers\Auth\GoogleController;
 // Google Login
@@ -132,20 +154,8 @@ Route::post('login', [LoginController::class, 'login']);
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [RegisterController::class, 'register']);
 
-Route::get('/home', function () {
-    return view('landing.page.home');  // Atau sesuaikan dengan halaman utama kamu.
-})->name('home');
-
-
-
-// Dashboard setelah login
 // Route::get('/home', function () {
-//     return view('home');
-// })->middleware('auth');
+//     return view('landing.page.home');  // Atau sesuaikan dengan halaman utama kamu.
+// })->name('home');
 
-use Illuminate\Support\Facades\Auth;
 
-// Route::post('logout', function () {
-//     Auth::logout();
-//     return redirect()->route('login');
-// })->name('logout');

@@ -9,24 +9,35 @@
         </button>
         <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
             <div class="navbar-nav mx-auto py-0">
-                <a href="{{ url('/') }}" class="nav-item nav-link active">Home</a>
-                <a href="{{ url('/about') }}" class="nav-item nav-link">About</a>
-                <a href="{{ url('/courses') }}" class="nav-item nav-link">Courses</a>
-                <div class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Pages</a>
-                    <div class="dropdown-menu m-0">
-                        <a href="{{ url('/detail') }}" class="dropdown-item">Course Detail</a>
-                        <a href="{{ url('/feature') }}" class="dropdown-item">Our Features</a>
-                        <a href="{{ url('/team') }}" class="dropdown-item">Instructors</a>
-                        <a href="{{ url('/testimonial') }}" class="dropdown-item">Testimonial</a>
-                    </div>
-                </div>
-                <a href="{{ url('/contact') }}" class="nav-item nav-link">Contact</a>
+                <a href="{{ url('/home') }}" class="nav-item nav-link {{ request()->is('home') ? 'active' : '' }}">Home</a>
+                <a href="{{ url('/about') }}" class="nav-item nav-link {{ request()->is('about') ? 'active' : '' }}">About</a>
+                <a href="{{ url('/program') }}" class="nav-item nav-link {{ request()->is('program') ? 'active' : '' }}">Program</a>
+                <a href="{{ url('/courses') }}" class="nav-item nav-link {{ request()->is('courses') ? 'active' : '' }}">Team</a>
+                <a href="{{ url('/testimoni') }}" class="nav-item nav-link {{ request()->is('testimoni') ? 'active' : '' }}">Testimoni</a>
+                <a href="{{ url('/contact') }}" class="nav-item nav-link {{ request()->is('contact') ? 'active' : '' }}">Contact</a>
             </div>
-            <a href="{{ route('login') }}" class="btn btn-primary py-2 px-4 d-none d-lg-block">Login</a>
 
+            {{-- Login / Authenticated Button --}}
+            @auth
+                <div class="d-flex align-items-center gap-2">
+                    <!-- Link ke profile -->
+                    <a class="btn btn-primary py-2 px-4 d-none d-lg-block">
+                        {{ Auth::user()->name }}
+                    </a>
 
+                    <!-- Logout button dengan ikon -->
+                    <form  method="POST" class="m-0 p-0">
+                        @csrf
+                        <button type="submit" class="btn btn-outline-light d-none d-lg-block" title="Logout">
+                            <i class="fas fa-sign-out-alt"></i>
+                        </button>
+                    </form>
+                </div>
+            @else
+                <a href="{{ route('login') }}" class="btn btn-primary py-2 px-4 d-none d-lg-block">Login</a>
+            @endauth
         </div>
+
     </nav>
 </div>
 <!-- Navbar End -->
