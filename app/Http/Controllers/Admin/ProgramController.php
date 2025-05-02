@@ -10,10 +10,11 @@ class ProgramController extends Controller
 {
     // Tampilkan semua program
     public function index()
-    {
-        $programs = Program::all();
-        return view('admin.program.index', compact('programs'));
-    }
+{
+    $programs = Program::paginate(6); // Menambahkan pagination 6 item per halaman
+    return view('admin.program.index', compact('programs'));
+}
+
 
     // Tampilkan form untuk membuat program baru
     public function create()

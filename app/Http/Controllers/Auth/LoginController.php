@@ -10,7 +10,7 @@ class LoginController extends Controller
 {
     public function showLoginForm()
     {
-        return view('auth.login');
+        return view('landing.layout.navbar'); // Ganti dengan view login yang sesuai
     }
 
     public function login(Request $request)
@@ -54,6 +54,14 @@ protected function redirectBasedOnRole()
     return redirect()->route('landing.page.home'); // Default redirect
 }
 
+public function logout(Request $request)
+    {
+        // Logout the user
+        Auth::logout();
+
+        // Redirect ke halaman home setelah logout
+        return redirect()->route('landing.page.home');
+    }
 
 
 }

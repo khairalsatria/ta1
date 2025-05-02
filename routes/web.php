@@ -12,7 +12,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 use App\Http\Controllers\Admin\DashboardController;
-// Route admin dashboard tanpa middleware auth
 Route::prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 });
@@ -87,7 +86,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('user', UserController::class);
 });
 
-
 use App\Http\Controllers\Admin\ProgramController;
 Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('program', ProgramController::class);
@@ -98,9 +96,6 @@ Route::prefix('mentor')->name('mentor.')->group(function () {
     Route::get('/dashboard', [MentorDashboardController::class, 'index'])->name('mwntor.dashboard');
 });
 
-
-
-// Route admin dashboard tanpa middleware auth
 Route::prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 });
@@ -119,7 +114,6 @@ Route::prefix('admin')->group(function () {
     Route::post('/pendaftaran/{id}/verifikasi-pembayaran', [PendaftaranController::class, 'verifikasiPembayaran'])->name('admin.pendaftaran.verifikasiPembayaran');
 });
 
-
 use App\Http\Controllers\Siswa\PendaftaranController as SiswaPendaftaranController;
 use App\Http\Controllers\Siswa\DashboardController as SiswaDashboardController;
 Route::prefix('siswa')->group(function () {
@@ -132,30 +126,25 @@ Route::get('/pendaftaran/upload/{id}', [SiswaPendaftaranController::class, 'uplo
 Route::post('/pendaftaran/upload/{id}', [SiswaPendaftaranController::class, 'uploadBukti'])->name('siswa.pendaftaran.uploadBukti');
 });
 
-
-
 use App\Http\Controllers\Landing\PageController;
 Route::get('/home', [PageController::class, 'home'])->name('landing.page.home');
 Route::get('/about', [PageController::class, 'about'])->name(name: 'landing.page.about');
 Route::get('/program', [PageController::class, 'program'])->name(name: 'landing.page.program');
 Route::get('/program/{id}', [PageController::class, 'detailProgram'])->name(name: 'landing.page.detail-program');
+Route::get('/team', [PageController::class, 'team'])->name(name: 'landing.page.team');
+Route::get('/kontak', [PageController::class, 'kontak'])->name(name: 'landing.page.kontak');
+
 
 use App\Http\Controllers\Auth\GoogleController;
-// Google Login
 Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-
 Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('login', [LoginController::class, 'login']);
-
+Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [RegisterController::class, 'register']);
-
-// Route::get('/home', function () {
-//     return view('landing.page.home');  // Atau sesuaikan dengan halaman utama kamu.
-// })->name('home');
 
 

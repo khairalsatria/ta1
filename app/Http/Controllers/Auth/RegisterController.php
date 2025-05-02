@@ -11,10 +11,10 @@ use Illuminate\Support\Facades\Auth;
 class RegisterController extends Controller
 {
 
-    
+
     public function showRegistrationForm()
     {
-        return view('auth.register');
+        return view('landing.layout.navbar'); // Ganti dengan view registrasi yang sesuai
     }
 
     public function register(Request $request)
@@ -35,7 +35,10 @@ class RegisterController extends Controller
         ]);
 
         Auth::login($user);
+        return redirect()
+        ->route('landing.page.home')
+        ->with('openLoginModal', true)
+        ->with('success', 'Registrasi berhasil! Silakan login.');
 
-        return redirect()->route('home');
     }
 }

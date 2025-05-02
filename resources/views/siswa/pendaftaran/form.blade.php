@@ -76,26 +76,27 @@
 
                     <div class="form-group mb-3">
                         <label for="jenjang">Jenjang Pendidikan</label>
-                        <select name="jenjang_pendidikan" id="jenjang" class="form-select @error('jenjang_pendidikan') is-invalid @enderror" required>
+                        <select name="id_jenjang_pendidikan" id="jenjang" class="form-control @error('id_jenjang_pendidikan') is-invalid @enderror" required>
                             <option value="">-- Pilih Jenjang Pendidikan --</option>
                             <option value="1">SD</option>
                             <option value="2">SMP</option>
                             <option value="3">SMA</option>
                         </select>
-                        @error('jenjang_pendidikan')
+                        @error('id_jenjang_pendidikan')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
 
                     <div class="form-group mb-3">
                         <label for="mataPelajaran">Mata Pelajaran</label>
-                        <select name="mata_pelajaran" id="mataPelajaran" class="form-select @error('mata_pelajaran') is-invalid @enderror" required>
+                        <select name="id_mata_pelajaran" id="mataPelajaran" class="form-select @error('id_mata_pelajaran') is-invalid @enderror" required>
                             <option value="">-- Pilih Mata Pelajaran --</option>
                         </select>
-                        @error('mata_pelajaran')
+                        @error('id_mata_pelajaran')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
 
                     <div class="form-group mb-3">
                         <label class="form-label">Pilih Maksimal 3 Jadwal:</label><br>

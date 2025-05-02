@@ -34,17 +34,27 @@ class PageController extends Controller
         return view('landing.page.detail-course', compact('promosi_classes'));
     }
     public function program()
-{
-    $programs = Program::paginate(6);
-    return view('landing.page.program', compact('programs'));
-}
-
+    {
+        $programs = Program::paginate(6);
+        return view('landing.page.program', compact('programs'));
+    }
 
     public function detailProgram($id)
     {
         $program = Program::findOrFail($id);
         $relatedPrograms = Program::where('id', '!=', $id)->take(4)->get();
         return view('landing.page.detail-program', compact('program', 'relatedPrograms'));
+    }
+
+    public function team()
+    {
+        $mentors = User::where('role', 'mentor')->get();
+        return view('landing.page.team', compact('mentors'));
+    }
+
+    public function kontak()
+    {
+        return view('landing.page.kontak');
     }
 
 

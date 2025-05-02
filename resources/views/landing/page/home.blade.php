@@ -6,11 +6,12 @@
        <!-- Header Start -->
     <div class="jumbotron jumbotron-fluid position-relative overlay-bottom" style="margin-bottom: 90px;">
         <div class="container text-center my-5 py-5">
-            <h1 class="text-white mt-4 mb-4">Learn From Home</h1>
-            <h1 class="text-white display-1 mb-5">Education Courses</h1>
+            {{-- <h1 class="text-white mb-5">Education Program</h1> --}}
+            <h1 class="text-white display-1 mt-4 mb-4">Empowering the Next Generation of Learners</h1>
+            <h1 class="text-white  mt-4 mb-4">Achieve More with GenZE</h1>
             <div class="mx-auto mb-5" style="width: 100%; max-width: 600px;">
                 <div class="input-group">
-                    <div class="input-group-prepend">
+                    {{-- <div class="input-group-prepend">
                         <button class="btn btn-outline-light bg-white text-body px-4 dropdown-toggle" type="button" data-toggle="dropdown"
                             aria-haspopup="true" aria-expanded="false">Courses</button>
                         <div class="dropdown-menu">
@@ -22,7 +23,7 @@
                     <input type="text" class="form-control border-light" style="padding: 30px 25px;" placeholder="Keyword">
                     <div class="input-group-append">
                         <button class="btn btn-secondary px-4 px-lg-5">Search</button>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -55,7 +56,7 @@
                         <div class="col-3 px-0">
                             <div class="bg-primary text-center p-4">
                                 <h1 class="text-white" data-toggle="counter-up">1234</h1>
-                                <h6 class="text-uppercase text-white">Online<span class="d-block">Courses</span></h6>
+                                <h6 class="text-uppercase text-white">Online<span class="d-block">Program</span></h6>
                             </div>
                         </div>
                         <div class="col-3 px-0">
@@ -132,8 +133,8 @@
         <div class="row mx-0 justify-content-center pt-5">
             <div class="col-lg-6">
                 <div class="section-title text-center position-relative mb-4">
-                    <h6 class="d-inline-block position-relative text-secondary text-uppercase pb-2">Our Courses</h6>
-                    <h1 class="display-4">Checkout New Releases Of Our Courses</h1>
+                    <h6 class="d-inline-block position-relative text-secondary text-uppercase pb-2">Our Programs</h6>
+                    <h1 class="display-4">Checkout New Releases Of Our Programs</h1>
                 </div>
             </div>
         </div>
@@ -141,11 +142,12 @@
         <div class="owl-carousel courses-carousel">
             @foreach ($programs as $program)
             <div class="courses-item position-relative">
-                <img class="img-fluid w-100"
+                <img class="img-fluid w-80"
                     src="{{ asset('storage/' . $program->gambar) }}"
                     alt="{{ $program->nama_program }}"
-                    style="height: 250px; object-fit: cover;">
+                    style="height: 280px; object-fit: cover;">
                 <div class="courses-text">
+                    <h4 class="text-center text-white px-3">{{ $program->tipe_program }}</h4>
                     <h4 class="text-center text-white px-3">{{ $program->nama_program }}</h4>
                     <div class="border-top w-100 mt-3">
                         <div class="d-flex justify-content-between p-4">
@@ -159,24 +161,6 @@
                 </div>
             </div>
             @endforeach
-
-            <div class="courses-item position-relative">
-                <img class="img-fluid w-100"
-                    src="{{ asset('assets2/img/lainnya.jpg') }}"
-                    alt=Tunggu Program Lainnya
-                    style="height: 250px; object-fit: cover;">
-                <div class="courses-text">
-                    <h4 class="text-center text-white px-3">Coming Soon</h4>
-                    <div class="border-top w-100 mt-3">
-                        <div class="d-flex justify-content-center p-4">
-                            <span class="text-white">Segera Hadir</span>
-                        </div>
-                    </div>
-                    <div class="w-100 bg-white text-center p-4">
-                        <a class="btn btn-primary" href="">Loading</a>
-                    </div>
-                </div>
-            </div>
         </div>
 
         @php
@@ -232,8 +216,8 @@
     <div class="container-fluid py-5">
         <div class="container py-5">
             <div class="section-title text-center position-relative mb-5">
-                <h6 class="d-inline-block position-relative text-secondary text-uppercase pb-2">Instructors</h6>
-                <h1 class="display-4">Meet Our Instructors</h1>
+                <h6 class="d-inline-block position-relative text-secondary text-uppercase pb-2">Team</h6>
+                <h1 class="display-4">Meet Our Team</h1>
             </div>
             <div class="owl-carousel team-carousel position-relative" style="padding: 0 30px;">
                 @foreach ($mentors as $mentor)
@@ -269,7 +253,7 @@
             <div class="row align-items-center">
                 <div class="col-lg-5 mb-5 mb-lg-0">
                     <div class="section-title position-relative mb-4">
-                        <h6 class="d-inline-block position-relative text-secondary text-uppercase pb-2">Testimonial</h6>
+                        <h6 class="d-inline-block position-relative text-secondary text-uppercase pb-2">Testimonial & FAQ</h6>
                         <h1 class="display-4">What Say Our Students</h1>
                     </div>
                     <p class="m-0">Dolor est dolores et nonumy sit labore dolores est sed rebum amet, justo duo ipsum sanctus dolore magna rebum sit et. Diam lorem ea sea at. Nonumy et at at sed justo est nonumy tempor. Vero sea ea eirmod, elitr ea amet diam ipsum at amet. Erat sed stet eos ipsum diam</p>
@@ -301,99 +285,184 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ====== FAQ Section Start -->
+
+            <div class="container py-5">
+                <div class="section-title position-relative mb-6 text-center">
+                    {{-- <h6 class="d-inline-block position-relative text-secondary text-uppercase pb-2">Any Questions</h6> --}}
+                    {{-- <h1 class="text-center mb-5">FAQ</h1> --}}
+                </div>
+
+                <div class="row align-items-stretch">
+                    <!-- FAQ List -->
+                    <div class="col-md-7 d-flex">
+                        <div class="w-100">
+                            <div id="faqAccordion">
+                                @php
+                                    $faqs = [
+                                        ['question' => 'Apa itu GenZE Class?', 'answer' => 'GenZE Class adalah program bimbingan belajar yang menyediakan kelas online dan offline.'],
+                                        ['question' => 'Bagaimana cara mendaftar?', 'answer' => 'Isi form pendaftaran di website dan pilih jadwal yang sesuai.'],
+                                        ['question' => 'Apakah saya bisa memilih lebih dari satu jadwal?', 'answer' => 'Ya, Anda bisa memilih hingga 3 pilihan jadwal.'],
+                                        ['question' => 'Apa yang saya dapat setelah bergabung?', 'answer' => 'Akses materi PDF, soal latihan, rekaman sesi, dan Zoom Meeting untuk belajar.']
+                                    ];
+                                @endphp
+
+                                @foreach($faqs as $index => $faq)
+                                <div class="card border-0 mb-3 shadow-sm">
+                                    <div class="card-header bg-white p-3 d-flex justify-content-between align-items-center"
+                                         style="cursor:pointer;"
+                                         data-toggle="collapse"
+                                         data-target="#faq{{ $index }}"
+                                         aria-expanded="false"
+                                         aria-controls="faq{{ $index }}">
+                                        <span class="font-weight-semibold">{{ $faq['question'] }}</span>
+                                        <span class="text-primary">+</span>
+                                    </div>
+                                    <div id="faq{{ $index }}" class="collapse" data-parent="#faqAccordion">
+                                        <div class="card-body text-muted">
+                                            {{ $faq['answer'] }}
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Illustration -->
+                    <div class="col-md-5 d-flex align-items-center">
+                        <div class="w-100 text-center">
+                            <img src="{{ asset('assets2/img/faq.png') }}" alt="FAQ Illustration" class="img-fluid mb-3" style="max-width: 300px;">
+                            {{-- <h5 class="font-weight-bold">Masih Bingung?</h5>
+                            <p class="text-muted">Hubungi tim kami jika pertanyaanmu belum terjawab.</p> --}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <style>
+                .card-header:hover {
+                 background-color: #f8f9fa;
+             }
+             .card-header span:last-child {
+                 font-size: 20px;
+             }
+
+                 </style>
+             <!-- ====== FAQ Section End -->
+
         </div>
     </div>
     <!-- Testimonial Start -->
 
 
+
+
+
+
     <!-- Contact Start -->
-    @php
-    use App\Models\Kontak;
-    $kontaks = Kontak::all();
+      <!-- Contact Start -->
+@php
+use App\Models\Kontak;
+$kontaks = Kontak::all();
 @endphp
 
 <div class="container-fluid py-5">
-    <div class="container py-5">
-        <div class="section-title position-relative mb-5 text-center">
-            <h6 class="d-inline-block position-relative text-secondary text-uppercase pb-2">Our Contact</h6>
-            <h1 class="display-4">Find Us On Social Media</h1>
-        </div>
-        <div class="row justify-content-center mt-3">
-            <!-- Kolom Kiri: Semua Info Kontak -->
-            @foreach ($kontaks as $kontak)
-                @php
-                    $tipe = strtolower($kontak->kontak);
-                    $icon = 'fa-info-circle';
-                    $warna = 'primary';
-                    $link = in_array($tipe, ['whatsapp','instagram', 'facebook', 'tiktok']) ? $kontak->link : null;
-
-                    switch ($tipe) {
-                        case 'alamat':
-                            $icon = 'fa-map-marker-alt'; $warna = 'primary'; break;
-                        case 'telepon':
-                            $icon = 'fa-phone-alt'; $warna = 'secondary'; break;
-                        case 'email':
-                            $icon = 'fa-envelope'; $warna = 'warning'; break;
-                        case 'instagram':
-                            $icon = 'fab fa-instagram'; $warna = 'danger'; break;
-                        case 'facebook':
-                            $icon = 'fab fa-facebook-f'; $warna = 'primary'; break;
-                        case 'tiktok':
-                            $icon = 'fab fa-tiktok'; $warna = 'dark'; break;
-                    }
-                @endphp
-
-                <div class="col-4 col-md-2 mb-4 d-flex justify-content-center">
-                    @if ($link)
-                        <a href="{{ $link }}" target="_blank" class="text-decoration-none text-dark">
-                    @endif
-                        <div class="text-center d-flex flex-column align-items-center">
-                            <!-- Logo/Icon -->
-                            <div class="btn-icon bg-{{ $warna }} mb-3 d-flex align-items-center justify-content-center rounded-circle" style="width: 70px; height: 70px;">
-                                <i class="fa fa-2x {{ $icon }} text-white"></i>
-                            </div>
-                            <!-- Teks Kontak -->
-                            <div>
-                                <h5 class="mb-2">{{ ucfirst($tipe) }}</h5>
-                                <p class="m-0">{{ $kontak->isi }}</p>
-                            </div>
-                        </div>
-                    @if ($link)
-                        </a>
-                    @endif
-                </div>
-            @endforeach
-
-            @if($kontaks->isEmpty())
-                <div class="col-12 text-center">
-                    <p>Belum ada kontak yang ditampilkan.</p>
-                </div>
-            @endif
-        </div>
+<div class="container py-5">
+    <div class="section-title position-relative mb-5 text-center">
+        <h6 class="d-inline-block position-relative text-secondary text-uppercase pb-2">Our Contact</h6>
+        <h1 class="text-center mb-5">Find Us on Social Media</h1>
     </div>
+
+    <div class="row justify-content-center mt-3">
+        @foreach ($kontaks as $kontak)
+            @php
+                $tipe = strtolower($kontak->kontak);
+                $link = in_array($tipe, ['whatsapp','instagram', 'facebook', 'tiktok']) ? $kontak->link : null;
+
+                switch ($tipe) {
+                    case 'alamat':
+                        $icon = ['fas', 'fa-map-marker-alt']; $warna = '#dc3545'; break;
+                    case 'telepon':
+                        $icon = ['fas', 'fa-phone-alt']; $warna = '#6c757d'; break;
+                    case 'email':
+                        $icon = ['fas', 'fa-envelope']; $warna = '#ffc107'; break;
+                    case 'instagram':
+                        $icon = ['fab', 'fa-instagram']; $warna = '#C13584'; break;
+                    case 'facebook':
+                        $icon = ['fab', 'fa-facebook-f']; $warna = '#1877F2'; break;
+                    case 'tiktok':
+                        $icon = ['fab', 'fa-tiktok']; $warna = '#010101'; break;
+                    case 'whatsapp':
+                        $icon = ['fab', 'fa-whatsapp']; $warna = '#25D366'; break;
+                    default:
+                        $icon = ['fas', 'fa-info-circle']; $warna = '#0d6efd'; break;
+                }
+            @endphp
+
+            <div class="col-6 col-md-3 col-lg-2 mb-4 d-flex justify-content-center animate-fade-up">
+                @if ($link)
+                    <a href="{{ $link }}" target="_blank" class="text-decoration-none text-dark w-100">
+                @endif
+
+                <div class="contact-card text-center d-flex flex-column align-items-center p-3 rounded shadow-sm h-100 transition">
+                    <div class="btn-icon mb-3 d-flex align-items-center justify-content-center rounded-circle shadow"
+                         style="width: 70px; height: 70px; background-color: {{ $warna }}">
+                        <i class="{{ $icon[0] }} {{ $icon[1] }} fa-2x text-white"></i>
+                    </div>
+                    <h6 class="mb-1">{{ ucfirst($tipe) }}</h6>
+                    <p class="m-0 small text-muted text-wrap">{{ $kontak->isi }}</p>
+                </div>
+
+                @if ($link)
+                    </a>
+                @endif
+            </div>
+        @endforeach
+
+        @if($kontaks->isEmpty())
+            <div class="col-12 text-center">
+                <p>Belum ada kontak yang ditampilkan.</p>
+            </div>
+        @endif
+    </div>
+</div>
 </div>
 
 <style>
-    .logo-size {
-        width: 100%;
-        max-width: 150px;
-        height: auto;
-        object-fit: contain;
+.contact-card {
+    background: #ffffff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+}
+
+.contact-card:hover {
+    transform: translateY(-6px);
+    background-color: rgba(108, 117, 125, 0.1); /* Warna abu-abu transparan */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.btn-icon:hover {
+    transform: rotate(10deg) scale(1.1);
+}
+
+.section-title h1 {
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.animate-fade-up {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.6s ease-out forwards;
+}
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
-    .btn-icon {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+}
 </style>
-
-
-
-
-
-
-
-
 
     <!-- Contact End -->
 @endsection

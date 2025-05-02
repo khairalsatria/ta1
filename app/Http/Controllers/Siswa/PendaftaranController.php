@@ -27,8 +27,8 @@ class PendaftaranController extends Controller
         'nohp' => 'required|string',
         'id_jeniskelas' => 'required|integer',
         'kelas' => 'required|string',
-        'jenjang_pendidikan' => 'required|integer',
-        'mata_pelajaran' => 'required|string',
+        'id_jenjang_pendidikan' => 'required|integer', // Perbarui sesuai kolom
+        'id_mata_pelajaran' => 'required|integer', // Perbarui sesuai kolom
         'harga' => 'required|numeric',
     ]);
 
@@ -38,8 +38,8 @@ class PendaftaranController extends Controller
         'nohp' => $request->nohp,
         'id_jeniskelas' => $request->id_jeniskelas,
         'kelas' => $request->kelas,
-        'jenjang_pendidikan' => $request->jenjang_pendidikan,
-        'mata_pelajaran' => $request->mata_pelajaran,
+        'id_jenjang_pendidikan' => $request->id_jenjang_pendidikan, // Perbarui sesuai kolom
+        'id_mata_pelajaran' => $request->id_mata_pelajaran, // Perbarui sesuai kolom
         'jadwal_pilihan' => json_encode($request->jadwal_pilihan),
         'harga' => $request->harga,
         'status_pembayaran' => 'menunggu_jadwal', // Status awal

@@ -12,9 +12,9 @@
                 <a href="{{ url('/home') }}" class="nav-item nav-link {{ request()->is('home') ? 'active' : '' }}">Home</a>
                 <a href="{{ url('/about') }}" class="nav-item nav-link {{ request()->is('about') ? 'active' : '' }}">About</a>
                 <a href="{{ url('/program') }}" class="nav-item nav-link {{ request()->is('program') ? 'active' : '' }}">Program</a>
-                <a href="{{ url('/courses') }}" class="nav-item nav-link {{ request()->is('courses') ? 'active' : '' }}">Team</a>
+                <a href="{{ url('/team') }}" class="nav-item nav-link {{ request()->is('team') ? 'active' : '' }}">Team</a>
                 <a href="{{ url('/testimoni') }}" class="nav-item nav-link {{ request()->is('testimoni') ? 'active' : '' }}">Testimoni</a>
-                <a href="{{ url('/contact') }}" class="nav-item nav-link {{ request()->is('contact') ? 'active' : '' }}">Contact</a>
+                <a href="{{ url('/kontak') }}" class="nav-item nav-link {{ request()->is('kontak') ? 'active' : '' }}">Contact</a>
             </div>
 
             {{-- Login / Authenticated Button --}}
@@ -26,15 +26,18 @@
                     </a>
 
                     <!-- Logout button dengan ikon -->
-                    <form  method="POST" class="m-0 p-0">
+                    <form method="POST" action="{{ route('logout') }}" class="m-0 p-0">
                         @csrf
                         <button type="submit" class="btn btn-outline-light d-none d-lg-block" title="Logout">
                             <i class="fas fa-sign-out-alt"></i>
                         </button>
                     </form>
+
                 </div>
             @else
-                <a href="{{ route('login') }}" class="btn btn-primary py-2 px-4 d-none d-lg-block">Login</a>
+                <a href="#" class="btn btn-primary py-2 px-4 d-none d-lg-block" data-toggle="modal" data-target="#loginModal">Login</a>
+
+                {{-- <a href="#" class="btn btn-primary py-2 px-4 d-none d-lg-block" data-toggle="modal" data-target="#loginModal">Login</a> --}}
             @endauth
         </div>
 
@@ -42,57 +45,77 @@
 </div>
 <!-- Navbar End -->
 
-{{-- <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content login-modal-content">
-            <div class="row no-gutters">
+<!--Modal Login-->
 
-                <!-- Left Side -->
-                <div class="col-md-6 login-left">
-                    <div class="illustration">
-                        <img src="{{ asset('images/illustration.png') }}" alt="Illustration" class="img-fluid">
-                    </div>
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content border-0 shadow-lg rounded-5 overflow-hidden" style="background-color: #fff7ee;">
+            <div class="modal-body d-flex flex-column flex-md-row p-0">
+
+                <!-- Kiri - Ilustrasi dan Slogan -->
+                <div class="col-md-6 bg-light-green d-flex flex-column align-items-center justify-content-center text-center p-4">
+                    <img src="{{ asset('assets2/img/login.png') }}" alt="GenZE Illustration" class="img-fluid mb-3 login-illustration">
+                    <h2 class="fw-bold text-dark">GenZE<br><span class="fw-normal"></span></h2>
                 </div>
 
-                <!-- Right Side -->
-                <div class="col-md-6 login-right p-5">
-                    <div class="modal-header border-0">
-                        <h5 class="modal-title w-100 text-center" id="loginModalLabel">Hello Again!</h5>
+                <!-- Kanan - Form Login -->
+                <div class="col-md-6 bg-white p-5">
+                    <div class="text-end mb-2">
+                        <small>Don't have an account? <a class="text-primary fw-bold" data-dismiss="modal" data-toggle="modal" data-target="#registerModal" href="="">Register here</a></small>
                     </div>
-                    <div class="modal-body p-0">
-                        <p class="text-center mb-4">Welcome back, you've been missed!</p>
 
-                        <form method="POST" action="{{ route('home') }}">
-                            @csrf
-                            <div class="form-group">
-                                <input type="email" class="form-control" name="email" placeholder="Enter email" required>
-                            </div>
-                            <div class="form-group position-relative">
-                                <input type="password" class="form-control" name="password" placeholder="Password" id="passwordField" required>
-                                <span toggle="#passwordField" class="fa fa-fw fa-eye field-icon toggle-password"></span>
-                            </div>
-                            <div class="form-group text-right">
-                                <a href="#" class="small">Recovery Password</a>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-danger btn-block">Sign In</button>
-                            </div>
-                        </form>
 
-                        <div class="text-center mt-4">
-                            <p>Or continue with</p>
-                            <div class="social-login-buttons d-flex justify-content-center">
-                                <a href="{{ route('google.login') }}" class="btn btn-light mr-2">
-                                    <img src="{{ asset('images/google-icon.png') }}" width="20" alt="Google">
-                                </a>
-                                {{-- Tambahkan tombol Facebook/Apple nanti kalau mau
+
+                    <h3 class="fw-bold text-center mb-4">Welcome Back!</h3>
+
+                    <form method="POST" action="{{ route('login') }}">
+                        @csrf
+
+                        <!-- Email/Phone Input -->
+                        <div class="form-group mb-4">
+                            <label for="login" class="form-label fw-semibold text-dark">Email or Phone</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white">
+                                    <i class="bi bi-person-fill text-muted"></i>
+                                </span>
+                                <input type="text" id="login" class="form-control @error('login') is-invalid @enderror" name="login" value="{{ old('login') }}" placeholder="Enter your email or phone" required autofocus>
                             </div>
+                            @error('login')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
 
-                        <div class="text-center mt-4">
-                            <p class="small">Not a member? <a href="#" id="registerLink">Register now</a></p>
+                        <!-- Password Input -->
+                        <div class="form-group mb-4">
+                            <label for="passwordLogin" class="form-label fw-semibold text-dark">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white">
+                                    <i class="bi bi-lock-fill text-muted"></i>
+                                </span>
+                                <input type="password" id="passwordLogin" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Enter your password" required>
+                                <span class="input-group-text bg-white toggle-password" style="cursor: pointer;" onclick="togglePassword()">
+                                    <i class="fa fa-eye text-muted" id="togglePasswordIcon"></i>
+                                </span>
+                            </div>
+                            @error('password')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
                         </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" class="btn w-100 rounded-3 fw-bold py-2" style="background-color: #3ddc97; color: white;">
+                            <i class=></i>Login
+                        </button>
+                    </form>
+
+                    <!-- Google Login -->
+                    <div class="text-center mt-4">
+                        <p class="text-muted"></p>
+                        <a href="{{ route('google.login') }}" class="btn btn-outline-primary rounded-pill px-4 py-2 d-inline-flex align-items-center">
+                            <i class="fab fa-google me-2">  Google</i>
+                        </a>
                     </div>
+
                 </div>
 
             </div>
@@ -100,146 +123,221 @@
     </div>
 </div>
 
+<!-- Toggle password visibility script -->
+<script>
+function togglePassword() {
+    const passwordInput = document.getElementById('passwordLogin');
+    const icon = document.getElementById('togglePasswordIcon');
+    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+    passwordInput.setAttribute('type', type);
+    icon.classList.toggle('fa-eye');
+    icon.classList.toggle('fa-eye-slash');
+}
+</script>
 
-<div class="modal fade" id="registerModal" tabindex="-1" role="dialog" aria-labelledby="registerModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-        <div class="modal-content register-modal-content">
-            <div class="row no-gutters">
-
-                <!-- Left Side -->
-                <div class="col-md-6 login-left">
-                    <div class="illustration">
-                        <img src="{{ asset('images/illustration.png') }}" alt="Illustration" class="img-fluid">
-                    </div>
-                </div>
-
-                <!-- Right Side -->
-                <div class="col-md-6 login-right p-5">
-                    <div class="modal-header border-0">
-                        <h5 class="modal-title w-100 text-center" id="registerModalLabel">Create an Account</h5>
-                    </div>
-                    <div class="modal-body p-0">
-                        <p class="text-center mb-4">Join us and enjoy our services!</p>
-
-                        {{-- <form method="POST" action="{{ route('register') }}">
-                            @csrf
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="name" placeholder="Enter your name" required>
-                            </div>
-                            <div class="form-group">
-                                <input type="email" class="form-control" name="email" placeholder="Enter email" required>
-                            </div>
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="nohp" placeholder="Enter phone number" required>
-                            </div>
-                            <div class="form-group position-relative">
-                                <input type="password" class="form-control" name="password" placeholder="Password" id="passwordFieldRegister" required>
-                                <span toggle="#passwordFieldRegister" class="fa fa-fw fa-eye field-icon toggle-password"></span>
-                            </div>
-                            <div class="form-group position-relative">
-                                <input type="password" class="form-control" name="password_confirmation" placeholder="Confirm Password" required>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-danger btn-block">Sign Up</button>
-                            </div>
-                        </form>
-
-                        <div class="text-center mt-4">
-                            <p>Or continue with</p>
-                            <div class="social-login-buttons d-flex justify-content-center">
-                                <a href="{{ route('google.login') }}" class="btn btn-light mr-2">
-                                    <img src="{{ asset('images/google-icon.png') }}" width="20" alt="Google">
-                                </a>
-                                {{-- Tambahkan tombol Facebook/Apple nanti kalau mau
-                            </div>
-                        </div>
-
-                        <div class="text-center mt-4">
-                            <p class="small">Already have an account? <a href="#" id="loginLink">Login here</a></p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-<!-- Custom CSS -->
+<!-- CSS -->
 <style>
-    .login-modal-content {
-        border-radius: 20px;
-        overflow: hidden;
+    .bg-light-green {
+        background-color: #C6F6E2;
     }
-    .login-left {
-        background: #f7d4f7; /* Soft pink-purple background */
-        display: flex;
-        align-items: center;
-        justify-content: center;
+
+    .modal-content {
+        border-radius: 25px;
     }
-    .login-right {
-        background: #ffffff;
-    }
-    .form-control {
-        border-radius: 10px;
+
+    input.form-control {
         height: 45px;
+        font-size: 14px;
     }
-    .btn-danger {
-        background-color: #FF6B6B;
-        border: none;
-        border-radius: 10px;
-        height: 45px;
-        font-weight: bold;
+
+    .login-illustration {
+        max-height: 280px;
+        width: auto;
+        object-fit: contain;
     }
-    .btn-danger:hover {
-        background-color: #ff4c4c;
+
+    @media (max-width: 768px) {
+        .login-illustration {
+            max-height: 180px;
+        }
     }
-    .social-login-buttons .btn {
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        padding: 0.5rem 1rem;
+
+    .input-group-text {
+        background-color: #fff;
+        border-right: none;
     }
-    .toggle-password {
-        position: absolute;
-        top: 50%;
-        right: 15px;
-        transform: translateY(-50%);
-        cursor: pointer;
-        color: #aaa;
+
+    .input-group .form-control {
+        border-left: none;
     }
-    input::placeholder {
-        color: #aaa;
+
+    .input-group .form-control:focus {
+        box-shadow: none;
     }
 </style>
 
-<!-- Optional: Toggle password visibility -->
+
+
+
+<!-- Modal Register -->
+<div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="registerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-5 overflow-hidden" style="background-color: #fff7ee;">
+            <div class="modal-body d-flex flex-column flex-md-row p-0">
+                <!-- Kiri - Ilustrasi -->
+                <div class="col-md-6 bg-light-green d-flex flex-column align-items-center justify-content-center text-center p-4">
+                    <img src="{{ asset('assets2/img/login.png') }}" alt="GenZE Illustration" class="img-fluid mb-3 login-illustration">
+                    <h2 class="fw-bold text-dark">GenZE<br>
+                </div>
+
+                <!-- Kanan - Form -->
+                <div class="col-md-6 bg-white p-5">
+                    <div class="text-end mb-2">
+                        <small>Already have an account?
+                            <a class="text-primary fw-bold" href="#" data-dismiss="modal" data-toggle="modal" data-target="#loginModal">Login here</a>
+                        </small>
+                    </div>
+
+                    <h3 class="fw-bold text-center mb-4">Create an Account</h3>
+
+                    <form method="POST" action="{{ route('register') }}">
+                        @csrf
+
+                        <!-- Name -->
+                        <div class="form-group mb-3">
+                            <label for="name" class="form-label fw-semibold text-dark">Name</label>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                   id="name" name="name" placeholder="Enter your name"
+                                   value="{{ old('name') }}" required autofocus>
+                            @error('name') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
+
+                        <!-- Email -->
+                        <div class="form-group mb-3">
+                            <label for="email" class="form-label fw-semibold text-dark">Email</label>
+                            <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                   id="email" name="email" placeholder="Enter your email"
+                                   value="{{ old('email') }}" required>
+                            @error('email') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
+
+                        <!-- Phone -->
+                        <div class="form-group mb-3">
+                            <label for="nohp" class="form-label fw-semibold text-dark">Phone Number</label>
+                            <input type="text" class="form-control @error('nohp') is-invalid @enderror"
+                                   id="nohp" name="nohp" placeholder="Enter your phone number"
+                                   value="{{ old('nohp') }}" required>
+                            @error('nohp') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
+
+                        <!-- Password -->
+                        <div class="form-group mb-3">
+                            <label for="passwordRegister" class="form-label fw-semibold text-dark">Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="bi bi-lock-fill text-muted"></i></span>
+                                <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                       id="passwordRegister" name="password" placeholder="Password" required>
+                                <span class="input-group-text bg-white" onclick="togglePassword('passwordRegister', 'toggleIcon1')" style="cursor:pointer;">
+                                    <i class="fa fa-eye text-muted" id="toggleIcon1"></i>
+                                </span>
+                            </div>
+                            @error('password') <small class="text-danger">{{ $message }}</small> @enderror
+                        </div>
+
+                        <!-- Confirm Password -->
+                        <div class="form-group mb-4">
+                            <label for="passwordConfirmationRegister" class="form-label fw-semibold text-dark">Confirm Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-white"><i class="bi bi-lock-fill text-muted"></i></span>
+                                <input type="password" class="form-control"
+                                       id="passwordConfirmationRegister" name="password_confirmation"
+                                       placeholder="Confirm Password" required>
+                                <span class="input-group-text bg-white" onclick="togglePassword('passwordConfirmationRegister', 'toggleIcon2')" style="cursor:pointer;">
+                                    <i class="fa fa-eye text-muted" id="toggleIcon2"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn w-100 rounded-3 fw-bold py-2" style="background-color: #3ddc97; color: white;">
+                            <i href="#" data-dismiss="modal" data-toggle="modal" data-target="#loginModal" class="bi bi-person-plus me-2"></i>Sign Up
+                        </button>
+                    </form>
+
+                    <!-- Google Login -->
+                    <div class="text-center mt-4">
+                        {{-- <p class="text-muted">Atau lanjutkan dengan</p> --}}
+                        <a href="{{ route('google.login') }}" class="btn btn-outline-primary rounded-pill px-4 py-2 d-inline-flex align-items-center">
+                            <i class="fab fa-google me-2"> Google</i>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Toggle Password Script -->
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        const togglePassword = document.querySelector('.toggle-password');
-        const passwordField = document.querySelector('#passwordField');
+    function togglePassword(inputId, iconId) {
+        const input = document.getElementById(inputId);
+        const icon = document.getElementById(iconId);
+        const isPasswordVisible = input.getAttribute('type') === 'text';
 
-        togglePassword.addEventListener('click', function () {
-            const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordField.setAttribute('type', type);
-            this.classList.toggle('fa-eye-slash');
-        });
-    });
-</script>
+        input.setAttribute('type', isPasswordVisible ? 'password' : 'text');
 
-<script>
-    document.getElementById('registerLink').addEventListener('click', function() {
-        $('#loginModal').modal('hide');
-        $('#registerModal').modal('show');
-    });
+        if (isPasswordVisible) {
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        } else {
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        }
+    }
+    </script>
 
-    document.getElementById('loginLink').addEventListener('click', function() {
-        $('#registerModal').modal('hide');
-        $('#loginModal').modal('show');
-    });
-</script> --}}
 
+<!-- CSS (gunakan juga di layout utama jika belum ada) -->
+<style>
+    .bg-light-green {
+        background-color: #C6F6E2;
+    }
+
+    .modal-content {
+        border-radius: 25px;
+    }
+
+    input.form-control {
+        height: 45px;
+        font-size: 14px;
+    }
+
+    .login-illustration {
+        max-height: 280px;
+        width: auto;
+        object-fit: contain;
+    }
+
+    @media (max-width: 768px) {
+        .login-illustration {
+            max-height: 180px;
+        }
+    }
+
+    .input-group-text {
+        background-color: #fff;
+        border-right: none;
+    }
+
+    .input-group .form-control {
+        border-left: none;
+    }
+
+    .input-group .form-control:focus {
+        box-shadow: none;
+    }
+</style>
 
 
 

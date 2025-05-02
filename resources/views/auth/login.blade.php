@@ -1,24 +1,25 @@
-@extends('auth.main')
+{{-- @extends('auth.main')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center align-items-center min-vh-100">
-        <div class="col-md-8">
-            <div class="login-container d-flex shadow rounded-4 overflow-hidden">
+<!-- Login Modal -->
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content login-container shadow rounded-4 overflow-hidden">
+            <div class="modal-body p-0 d-flex">
 
                 <!-- Left Side -->
-                <div class="col-md-6 p-0 login-left d-flex align-items-center justify-content-center">
+                <div class="col-md-6 p-0 login-left d-none d-md-flex align-items-center justify-content-center">
                     <img src="{{ asset('images/illustration-login.png') }}" alt="Login Illustration" class="img-fluid">
                 </div>
 
                 <!-- Right Side -->
-                <div class="col-md-6 p-5 login-right position-relative">
+                <div class="col-md-6 p-4 login-right position-relative">
 
-                    <div class="text-end">
+                    <div class="text-end mb-2">
                         <small>Don't have an account? <a href="{{ route('register') }}" class="text-primary fw-bold">Register here</a></small>
                     </div>
 
-                    <h2 class="fw-bold text-center mt-4">Welcome Back!</h2>
+                    <h2 class="fw-bold text-center">Welcome Back!</h2>
                     <p class="text-center mb-4 text-muted">Login to your account</p>
 
                     <form method="POST" action="{{ route('login') }}">
@@ -38,16 +39,14 @@
                             @enderror
                         </div>
 
-                        <button type="submit" class="btn btn-primary btn-block rounded-3 fw-bold mb-3">Login</button>
+                        <button type="submit" class="btn btn-primary w-100 rounded-3 fw-bold mb-3">Login</button>
                     </form>
 
                     <div class="text-center mt-3">
                         <p class="text-muted">Or continue with</p>
-                        <div class="d-flex justify-content-center gap-3">
-                            <a href="{{ route('google.login') }}" class="btn btn-light border rounded-circle p-2">
-                                <img src="{{ asset('images/google-icon.png') }}" width="24" alt="Google">
-                            </a>
-                        </div>
+                        <a href="{{ route('google.login') }}" class="btn btn-light border rounded-circle p-2">
+                            <img src="{{ asset('images/google-icon.png') }}" width="24" alt="Google">
+                        </a>
                     </div>
 
                 </div>
@@ -56,6 +55,7 @@
         </div>
     </div>
 </div>
+
 @endsection
 
 @push('styles')
@@ -106,3 +106,13 @@
     });
 </script>
 @endpush
+
+
+<script>
+    @if ($errors->has('login') || $errors->has('password'))
+        $(document).ready(function() {
+            $('#loginModal').modal('show');
+        });
+    @endif
+</script>
+ --}}
