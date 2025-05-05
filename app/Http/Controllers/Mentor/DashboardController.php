@@ -11,7 +11,7 @@ class DashboardController extends Controller
     {
         // Kirim data ke view (contoh: total user, total order, dll.)
         $data = [
-            'pageTitle' => 'Dashboard Admin',
+            'pageTitle' => 'Dashboard Mentor',
             'totalUsers' => 150, // Contoh static, bisa ambil dari DB
             'totalOrders' => 75, // Contoh static
         ];

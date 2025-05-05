@@ -55,7 +55,7 @@
                             <td>{{ $program->level }}</td>
                             <td>{{ $program->durasi }}</td>
                             <td>Rp{{ number_format($program->harga, 0, ',', '.') }}</td>
-                            <td>{{ $program->rating }}/10</td>
+                            <td>{{ $program->rating }}</td>
                             <td>
                                 @if($program->gambar)
                                     <img src="{{ asset('storage/' . $program->gambar) }}" alt="Gambar" width="100">

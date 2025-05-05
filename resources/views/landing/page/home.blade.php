@@ -4,7 +4,7 @@
 
 @section('content')
        <!-- Header Start -->
-    <div class="jumbotron jumbotron-fluid position-relative overlay-bottom" style="margin-bottom: 90px;">
+    <div class="jumbotron jumbotron-fluid position-relative overlay-bottom" style="margin-bottom: 100px;">
         <div class="container text-center my-5 py-5">
             {{-- <h1 class="text-white mb-5">Education Program</h1> --}}
             <h1 class="text-white display-1 mt-4 mb-4">Empowering the Next Generation of Learners</h1>

@@ -78,14 +78,19 @@
                         <label for="jenjang">Jenjang Pendidikan</label>
                         <select name="id_jenjang_pendidikan" id="jenjang" class="form-control @error('id_jenjang_pendidikan') is-invalid @enderror" required>
                             <option value="">-- Pilih Jenjang Pendidikan --</option>
-                            <option value="1">SD</option>
-                            <option value="2">SMP</option>
-                            <option value="3">SMA</option>
+                            @foreach ($jenjangPendidikans as $jenjang)
+                                <option value="{{ $jenjang->id_jenjang_pendidikan }}"
+                                    {{ old('id_jenjang_pendidikan') == $jenjang->id_jenjang_pendidikan ? 'selected' : '' }}>
+                                    {{ $jenjang->jenjang_pendidikan }}
+                                </option>
+                            @endforeach
                         </select>
                         @error('id_jenjang_pendidikan')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
+
+
 
                     <div class="form-group mb-3">
                         <label for="mataPelajaran">Mata Pelajaran</label>

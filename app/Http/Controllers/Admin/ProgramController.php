@@ -28,7 +28,7 @@ class ProgramController extends Controller
     {
         $request->validate([
             'nama_program' => 'required|string|max:255',
-            'tipe_program' => 'required|in:GenZE Class,GenZE Guide,GenZE Learn',
+            'tipe_program' => 'required|string|max:255',
             'deskripsi' => 'required|string',
             'fitur' => 'nullable|string',
             'rating' => 'required|numeric|min:0|max:10',
@@ -75,7 +75,7 @@ class ProgramController extends Controller
 
         $request->validate([
             'nama_program' => 'required|string|max:255',
-            'tipe_program' => 'required|in:GenZE Class,GenZE Guide,GenZE Learn',
+            'tipe_program' => 'required|string|max:255',
             'deskripsi' => 'required|string',
             'fitur' => 'nullable|string',
             'rating' => 'required|numeric|min:0|max:10',

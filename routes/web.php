@@ -11,9 +11,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('jenis_kelas', JenisKelasController::class);
 });
 
-use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 Route::prefix('admin')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
+    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 });
 
 use App\Http\Controllers\Admin\MataPelajaranController;
@@ -92,13 +92,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
-Route::prefix('mentor')->name('mentor.')->group(function () {
-    Route::get('/dashboard', [MentorDashboardController::class, 'index'])->name('mwntor.dashboard');
+Route::prefix('mentor')->group(function () {
+    Route::get('/dashboard', [MentorDashboardController::class, 'index'])->name('mentor.dashboard');
 });
 
-Route::prefix('admin')->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
-});
+
 
 Route::get('/mata-pelajaran/by-jenjang/{id}', function ($id) {
     $mataPelajaran = \App\Models\MataPelajaran::where('jenjang_pendidikan', $id)->get();
@@ -148,3 +146,9 @@ Route::get('register', [RegisterController::class, 'showRegistrationForm'])->nam
 Route::post('register', [RegisterController::class, 'register']);
 
 
+use App\Http\Controllers\Siswa\ProfileController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+});

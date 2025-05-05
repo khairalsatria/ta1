@@ -11,14 +11,13 @@ class PendaftaranController extends Controller
     public function create()
     {
         $jenisKelas = JenisKelas::all();
-        $jenjangPendidikan = JenjangPendidikan::all();
         $jadwalKelas = JadwalKelas::all();
         $hargaPromosi = PromosiClass::latest()->first()->harga ?? 0;
 
-        return view('siswa.pendaftaran.form', compact('jenisKelas', 'jenjangPendidikan', 'jadwalKelas', 'hargaPromosi'));
+        $jenjangPendidikans = JenjangPendidikan::all(); // Gunakan plural sesuai yang dipanggil di view
+return view('siswa.pendaftaran.form', compact('jenisKelas', 'jenjangPendidikans', 'jadwalKelas', 'hargaPromosi'));
     }
-
-    public function store(Request $request)
+ public function store(Request $request)
 {
     $request->validate([
         'jadwal_pilihan' => 'required|array|max:3',
@@ -38,8 +37,8 @@ class PendaftaranController extends Controller
         'nohp' => $request->nohp,
         'id_jeniskelas' => $request->id_jeniskelas,
         'kelas' => $request->kelas,
-        'id_jenjang_pendidikan' => $request->id_jenjang_pendidikan, // Perbarui sesuai kolom
-        'id_mata_pelajaran' => $request->id_mata_pelajaran, // Perbarui sesuai kolom
+        'jenjang_pendidikan' => $request->id_jenjang_pendidikan, // Perbarui sesuai kolom
+        'mata_pelajaran' => $request->id_mata_pelajaran, // Perbarui sesuai kolom
         'jadwal_pilihan' => json_encode($request->jadwal_pilihan),
         'harga' => $request->harga,
         'status_pembayaran' => 'menunggu_jadwal', // Status awal
@@ -52,6 +51,7 @@ class PendaftaranController extends Controller
     {
         return view('siswa.pendaftaran.form-email', ['pendaftaran_id' => $id]);
     }
+
 
     public function dashboard(Request $request, $id)
 {

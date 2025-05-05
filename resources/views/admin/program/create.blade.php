@@ -30,7 +30,7 @@
                     @csrf
 
 
-                    <div class="form-group mb-3">
+                    {{-- <div class="form-group mb-3">
                         <label for="tipe_program">Tipe Program</label>
                         <select class="form-control @error('tipe_program') is-invalid @enderror" id="tipe_program" name="tipe_program" required>
                             <option value="">Pilih Tipe Program</option>
@@ -38,6 +38,14 @@
                             <option value="GenZE Guide" {{ old('tipe_program') == 'GenZE Guide' ? 'selected' : '' }}>GenZE Guide</option>
                             <option value="GenZE Learn" {{ old('tipe_program') == 'GenZE Learn' ? 'selected' : '' }}>GenZE Learn</option>
                         </select>
+                        @error('tipe_program')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div> --}}
+
+                    <div class="form-group mb-3">
+                        <label for="tipe_program">Tipe Program</label>
+                        <input type="text" class="form-control @error('tipe_program') is-invalid @enderror" id="tipe_program" name="tipe_program" value="{{ old('tipe_program') }}">
                         @error('tipe_program')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

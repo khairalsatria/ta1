@@ -40,7 +40,7 @@ class PendaftaranController extends Controller
             $pendaftaran->jadwal_pilihan = [];
         }
 
-        $jadwalKelas = JadwalKelas::all();
+        $jadwalKelas = JadwalKelas::whereIn('id_jadwalkelas', (array) $pendaftaran->jadwal_pilihan)->get();
 
         return view('admin.pendaftaran.show', compact('pendaftaran', 'jadwalKelas'));
     }
