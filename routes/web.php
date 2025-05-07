@@ -146,9 +146,44 @@ Route::get('register', [RegisterController::class, 'showRegistrationForm'])->nam
 Route::post('register', [RegisterController::class, 'register']);
 
 
-use App\Http\Controllers\Siswa\ProfileController;
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
+use App\Http\Controllers\PendaftaranProgramController;
+use App\Http\Controllers\PendaftaranClassController;
+use App\Http\Controllers\PendaftaranGuideController;
+use App\Http\Controllers\PendaftaranLearnController;
+Route::post('/pendaftaran/store', [PendaftaranProgramController::class, 'store'])->name('pendaftaran.program.store');
+// Route Siswa - GenZE Class
+Route::prefix('siswa/pendaftaran/genze-class')->name('siswa.pendaftaran.genze-class.')->group(function () {
+    Route::get('/', [PendaftaranClassController::class, 'create'])->name('form');
+    Route::post('/store', [PendaftaranClassController::class, 'store'])->name('store');
 });
+Route::get('/mata-pelajaran/by-jenjang/{id}', [PendaftaranClassController::class, 'mataPelajaranByJenjang'])->name('mata-pelajaran.by-jenjang');
+
+Route::get('/siswa/pendaftaran/email/{id}', [PendaftaranClassController::class, 'formEmail'])->name('siswa.pendaftaran.formEmail');
+
+Route::get('/pendaftaran/genze-class/{program_id}', [PendaftaranClassController::class, 'create'])->name('siswa.pendaftaran.genze-class.form');
+
+// Route::middleware('auth')->group(function () {
+//     Route::post('/pendaftaran-program', [PendaftaranProgramController::class, 'store'])->name('pendaftaran.program.store');
+
+//     // Genze Class
+//     Route::get('/pendaftaran/class/{id}', [PendaftaranClassesController::class, 'create'])->name('siswa.pendaftaran.class');
+//     Route::post('/pendaftaran/class/{id}', [PendaftaranClassesController::class, 'store'])->name('pendaftaran.class.store');
+//     Route::post('/pendaftaran/class/konfirmasi/{id}', [PendaftaranClassesController::class, 'konfirmasiJadwal'])->name('pendaftaran.class.konfirmasi');
+
+//     // Genze Guide
+//     Route::get('/pendaftaran/guide/{id}', [PendaftaranGuidesController::class, 'create'])->name('pendaftaran.guide.create');
+//     Route::post('/pendaftaran/guide/{id}', [PendaftaranGuidesController::class, 'store'])->name('pendaftaran.guide.store');
+//     Route::post('/pendaftaran/guide/konfirmasi/{id}', [PendaftaranGuidesController::class, 'konfirmasiJadwal'])->name('pendaftaran.guide.konfirmasi');
+
+//     // Genze Learn
+//     Route::get('/pendaftaran/learn/{id}', [PendaftaranLearnsController::class, 'create'])->name('pendaftaran.learn.create');
+//     Route::post('/pendaftaran/learn/{id}', [PendaftaranLearnsController::class, 'store'])->name('pendaftaran.learn.store');
+//     Route::post('/pendaftaran/learn/sertifikat/{id}', [PendaftaranLearnsController::class, 'uploadSertifikat'])->name('pendaftaran.learn.sertifikat');
+
+//     // Umum
+//     Route::post('/pendaftaran/upload-bukti/{id}', [PendaftaranProgramController::class, 'uploadBukti'])->name('pendaftaran.upload.bukti');
+//     Route::post('/pendaftaran/verifikasi/{id}/{status}', [PendaftaranProgramController::class, 'verifikasi'])->name('pendaftaran.verifikasi');
+// });
+
+
+

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('pendaftaran_class', function (Blueprint $table) {
+        Schema::create('pendaftaran_kelas', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
             $table->string('email');

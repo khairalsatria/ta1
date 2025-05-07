@@ -21,4 +21,9 @@ class Program extends Model
         'harga',
         'gambar',
     ];
+
+    public function pendaftarans()
+    {
+        return $this->hasMany(PendaftaranProgram::class, 'tipe_program');
+    }
 }

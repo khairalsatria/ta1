@@ -14,9 +14,14 @@ class JadwalKelas extends Model
 
     protected $fillable = ['jadwalkelas'];
 
-    public function jadwal_kelas()
-{
-    return $this->belongsToMany(JadwalKelas::class, 'jadwal_pendaftaran', 'pendaftaran_id', 'jadwal_id');
-}
+//     public function jadwal_kelas()
+// {
+//     return $this->belongsToMany(JadwalKelas::class, 'jadwal_pendaftaran', 'pendaftaran_id', 'jadwal_id');
+// }
+
+public function pendaftaranClass()
+    {
+        return $this->hasMany(PendaftaranClasses::class, 'jadwalkelas_konfirmasi', 'id_jadwalkelas');
+    }
 
 }

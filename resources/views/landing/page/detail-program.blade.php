@@ -58,8 +58,11 @@
             <h6 class="text-white my-3">{{ $program->rating ?? '4.5' }}</h6>
         </div>
         <div class="py-3 px-4">
-            <a class="btn btn-block btn-secondary py-3 px-5" href="">Enroll Now</a>
+            <a href="{{ route('siswa.pendaftaran.genze-class.form', ['program_id' => $program->id]) }}" class="btn btn-block btn-secondary py-3 px-5">
+                Enroll Now {{ $program->nama }}
+            </a>
         </div>
+
     </div>
 
     <!-- Program Terkait Dipindahkan ke Sini -->

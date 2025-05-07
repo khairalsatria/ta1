@@ -26,6 +26,11 @@ class User extends Authenticatable
         'google_id',
     ];
 
+    public function pendaftaranPrograms()
+    {
+        return $this->hasMany(PendaftaranProgram::class, 'user_id');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
