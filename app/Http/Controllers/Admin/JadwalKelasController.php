@@ -45,7 +45,7 @@ class JadwalKelasController extends Controller
 
         if (!empty($jadwal)) {
             JadwalKelas::create([
-                'jadwalkelas' => implode(' dan ', $jadwal)
+                'jadwalkelas' => implode(' & ', $jadwal)
             ]);
         }
 
@@ -91,7 +91,7 @@ public function update(Request $request, $id)
 
     if (!empty($jadwal)) {
         $jadwal_kelas->update([
-            'jadwalkelas' => implode(' dan ', $jadwal)
+            'jadwalkelas' => implode(' & ', $jadwal)
         ]);
     }
 

@@ -91,11 +91,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::resource('program', ProgramController::class);
 });
 
+use App\Http\Controllers\Admin\PendaftaranProgramController as AdminPendaftaranProgramController;
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('pendaftaran/program', AdminPendaftaranProgramController::class);
+});
+
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
 Route::prefix('mentor')->group(function () {
     Route::get('/dashboard', [MentorDashboardController::class, 'index'])->name('mentor.dashboard');
 });
-
 
 
 Route::get('/mata-pelajaran/by-jenjang/{id}', function ($id) {
@@ -105,11 +109,11 @@ Route::get('/mata-pelajaran/by-jenjang/{id}', function ($id) {
 
 use App\Http\Controllers\Admin\PendaftaranController;
 Route::prefix('admin')->group(function () {
-    Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('admin.pendaftaran.index');
-    Route::get('/pendaftaran/{id}', [PendaftaranController::class, 'show'])->name('admin.pendaftaran.show');
-    Route::post('/pendaftaran/{id}/konfirmasi-jadwal', [PendaftaranController::class, 'konfirmasiJadwal'])->name('admin.pendaftaran.konfirmasiJadwal');
-    Route::get('/pendaftaran/{id}/verifikasi-pembayaran', [PendaftaranController::class, 'showVerifikasiPembayaranForm'])->name('admin.pendaftaran.showVerifikasiPembayaranForm');
-    Route::post('/pendaftaran/{id}/verifikasi-pembayaran', [PendaftaranController::class, 'verifikasiPembayaran'])->name('admin.pendaftaran.verifikasiPembayaran');
+    Route::get('/pendaftarann', [PendaftaranController::class, 'index'])->name('admin.pendaftaran.index');
+    Route::get('/pendaftarann/{id}', [PendaftaranController::class, 'show'])->name('admin.pendaftaran.show');
+    Route::post('/pendaftarann/{id}/konfirmasi-jadwal', [PendaftaranController::class, 'konfirmasiJadwal'])->name('admin.pendaftaran.konfirmasiJadwal');
+    Route::get('/pendaftarann/{id}/verifikasi-pembayaran', [PendaftaranController::class, 'showVerifikasiPembayaranForm'])->name('admin.pendaftaran.showVerifikasiPembayaranForm');
+    Route::post('/pendaftarann/{id}/verifikasi-pembayaran', [PendaftaranController::class, 'verifikasiPembayaran'])->name('admin.pendaftaran.verifikasiPembayaran');
 });
 
 use App\Http\Controllers\Siswa\PendaftaranController as SiswaPendaftaranController;
@@ -161,6 +165,25 @@ Route::get('/mata-pelajaran/by-jenjang/{id}', [PendaftaranClassController::class
 Route::get('/siswa/pendaftaran/email/{id}', [PendaftaranClassController::class, 'formEmail'])->name('siswa.pendaftaran.formEmail');
 
 Route::get('/pendaftaran/genze-class/{program_id}', [PendaftaranClassController::class, 'create'])->name('siswa.pendaftaran.genze-class.form');
+
+use App\Http\Controllers\Admin\PendaftaranClassController as AdminPendaftaranClassController;
+
+
+// Admin
+Route::prefix('admin/pendaftaran/class')->name('admin.pendaftaran.class.')->group(function () {
+    Route::get('/', [AdminPendaftaranClassController::class, 'index'])->name('index');
+    Route::get('/{id}', [AdminPendaftaranClassController::class, 'show'])->name('show');
+    Route::put('/{id}/konfirmasi', [AdminPendaftaranClassController::class, 'konfirmasiJadwal'])->name('konfirmasi');
+});
+
+// Siswa melihat status dan upload bukti
+Route::get('/siswa/pendaftaran/status/{id}', function($id) {
+    $pendaftaran = \App\Models\PendaftaranProgram::with('pendaftaranClass.jadwalKonfirmasi')->findOrFail($id);
+    return view('siswa.pendaftaran.status', compact('pendaftaran'));
+})->name('siswa.pendaftaran.status');
+
+Route::post('/siswa/pendaftaran/upload/{id}', [PendaftaranProgramController::class, 'uploadBukti'])->name('siswa.pendaftaran.upload');
+
 
 // Route::middleware('auth')->group(function () {
 //     Route::post('/pendaftaran-program', [PendaftaranProgramController::class, 'store'])->name('pendaftaran.program.store');

@@ -58,9 +58,139 @@
             <h6 class="text-white my-3">{{ $program->rating ?? '4.5' }}</h6>
         </div>
         <div class="py-3 px-4">
-            <a href="{{ route('siswa.pendaftaran.genze-class.form', ['program_id' => $program->id]) }}" class="btn btn-block btn-secondary py-3 px-5">
+            <button class="btn btn-block btn-secondary py-3 px-5" data-bs-toggle="modal" data-bs-target="#daftarModal">
                 Enroll Now {{ $program->nama }}
-            </a>
+            </button>
+<!-- Modal -->
+<div class="modal fade" id="daftarModal" tabindex="-1" aria-labelledby="daftarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content border-0 shadow-lg rounded-5 overflow-hidden" style="background-color: #fff7ee;">
+        <div class="modal-body d-flex flex-column flex-md-row p-0">
+          <!-- Kiri - Ilustrasi -->
+          <div class="col-md-6 bg-light-green d-flex flex-column align-items-center justify-content-center text-center p-4">
+            <img src="{{ asset('assets2/img/login.png') }}" alt="GenZE Illustration" class="img-fluid mb-3 login-illustration">
+            <h2 class="fw-bold text-dark">GenZE<br><small class="text-muted">Empower Your Learning</small></h2>
+          </div>
+
+          <!-- Formulir Pendaftaran Kanan -->
+          <div class="col-md-6 bg-white p-5">
+            <h4 class="fw-bold text-primary text-center mb-4">Pendaftaran GenZE Class</h4>
+
+            <form action="{{ route('siswa.pendaftaran.genze-class.store') }}" method="POST">
+              @csrf
+              <input type="hidden" name="pendaftaran_id" value="{{ request()->get('pendaftaran_id') ?? $pendaftaran_id ?? '' }}">
+              <input type="hidden" name="tipe_program" value="{{ $program->id }}">
+
+              <div class="form-group mb-3">
+                <select name="id_jeniskelas" class="form-select" required>
+                  <option value="">-- Pilih Jenis Kelas --</option>
+                  @foreach($jenisKelas as $jenis)
+                    <option value="{{ $jenis->id_jeniskelas }}">{{ $jenis->jeniskelas }}</option>
+                  @endforeach
+                </select>
+              </div>
+
+              <div class="form-group mb-3">
+                <input type="number" name="kelas" class="form-control" placeholder="Kelas (contoh: 10)" required>
+              </div>
+
+              <div class="form-group mb-3">
+                <select name="id_jenjang_pendidikan" id="jenjang" class="form-select" required>
+                  <option value="">-- Pilih Jenjang Pendidikan --</option>
+                  @foreach($jenjangPendidikans as $jenjang)
+                    <option value="{{ $jenjang->id_jenjang_pendidikan }}">{{ $jenjang->jenjang_pendidikan }}</option>
+                  @endforeach
+                </select>
+              </div>
+
+              <div class="form-group mb-3">
+                <select name="id_mata_pelajaran" id="mataPelajaran" class="form-select" required>
+                  <option value="">-- Pilih Mata Pelajaran --</option>
+                </select>
+              </div>
+
+              <div class="form-group mb-4">
+                <label class="form-label fw-semibold" style="font-size: 0.875rem;">Pilih Maksimal 3 Jadwal:</label>
+                @foreach($jadwalKelas as $jadwal)
+                  <div class="form-check" style="font-size: 0.875rem;">
+                    <input type="checkbox" class="form-check-input" name="jadwal_pilihan[]" value="{{ $jadwal->id_jadwalkelas }}" id="jadwal-{{ $jadwal->id_jadwalkelas }}">
+                    <label class="form-check-label" for="jadwal-{{ $jadwal->id_jadwalkelas }}" style="font-size: 0.875rem;">{{ $jadwal->jadwalkelas }}</label>
+                  </div>
+                @endforeach
+              </div>
+
+
+              <button type="submit" class="btn w-100 rounded-3 fw-bold py-2" style="background-color: #3ddc97; color: white;">
+                Daftar Sekarang
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .bg-light-green {
+      background-color: #C6F6E2;
+    }
+
+    .login-illustration {
+      max-height: 280px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    @media (max-width: 768px) {
+      .login-illustration {
+        max-height: 180px;
+      }
+    }
+  </style>
+
+<!-- Script -->
+<script>
+    (() => {
+        'use strict';
+        const forms = document.querySelectorAll('.needs-validation');
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+    })();
+
+    document.getElementById('jenjang').addEventListener('change', function () {
+        let jenjangId = this.value;
+        fetch('/mata-pelajaran/by-jenjang/' + jenjangId)
+            .then(response => response.json())
+            .then(data => {
+                let mataPelajaran = document.getElementById('mataPelajaran');
+                mataPelajaran.innerHTML = '<option value="">-- Pilih Mata Pelajaran --</option>';
+                data.forEach(item => {
+                    mataPelajaran.innerHTML += `<option value="${item.id_mata_pelajaran}">${item.mata_pelajaran}</option>`;
+                });
+            });
+    });
+
+    const checkboxes = document.querySelectorAll('.jadwal-check');
+    const warning = document.getElementById('jadwal-limit-warning');
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            const checked = document.querySelectorAll('.jadwal-check:checked');
+            if (checked.length > 3) {
+                checkbox.checked = false;
+                warning.classList.remove('d-none');
+                setTimeout(() => warning.classList.add('d-none'), 2000);
+            }
+        });
+    });
+</script>
         </div>
 
     </div>

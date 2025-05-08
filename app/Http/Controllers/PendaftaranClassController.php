@@ -24,12 +24,13 @@ class PendaftaranClassController extends Controller
     $jadwalKelas = JadwalKelas::all();
     $program = Program::findOrFail($program_id); // Program ID bisa 1 atau 6
     // $program = Program::where('tipe_program', 'GenZE Class')->firstOrFail();
-
-    return view('siswa.pendaftaran.genze-class-form', compact(
+    $relatedPrograms = Program::where('id', '!=', $program_id)->take(4)->get();
+    return view('landing.page.detail-program', compact(
         'jenisKelas',
         'jenjangPendidikans',
         'jadwalKelas',
         'program',
+        'relatedPrograms'
     ));
 }
 
