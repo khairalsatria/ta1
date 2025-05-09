@@ -46,6 +46,7 @@ class PageController extends Controller
 
     public function detailProgram($program_id)
     {
+    $programs = Program::all();
     $jenisKelas = JenisKelas::all();
     $jenjangPendidikans = JenjangPendidikan::all();
     $jadwalKelas = JadwalKelas::all();
@@ -57,7 +58,8 @@ class PageController extends Controller
         'jenjangPendidikans',
         'jadwalKelas',
         'program',
-        'relatedPrograms'
+        'relatedPrograms',
+        'programs'
     ));
     }
 

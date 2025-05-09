@@ -60,12 +60,6 @@
 
                 <!-- Kanan - Form Login -->
                 <div class="col-md-6 bg-white p-5">
-                    <div class="text-end mb-2">
-                        <small>Don't have an account? <a class="text-primary fw-bold" data-dismiss="modal" data-toggle="modal" data-target="#registerModal" href="="">Register here</a></small>
-                    </div>
-
-
-
                     <h3 class="fw-bold text-center mb-4">Welcome Back!</h3>
 
                     <form method="POST" action="{{ route('login') }}">
@@ -114,6 +108,9 @@
                         <a href="{{ route('google.login') }}" class="btn btn-outline-primary rounded-pill px-4 py-2 d-inline-flex align-items-center">
                             <i class="fab fa-google me-2">  Google</i>
                         </a>
+                    </div>
+                    <div class="text-center mt-2">
+                        <small>Don't have an account? <a class="text-primary fw-bold" data-dismiss="modal" data-toggle="modal" data-target="#registerModal" href="="">Register here</a></small>
                     </div>
 
                 </div>
@@ -192,13 +189,8 @@ function togglePassword() {
 
                 <!-- Kanan - Form -->
                 <div class="col-md-6 bg-white p-5">
-                    <div class="text-end mb-2">
-                        <small>Already have an account?
-                            <a class="text-primary fw-bold" href="#" data-dismiss="modal" data-toggle="modal" data-target="#loginModal">Login here</a>
-                        </small>
-                    </div>
 
-                    <h3 class="fw-bold text-center mb-4">Create an Account</h3>
+                    <h3 class="fw-bold text-center mb-3">Create an Account</h3>
 
                     <form method="POST" action="{{ route('register') }}">
                         @csrf
@@ -269,6 +261,11 @@ function togglePassword() {
                         <a href="{{ route('google.login') }}" class="btn btn-outline-primary rounded-pill px-4 py-2 d-inline-flex align-items-center">
                             <i class="fab fa-google me-2"> Google</i>
                         </a>
+                    </div>
+                    <div class="text-center mt-2   ">
+                        <small>Already have an account?
+                            <a class="text-primary fw-bold" href="#" data-dismiss="modal" data-toggle="modal" data-target="#loginModal">Login here</a>
+                        </small>
                     </div>
 
                 </div>

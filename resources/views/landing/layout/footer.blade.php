@@ -43,7 +43,7 @@
                     <a class="text-white-50" href="#"><i class="fa fa-angle-right mr-2"></i>SEO</a>
                 </div>
             </div>
-            <div class="mb-5">
+            <div class="col mb-5">
                 <h3 class="text-white mb-4">Quick Links</h3>
                 <div class="d-flex flex-column justify-content-start">
                     <a class="text-white-50 mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Privacy Policy</a>

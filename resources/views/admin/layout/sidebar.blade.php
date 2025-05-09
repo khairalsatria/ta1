@@ -58,8 +58,8 @@
 
     <li class="sidebar-item has-sub {{ request()->is('admin/user*') || request()->is('admin/mentor*') || request()->is('') || request()->is('') || request()->is('') ? 'active' : '' }}">
         <a href="#" class='sidebar-link'>
-            <i class="bi bi-person-check-fill"></i>
-            <span>Data User</span>
+            <i class="bi bi-person"></i>
+            <span>Akun User</span>
         </a>
         <ul class="submenu">
             <li class="submenu-item {{ request()->is('admin/user*') ? 'active' : '' }}">
@@ -68,14 +68,26 @@
             <li class="submenu-item {{ request()->is('admin/mentor*') ? 'active' : '' }}">
                 <a href="{{ url('admin/mentor') }}" class="submenu-link">Mentor</a>
             </li>
-            <li class="submenu-item {{ request()->is('') ? 'active' : '' }}">
-                <a href="{{ url('') }}" class="submenu-link">GenZE Class</a>
+        </ul>
+    </li>
+
+    <li class="sidebar-item has-sub {{ request()->is('admin/pembayaran*') || request()->is('admin/pendaftaran/classes/data*') || request()->is('') || request()->is('') || request()->is('') ? 'active' : '' }}">
+        <a href="#" class='sidebar-link'>
+            <i class="bi bi-person-check-fill"></i>
+            <span>Pendaftaran</span>
+        </a>
+        <ul class="submenu">
+            <li class="submenu-item {{ request()->is('admin/pembayaran') ? 'active' : '' }}">
+                <a href="{{ url('admin/pembayaran') }}" class="submenu-link">Pembayaran</a>
+            </li>
+            <li class="submenu-item {{ request()->is('admin/pendaftaran/classes/data*') ? 'active' : '' }}">
+                <a href="{{ url('admin/pendaftaran/classes/data') }}" class="submenu-link">Pendaftar Class</a>
             </li>
             <li class="submenu-item {{ request()->is('') ? 'active' : '' }}">
-                <a href="{{ url('') }}" class="submenu-link">GenZE Guide</a>
+                <a href="{{ url('') }}" class="submenu-link">Pendaftar Guide</a>
             </li>
             <li class="submenu-item {{ request()->is('') ? 'active' : '' }}">
-                <a href="{{ url('') }}" class="submenu-link">GenZE Learn</a>
+                <a href="{{ url('') }}" class="submenu-link">Pendaftar Learn</a>
             </li>
         </ul>
     </li>
@@ -112,9 +124,9 @@
         </a>
 
         <ul class="submenu">
-            <li class="submenu-item {{ request()->is('admin/genze_guides*') ? 'active' : '' }}">
+            {{-- <li class="submenu-item {{ request()->is('admin/genze_guides*') ? 'active' : '' }}">
                 <a href="{{ url('/admin/genze_guides') }}" class="submenu-link">GenZE Guide</a>
-            </li>
+            </li> --}}
             <li class="submenu-item {{ request()->is('admin/paket_guide*') ? 'active' : '' }}">
                 <a href="{{ url('/admin/paket_guide') }}" class="submenu-link">Paket Guide</a>
             </li>
@@ -124,12 +136,12 @@
         </ul>
     </li>
 
-    <li class="sidebar-item {{ request()->is('admin/genze_learn*') ? 'active' : '' }}">
+    {{-- <li class="sidebar-item {{ request()->is('admin/genze_learn*') ? 'active' : '' }}">
         <a href="{{ url('admin/genze_learn') }}" class='sidebar-link'>
             <i class="bi bi-mic-fill"></i>
             <span>GenZE Learn</span>
         </a>
-    </li>
+    </li> --}}
 
     <li class="sidebar-item has-sub {{ request()->is('admin/blog*') || request()->is('admin/blog*') ? 'active' : '' }}">
         <a href="#" class='sidebar-link'>

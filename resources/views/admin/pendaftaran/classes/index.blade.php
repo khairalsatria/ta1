@@ -47,7 +47,7 @@
                             <td>GenZE Class</td>
                             <td>{{ $class->jadwalKonfirmasi->jadwalkelas ?? 'Belum dikonfirmasi' }}</td>
                             <td>
-                                <a href="{{ route('admin.pendaftaran.class.show', $class->id) }}" class="btn btn-sm btn-primary">Lihat & Konfirmasi</a>
+                                <a href="{{ route('admin.pendaftaran.classes.show', $class->id) }}" class="btn btn-sm btn-primary">Lihat & Konfirmasi</a>
                             </td>
                         </tr>
                         @endforeach

@@ -28,10 +28,10 @@ class PendaftaranProgramController extends Controller
 
         // Arahkan ke form sesuai tipe program
         if ($program->tipe_program === 'GenZE Class') {
-            return redirect()->route('siswa.pendaftaran.genze-class.form', ['program_id' => $pendaftaran->tipe_program]);
+            // return redirect()->route('siswa.pendaftaran.genze-class.form', ['program_id' => $pendaftaran->tipe_program]);
 
         } elseif ($program->tipe_program === 'GenZE Guide') {
-            return redirect()->route('pendaftaran.guide.create', $pendaftaran->id);
+            return redirect()->route('siswa.pendaftaran.genze-guide-form', $pendaftaran->id);
         } elseif ($program->tipe_program === 'GenZE Learn') {
             return redirect()->route('pendaftaran.learn.create', $pendaftaran->id);
         }

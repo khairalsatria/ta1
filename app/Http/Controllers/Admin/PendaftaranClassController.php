@@ -14,7 +14,7 @@ class PendaftaranClassController extends Controller
     public function index()
     {
         $pendaftaranClasses = PendaftaranClasses::with('pendaftaran.user', 'jadwalKonfirmasi')->get();
-        return view('admin.pendaftaran.class.index', compact('pendaftaranClasses'));
+        return view('admin.pendaftaran.classes.index', compact('pendaftaranClasses'));
     }
 
     // Menampilkan detail dan form konfirmasi jadwal
@@ -22,12 +22,13 @@ class PendaftaranClassController extends Controller
     {
         $pendaftaranClass = PendaftaranClasses::with('pendaftaran.user')->findOrFail($id);
         $jadwalPilihan = $pendaftaranClass->jadwalPilihanObjects;
-        return view('admin.pendaftaran.class.show', compact('pendaftaranClass', 'jadwalPilihan'));
+        return view('admin.pendaftaran.classes.show', compact('pendaftaranClass', 'jadwalPilihan'));
     }
 
     // Admin memilih jadwal yang dikonfirmasi
     public function konfirmasiJadwal(Request $request, $id)
     {
+
         $request->validate([
             'jadwal_konfirmasi' => 'required|exists:jadwal_kelas,id_jadwalkelas',
         ]);
@@ -37,6 +38,6 @@ class PendaftaranClassController extends Controller
             'jadwalkelas_konfirmasi' => $request->jadwal_konfirmasi,
         ]);
 
-        return redirect()->route('admin.pendaftaran.class.index')->with('success', 'Jadwal berhasil dikonfirmasi.');
+        return redirect()->route('admin.pendaftaran.classes.index')->with('success', 'Jadwal berhasil dikonfirmasi.');
     }
 }

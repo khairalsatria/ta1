@@ -13,7 +13,7 @@ class PendaftaranGuides extends Model
 
     protected $fillable = [
         'pendaftaran_id',
-        'paketguides',
+        'paket_guide',
         'file_upload',
         'jadwalguide2_pilihan',
         'jadwalguide2_konfirmasi'
@@ -30,7 +30,7 @@ class PendaftaranGuides extends Model
 
     public function paketGuide()
     {
-        return $this->belongsTo(PaketGuide::class, 'paketguides', 'id_paket_guide');
+        return $this->belongsTo(PaketGuide::class, 'paket_guide', 'id_paket_guide');
     }
 
     public function jadwalKonfirmasi()
