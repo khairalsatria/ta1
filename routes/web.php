@@ -27,7 +27,8 @@ use App\Http\Controllers\Admin\{
 
 use App\Http\Controllers\Siswa\{
     PendaftaranController as SiswaPendaftaranController,
-    DashboardController as SiswaDashboardController
+    DashboardController as SiswaDashboardController,
+    StatusPendaftaranController
 };
 
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
@@ -147,6 +148,12 @@ Route::prefix('siswa')->name('siswa.')->group(function () {
         Route::post('/store', [PendaftaranClassController::class, 'store'])->name('store');
     });
 
+    // GenZE Guide
+    Route::prefix('pendaftaran/genze-guide')->name('pendaftaran.genze-guide.')->group(function () {
+        Route::get('/', [PendaftaranGuideController::class, 'create'])->name('form');
+        Route::post('/store', [PendaftaranGuideController::class, 'store'])->name('store');
+    });
+
     // Status Pendaftaran
     Route::get('/pendaftaran/status/{id}', function ($id) {
         $pendaftaran = \App\Models\PendaftaranProgram::with('pendaftaranClass.jadwalKonfirmasi')->findOrFail($id);
@@ -154,18 +161,18 @@ Route::prefix('siswa')->name('siswa.')->group(function () {
     })->name('pendaftaran.status');
 });
 
+
+
 // ==========================
 // PENDAFTARAN UMUM
-// ==========================
+// // ==========================
+// Route::get('/pendaftaran-guide/create/{program_id}', [PendaftaranGuideController::class, 'create'])->name('pendaftaran-guide.create');
+
 Route::post('/pendaftaran/store', [PendaftaranProgramController::class, 'store'])->name('pendaftaran.program.store');
 Route::post('/siswa/pendaftaran/upload/{id}', [PendaftaranProgramController::class, 'uploadBukti'])->name('siswa.pendaftaran.upload');
 
 // Mata Pelajaran berdasarkan Jenjang
 Route::get('/mata-pelajaran/by-jenjang/{id}', [PendaftaranClassController::class, 'mataPelajaranByJenjang'])->name('mata-pelajaran.by-jenjang');
-
-
-
-
 
 
 Route::prefix('pendaftaran-guide')->group(function () {
@@ -180,4 +187,8 @@ Route::prefix('pendaftaran-guide')->group(function () {
 
     // Ambil jadwal guide berdasarkan paket
     Route::get('/jadwal-guide/{id}', [PendaftaranGuideController::class, 'jadwalGuide2ByPaket'])->name('pendaftaran-guide.jadwal');
+
 });
+
+
+

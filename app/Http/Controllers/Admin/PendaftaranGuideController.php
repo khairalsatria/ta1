@@ -16,12 +16,19 @@ class PendaftaranGuideController extends Controller
         return view('admin.pendaftaran.guides.index', compact('pendaftarans'));
     }
 
-    public function show($id)
+        public function show($id)
     {
         $pendaftaran = PendaftaranGuides::with(['pendaftaran.user', 'jadwalKonfirmasi'])->findOrFail($id);
-        $jadwalTersedia = JadwalGuide2::all();
+
+        // Ambil array ID jadwal yang sudah dipilih pendaftar
+        $jadwalPilihanIds = $pendaftaran->jadwalguide2_pilihan ?? [];
+
+        // Ambil jadwal yang sesuai ID pilihan
+        $jadwalTersedia = JadwalGuide2::whereIn('id_jadwalguide2', $jadwalPilihanIds)->get();
+
         return view('admin.pendaftaran.guides.show', compact('pendaftaran', 'jadwalTersedia'));
     }
+
 
     public function konfirmasiJadwal(Request $request, $id)
     {
@@ -32,9 +39,6 @@ class PendaftaranGuideController extends Controller
         $pendaftaran = PendaftaranGuides::findOrFail($id);
         $pendaftaran->jadwalguide2_konfirmasi = $request->jadwalguide2_konfirmasi;
         $pendaftaran->save();
-
-        // update status program menjadi bisa bayar
-        $pendaftaran->pendaftaran->update(['status' => 'menunggu pembayaran']);
 
         return redirect()->route('admin.pendaftaran.guides.index')->with('success', 'Jadwal berhasil dikonfirmasi.');
     }

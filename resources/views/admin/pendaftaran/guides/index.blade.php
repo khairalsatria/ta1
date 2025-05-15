@@ -1,27 +1,68 @@
-@extends('landing.layout.main')
+@extends('admin.layout.main')
+
+@section('title', 'Daftar Genze Guide')
 
 @section('content')
-<h2 class="text-xl font-bold mb-4">Daftar Pendaftar Guide</h2>
-<table class="table-auto w-full border">
-    <thead>
-        <tr>
-            <th class="border px-2 py-1">Nama</th>
-            <th class="border px-2 py-1">Paket</th>
-            <th class="border px-2 py-1">Status</th>
-            <th class="border px-2 py-1">Aksi</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($pendaftarans as $p)
-        <tr>
-            <td class="border px-2 py-1">{{ $p->pendaftaran->user->name ?? '-' }}</td>
-            <td class="border px-2 py-1">Paket {{ $p->paket_guide }}</td>
-            <td class="border px-2 py-1">{{ $p->pendaftaran->status }}</td>
-            <td class="border px-2 py-1">
-                <a href="{{ route('admin.pendaftaran.guides.show', $p->id) }}" class="text-blue-500">Detail</a>
-            </td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-last">
+                <h3>Genze Guide</h3>
+                <p class="text-subtitle text-muted">Daftar pendaftar program Genze Guide</p>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-first">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item active" aria-current="page">Genze Guide</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Data Pendaftaran Genze Guide</h5>
+            </div>
+            <div class="card-body">
+                @if(session('success'))
+                    <div class="alert alert-success">{{ session('success') }}</div>
+                @endif
+                <table class="table table-striped" id="table1">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama</th>
+                            <th>Paket</th>
+                            <th>Status</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($pendaftarans as $p)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $p->pendaftaran->user->name ?? '-' }}</td>
+                            <td>Paket {{ $p->paket_guide }}</td>
+                            <td>{{ ucfirst($p->pendaftaran->status) }}</td>
+                            <td>
+                                <a href="{{ route('admin.pendaftaran.guides.show', $p->id) }}" class="btn btn-sm btn-primary">Lihat Detail</a>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</div>
+@endsection
+
+@section('scripts')
+<script>
+    $(document).ready(function() {
+        $('#table1').DataTable();
+    });
+</script>
 @endsection

@@ -14,17 +14,19 @@ use Illuminate\Support\Facades\Auth;
 
 class PendaftaranGuideController extends Controller
 {
-    public function create()
+    public function create($program_id)
 {
-    // Ambil semua program yang tersedia
-    $programs = Program::all();
-
-    // Ambil data paket dan jadwal guide terkait
     $paketGuides = PaketGuide::all();
     $jadwalGuide2 = JadwalGuide2::all();
+    $program = Program::findOrFail($program_id);
+    $relatedPrograms = Program::where('id', '!=', $program_id)->take(4)->get();
 
-    return view('siswa.pendaftaran.genze-guide-form', compact('programs', 'paketGuides', 'jadwalGuide2'));
+    return view('landing.page.detail-program', compact(
+    'paketGuides', 'jadwalGuide2', 'program', 'relatedPrograms'
+));
+
 }
+
 
 
     public function store(Request $request)
@@ -56,8 +58,15 @@ class PendaftaranGuideController extends Controller
             PendaftaranGuides::create([
                 'pendaftaran_id' => $pendaftaranProgram->id,
                 'paket_guide' => $request->paket_guide,
-                'file_upload' => $request->file('file_upload')->store('uploads/guide_files'), // menyimpan file upload
+                'file_upload' => $request->file('file_upload')->store('guide_files', 'public'), // menyimpan file upload
             ]);
+
+            $data = $request->all();
+
+        if ($request->hasFile('gambar')) {
+            $data['gambar'] = $request->file('gambar')->store('gambar_blog', 'public');
+        }
+
 
             // Update status pendaftaran menjadi 'diterima' setelah file upload
             $pendaftaranProgram->update(['status' => 'diterima']);
@@ -74,8 +83,8 @@ class PendaftaranGuideController extends Controller
                 'jadwalguide2_pilihan' => $request->jadwalguide2_pilihan,
             ]);
 
-            // Status masih menunggu konfirmasi admin
-            $pendaftaranProgram->update(['status' => 'menunggu konfirmasi']);
+            // // Status masih menunggu konfirmasi admin
+            // $pendaftaranProgram->update(['status' => 'menunggu konfirmasi']);
         }
 
         return redirect()->route('siswa.pendaftaran.formEmail', $pendaftaranProgram->id)->with('success', 'Pendaftaran berhasil! Silakan cek email.');

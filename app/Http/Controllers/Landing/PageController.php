@@ -11,6 +11,8 @@ use App\Models\Kontak;
 use App\Models\JenisKelas;
 use App\Models\JenjangPendidikan;
 use App\Models\JadwalKelas;
+use App\Models\JadwalGuide2;
+use App\Models\PaketGuide;
 use App\Models\MataPelajaran;
 
 
@@ -46,6 +48,8 @@ class PageController extends Controller
 
     public function detailProgram($program_id)
     {
+        $jadwalGuide2 = JadwalGuide2::all();
+        $paketGuides = PaketGuide::all();
     $programs = Program::all();
     $jenisKelas = JenisKelas::all();
     $jenjangPendidikans = JenjangPendidikan::all();
@@ -59,7 +63,9 @@ class PageController extends Controller
         'jadwalKelas',
         'program',
         'relatedPrograms',
-        'programs'
+        'programs',
+        'jadwalGuide2',
+        'paketGuides'
     ));
     }
 

@@ -71,7 +71,7 @@
         </ul>
     </li>
 
-    <li class="sidebar-item has-sub {{ request()->is('admin/pembayaran*') || request()->is('admin/pendaftaran/classes/data*') || request()->is('') || request()->is('') || request()->is('') ? 'active' : '' }}">
+    <li class="sidebar-item has-sub {{ request()->is('admin/pembayaran*') || request()->is('admin/pendaftaran/classes/data*') || request()->is('admin/pendaftaran/guides/data*') || request()->is('') || request()->is('') ? 'active' : '' }}">
         <a href="#" class='sidebar-link'>
             <i class="bi bi-person-check-fill"></i>
             <span>Pendaftaran</span>
@@ -83,8 +83,8 @@
             <li class="submenu-item {{ request()->is('admin/pendaftaran/classes/data*') ? 'active' : '' }}">
                 <a href="{{ url('admin/pendaftaran/classes/data') }}" class="submenu-link">Pendaftar Class</a>
             </li>
-            <li class="submenu-item {{ request()->is('') ? 'active' : '' }}">
-                <a href="{{ url('') }}" class="submenu-link">Pendaftar Guide</a>
+            <li class="submenu-item {{ request()->is('admin/pendaftaran/guides/data*') ? 'active' : '' }}">
+                <a href="{{ url('admin/pendaftaran/guides/data') }}" class="submenu-link">Pendaftar Guide</a>
             </li>
             <li class="submenu-item {{ request()->is('') ? 'active' : '' }}">
                 <a href="{{ url('') }}" class="submenu-link">Pendaftar Learn</a>

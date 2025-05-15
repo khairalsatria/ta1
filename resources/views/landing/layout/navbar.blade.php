@@ -28,7 +28,7 @@
                     <!-- Logout button dengan ikon -->
                     <form method="POST" action="{{ route('logout') }}" class="m-0 p-0">
                         @csrf
-                        <button type="submit" class="btn btn-outline-light d-none d-lg-block" title="Logout">
+                        <button type="submit" class="btn btn-primary d-none d-lg-block" title="Logout">
                             <i class="fas fa-sign-out-alt"></i>
                         </button>
                     </form>

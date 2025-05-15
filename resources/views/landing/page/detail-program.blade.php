@@ -18,51 +18,90 @@
 <!-- Header End -->
 
 <!-- Detail Start -->
-<div class="container-fluid py-5">
-    <div class="container py-5">
-        <div class="row">
-            <!-- Konten Kiri -->
-            <div class="col-lg-8">
-                <div class="mb-5">
-                    <div class="section-title position-relative mb-5">
-                        <h6 class="d-inline-block position-relative text-secondary text-uppercase pb-2">Deskripsi Program</h6>
-                        <h1 class="display-4">{{ $program->nama_program }}</h1>
+    <div class="container-fluid py-5">
+        <div class="container py-5">
+            <div class="row">
+                <!-- Konten Kiri -->
+                <div class="col-lg-8">
+                    <div class="mb-5">
+                        <div class="section-title position-relative mb-5">
+                            <h6 class="d-inline-block position-relative text-secondary text-uppercase pb-2">Deskripsi Program</h6>
+                            <h1 class="display-4">{{ $program->nama_program }}</h1>
+                        </div>
+                        <img class="img-fluid rounded w-100 mb-4" src="{{ asset('storage/' . $program->gambar) }}" alt="{{ $program->nama_program }}">
+                        <p>{!! nl2br(e($program->deskripsi)) !!}</p>
                     </div>
-                    <img class="img-fluid rounded w-100 mb-4" src="{{ asset('storage/' . $program->gambar) }}" alt="{{ $program->nama_program }}">
-                    <p>{!! nl2br(e($program->deskripsi)) !!}</p>
+                </div>
+
+                <!-- Sidebar Kanan -->
+            <div class="col-lg-4 mt-5 mt-lg-0">
+                <div class="bg-primary mb-5 py-3">
+                    <h3 class="text-white py-3 px-4 m-0">Fitur Program</h3>
+                    <div class="d-flex justify-content-between border-bottom px-4">
+                        <h6 class="text-white my-3">Instruktur</h6>
+                        <h6 class="text-white my-3">{{ $program->instruktur }}</h6>
+                    </div>
+                    <div class="d-flex justify-content-between border-bottom px-4">
+                        <h6 class="text-white my-3">Tipe Kelas</h6>
+                        <h6 class="text-white my-3">{{ ucfirst($program->tipe_kelas) }}</h6>
+                    </div>
+                    <div class="d-flex justify-content-between border-bottom px-4">
+                        <h6 class="text-white my-3">Durasi</h6>
+                        <h6 class="text-white my-3">{{ $program->durasi }} Jam</h6>
+                    </div>
+                    <div class="d-flex justify-content-between border-bottom px-4">
+                        <h6 class="text-white my-3">Pendidikan</h6>
+                        <h6 class="text-white my-3">{{ $program->level }}</h6>
+                    </div>
+                    <div class="d-flex justify-content-between border-bottom px-4">
+                        <h6 class="text-white my-3">Rating</h6>
+                        <h6 class="text-white my-3">{{ $program->rating ?? '4.5' }}</h6>
+                    </div>
+                    <div class="py-3 px-4">
+                        @if ($program->tipe_program === 'GenZE Class')
+                            <button class="btn btn-block btn-secondary py-3 px-5" data-bs-toggle="modal" data-bs-target="#daftarGenzeClassModal">
+                                Daftar GenZE Class
+                            </button>
+                        @elseif ($program->tipe_program === 'GenZE Guide')
+                            <button class="btn btn-block btn-secondary py-3 px-5" data-bs-toggle="modal" data-bs-target="#daftarGenzeGuideModal">
+                                Daftar GenZE Guide
+                            </button>
+                        @elseif ($program->tipe_program === 'GenZE Learn')
+                            <button class="btn btn-block btn-secondary py-3 px-5" data-bs-toggle="modal" data-bs-target="#daftarGenzeLearnModal">
+                                Daftar GenZE Learn
+                            </button>
+                        @else
+                            <button class="btn btn-block btn-warning py-3 px-5" disabled>
+                                Jenis Program Tidak Dikenal
+                            </button>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Program Terkait Dipindahkan ke Sini -->
+                <div class="mb-5">
+                    <h4 class="mb-4">Program Lainnya</h4>
+                    @foreach ($relatedPrograms as $related)
+                    <a class="d-flex align-items-center text-decoration-none mb-4" href="{{ route('landing.page.detail-program', $related->id) }}">
+                        <img class="img-fluid rounded" src="{{ asset('storage/' . $related->gambar) }}" alt="{{ $related->nama_program }}" style="width: 80px; height: 80px; object-fit: cover;">
+                        <div class="pl-3">
+                            <h6 class="text-dark mb-1">{{ $related->nama_program }}</h6>
+                            <div class="d-flex">
+                                <small class="text-body mr-3"><i class="fa fa-user text-primary mr-2"></i>{{ $related->instruktur ?? 'Mentor' }}</small>
+                                <small class="text-body"><i class="fa fa-star text-primary mr-2"></i>{{ $related->rating ?? '4.5' }}</small>
+                            </div>
+                        </div>
+                    </a>
+                    @endforeach
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+<!-- Detail End -->
 
-            <!-- Sidebar Kanan -->
-<div class="col-lg-4 mt-5 mt-lg-0">
-    <div class="bg-primary mb-5 py-3">
-        <h3 class="text-white py-3 px-4 m-0">Fitur Program</h3>
-        <div class="d-flex justify-content-between border-bottom px-4">
-            <h6 class="text-white my-3">Instruktur</h6>
-            <h6 class="text-white my-3">{{ $program->instruktur }}</h6>
-        </div>
-        <div class="d-flex justify-content-between border-bottom px-4">
-            <h6 class="text-white my-3">Tipe Kelas</h6>
-            <h6 class="text-white my-3">{{ ucfirst($program->tipe_kelas) }}</h6>
-        </div>
-        <div class="d-flex justify-content-between border-bottom px-4">
-            <h6 class="text-white my-3">Durasi</h6>
-            <h6 class="text-white my-3">{{ $program->durasi }} Jam</h6>
-        </div>
-        <div class="d-flex justify-content-between border-bottom px-4">
-            <h6 class="text-white my-3">Pendidikan</h6>
-            <h6 class="text-white my-3">{{ $program->level }}</h6>
-        </div>
-        <div class="d-flex justify-content-between border-bottom px-4">
-            <h6 class="text-white my-3">Rating</h6>
-            <h6 class="text-white my-3">{{ $program->rating ?? '4.5' }}</h6>
-        </div>
-        <div class="py-3 px-4">
-            <button class="btn btn-block btn-secondary py-3 px-5" data-bs-toggle="modal" data-bs-target="#daftarModal">
-                Enroll Now {{ $program->nama }}
-            </button>
-<!-- Modal -->
-<div class="modal fade" id="daftarModal" tabindex="-1" aria-labelledby="daftarModalLabel" aria-hidden="true">
+<!-- Modal GenZE Clas -->
+<div class="modal fade" id="daftarGenzeClassModal" tabindex="-1" aria-labelledby="daftarModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
       <div class="modal-content border-0 shadow-lg rounded-5 overflow-hidden" style="background-color: #fff7ee;">
         <div class="modal-body d-flex flex-column flex-md-row p-0">
@@ -74,7 +113,8 @@
 
           <!-- Formulir Pendaftaran Kanan -->
           <div class="col-md-6 bg-white p-5">
-            <h4 class="fw-bold text-primary text-center mb-4">Pendaftaran GenZE Class</h4>
+            <h4 class="fw-bold text-primary text-center">Pendaftaran</h4>
+            <h4 class="fw-bold text-primary text-center mb-4">GenZE Class</h4>
 
             <form action="{{ route('siswa.pendaftaran.genze-class.store') }}" method="POST">
               @csrf
@@ -191,31 +231,145 @@
         });
     });
 </script>
+
+<!-- Modal GenZE Guide -->
+<div class="modal fade" id="daftarGenzeGuideModal" tabindex="-1" aria-labelledby="daftarGuideModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-5 overflow-hidden" style="background-color: #fff7ee;">
+      <div class="modal-body d-flex flex-column flex-md-row p-0">
+
+        <!-- Kiri - Ilustrasi -->
+        <div class="col-md-6 bg-light-green d-flex flex-column align-items-center justify-content-center text-center p-4">
+          <img src="{{ asset('assets2/img/login.png') }}" alt="Guide Illustration" class="img-fluid mb-3 login-illustration">
+          <h2 class="fw-bold text-dark">GenZE Guide<br><small class="text-muted">Bimbingan Tugas & Proyekmu</small></h2>
         </div>
 
-    </div>
+        <!-- Kanan - Formulir -->
+        <div class="col-md-6 bg-white p-5">
+          <h4 class="fw-bold text-primary text-center">Pendaftaran</h4>
+          <h4 class="fw-bold text-primary text-center mb-4">GenZE Guide</h4>
 
-    <!-- Program Terkait Dipindahkan ke Sini -->
-    <div class="mb-5">
-        <h4 class="mb-4">Program Lainnya</h4>
-        @foreach ($relatedPrograms as $related)
-        <a class="d-flex align-items-center text-decoration-none mb-4" href="{{ route('landing.page.detail-program', $related->id) }}">
-            <img class="img-fluid rounded" src="{{ asset('storage/' . $related->gambar) }}" alt="{{ $related->nama_program }}" style="width: 80px; height: 80px; object-fit: cover;">
-            <div class="pl-3">
-                <h6 class="text-dark mb-1">{{ $related->nama_program }}</h6>
-                <div class="d-flex">
-                    <small class="text-body mr-3"><i class="fa fa-user text-primary mr-2"></i>{{ $related->instruktur ?? 'Mentor' }}</small>
-                    <small class="text-body"><i class="fa fa-star text-primary mr-2"></i>{{ $related->rating ?? '4.5' }}</small>
-                </div>
+          <form action="{{ route('pendaftaran-guide.store') }}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
+            @csrf
+            <input type="hidden" name="pendaftaran_id" value="{{ request()->get('pendaftaran_id') ?? $pendaftaran_id ?? '' }}">
+              <input type="hidden" name="tipe_program" value="{{ $program->id }}">
+
+
+            <div class="form-group mb-3">
+              <label for="paket_guide">Pilih Paket Guide:</label>
+                <select name="paket_guide" id="paket_guide" class="form-control" required>
+                    <option value="">-- Pilih Paket Guide --</option>
+                    @foreach($paketGuides as $paket)
+                    <option value="{{ $paket->id_paket_guide }}">{{ $paket->paket_guide }}</option>
+                    @endforeach
+                </select>
             </div>
-        </a>
+
+            <!-- Upload File -->
+            <div class="form-group mb-3" id="file-upload" style="display:none;">
+              <label for="file_upload" class="form-label">Upload File (PDF, DOC, JPG)</label>
+              <input type="file" class="form-control" name="file_upload" id="file_upload" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png">
+            </div>
+
+            <!-- Pilih Jadwal -->
+<div class="form-group mb-4" id="jadwal-pilihan" style="display:none;">
+    <label class="form-label fw-semibold" style="font-size: 0.875rem;">Pilih Maksimal 3 Jadwal:</label>
+    @if(isset($jadwalGuide2) && $jadwalGuide2->count() > 0)
+        @foreach($jadwalGuide2 as $jadwal)
+            <div class="form-check" style="font-size: 0.875rem;">
+                <input type="checkbox" class="form-check-input" name="jadwalguide2_pilihan[]" value="{{ $jadwal->id_jadwalguide2 }}" id="jadwal-{{ $jadwal->id_jadwalguide2 }}">
+                <label class="form-check-label" for="jadwal-{{ $jadwal->id_jadwalguide2 }}" style="font-size: 0.875rem;">{{ $jadwal->jadwalguide2 }}</label>
+            </div>
         @endforeach
-    </div>
-</div>
-</div>
-    </div>
+    @else
+        <p>Jadwal belum tersedia.</p>
+    @endif
 </div>
 
-<!-- Detail End -->
+
+            <button type="submit" class="btn w-100 rounded-3 fw-bold py-2" style="background-color: #3ddc97; color: white;">
+              Daftar Sekarang
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Style -->
+<style>
+  .bg-light-green {
+    background-color: #C6F6E2;
+  }
+
+  .login-illustration {
+    max-height: 280px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  @media (max-width: 768px) {
+    .login-illustration {
+      max-height: 180px;
+    }
+  }
+</style>
+
+<!-- Script -->
+<script>
+  document.getElementById('paket_guide').addEventListener('change', function () {
+    const fileUpload = document.getElementById('file-upload');
+    const jadwalPilihan = document.getElementById('jadwal-pilihan');
+
+    if (this.value === '1' || this.value === '3') {
+      fileUpload.style.display = 'block';
+      jadwalPilihan.style.display = 'none';
+    } else if (this.value === '2') {
+      fileUpload.style.display = 'none';
+      jadwalPilihan.style.display = 'block';
+    } else {
+      fileUpload.style.display = 'none';
+      jadwalPilihan.style.display = 'none';
+    }
+  });
+
+  // Trigger display on load if needed (for edit form or refresh)
+  document.addEventListener('DOMContentLoaded', () => {
+    const trigger = document.getElementById('paket_guide');
+    const event = new Event('change');
+    trigger.dispatchEvent(event);
+  });
+
+  // Validasi Bootstrap
+  (() => {
+    'use strict';
+    const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  })();
+</script>
+<script>
+    // Batasi maksimal checkbox terpilih hanya 3
+    const maxChecked = 3;
+    const checkboxes = document.querySelectorAll('input[name="jadwalguide2_pilihan[]"]');
+    checkboxes.forEach((checkbox) => {
+        checkbox.addEventListener('change', function() {
+            const checkedBoxes = document.querySelectorAll('input[name="jadwalguide2_pilihan[]"]:checked');
+            if (checkedBoxes.length > maxChecked) {
+                this.checked = false;
+                alert(`Maksimal memilih ${maxChecked} jadwal.`);
+            }
+        });
+    });
+</script>
+
 
 @endsection

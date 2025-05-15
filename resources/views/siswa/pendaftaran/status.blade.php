@@ -240,13 +240,14 @@
 <div class="page-heading">
     <h3>Status Pendaftaran</h3>
 </div>
+
 <div class="card shadow-sm">
     <div class="info-row">
         <div class="info-col">
             <i class="bi bi-book-half"></i>
             <div>
                 <div class="text-muted">Program</div>
-                <p class="fw-bold mb-0">GenZE Class</p>
+                <p class="fw-bold mb-0">{{ $pendaftaran->program->nama_program }}</p>
             </div>
         </div>
         <div class="info-col">
@@ -271,12 +272,45 @@
         <span class="badge {{ $badge }}">{{ ucfirst($pendaftaran->status) }}</span>
     </div>
 
-    @if($pendaftaran->pendaftaranClass && $pendaftaran->pendaftaranClass->jadwalKonfirmasi)
-    <div class="schedule-confirm">
-        <h6>Jadwal Ditetapkan</h6>
-        <p>{{ $pendaftaran->pendaftaranClass->jadwalKonfirmasi->jadwalkelas }}</p>
+    {{-- INFO JADWAL --}}
+    @if ($pendaftaran->pendaftaranClass && $pendaftaran->pendaftaranClass->jadwalKonfirmasi)
+        <div class="schedule-confirm text-center mb-3">
+            <h6>Jadwal Ditetapkan (GenZE Class)</h6>
+            <p>{{ $pendaftaran->pendaftaranClass->jadwalKonfirmasi->jadwalkelas }}</p>
+        </div>
+    @elseif ($pendaftaran->pendaftaranGuide)
+    @php
+        $guide = $pendaftaran->pendaftaranGuide;
+    @endphp
 
-        <form action="{{ route('siswa.pendaftaran.upload', $pendaftaran->id) }}" method="POST" enctype="multipart/form-data" class="mt-3">
+    @if ($guide->paket_guide == 2 && $guide->jadwalKonfirmasi)
+        <div class="schedule-confirm text-center mb-3">
+            <h6>Jadwal Ditetapkan (GenZE Guide - Paket 2)</h6>
+            <p>{{ $guide->jadwalKonfirmasi->jadwalguide2 }}</p>
+        </div>
+    @elseif (in_array($guide->paket_guide, [1, 3]) && $guide->file_upload)
+        <div class="schedule-confirm text-center mb-3">
+            <h6>File Upload (GenZE Guide - Paket {{ $guide->paket_guide }})</h6>
+            <a href="{{ asset('storage/' . $guide->file_upload) }}" target="_blank" class="btn btn-outline-primary">
+                <i class="bi bi-file-earmark-arrow-down"></i> Lihat File
+            </a>
+        </div>
+    @endif
+
+    @elseif ($pendaftaran->pendaftaranLearn)
+        <div class="schedule-confirm text-center mb-3">
+            <h6>Info Program (GenZE Learn)</h6>
+            <p><strong>Instansi:</strong> {{ $pendaftaran->pendaftaranLearn->instansi }}</p>
+        </div>
+    @else
+        <div class="alert alert-info mt-4 text-center" role="alert">
+            Jadwal belum dikonfirmasi oleh admin. Silakan tunggu informasi selanjutnya.
+        </div>
+    @endif
+
+    {{-- FORM UPLOAD BUKTI PEMBAYARAN --}}
+    @if (!$pendaftaran->bukti_pembayaran && ($pendaftaran->pendaftaranClass?->jadwalKonfirmasi || $pendaftaran->pendaftaranGuide?->jadwalKonfirmasi || $pendaftaran->pendaftaranLearn))
+        <form action="{{ route('siswa.pendaftaran.upload', $pendaftaran->id) }}" method="POST" enctype="multipart/form-data" class="p-3">
             @csrf
             <label for="bukti_pembayaran" class="form-label">Upload Bukti Pembayaran</label>
             <input type="file" name="bukti_pembayaran" id="bukti_pembayaran" class="form-control" required>
@@ -284,32 +318,15 @@
                 <i class="bi bi-upload me-1"></i> Upload
             </button>
         </form>
-    </div>
-    @else
-    <div class="alert alert-info mt-4" role="alert">
-        Jadwal belum dikonfirmasi oleh admin. Silakan tunggu informasi selanjutnya.
-    </div>
+    @elseif ($pendaftaran->bukti_pembayaran)
+        <div class="text-center mt-3">
+            <p class="fw-bold mb-1">Bukti Pembayaran:</p>
+            <img src="{{ asset('storage/' . $pendaftaran->bukti_pembayaran) }}" alt="Bukti Pembayaran" style="max-width: 300px;" class="img-thumbnail">
+        </div>
     @endif
 </div>
 
-<div class="container">
-    <h3>Status Pendaftaran Guide</h3>
 
-    @if($pendaftaran)
-        <p><strong>Paket:</strong> {{ $pendaftaran->paketGuide->nama_paket ?? '-' }}</p>
-        <p><strong>Status:</strong>
-            @if($pendaftaran->jadwalguide2_konfirmasi)
-                Jadwal Dikonfirmasi: {{ $pendaftaran->jadwalKonfirmasi->hari }} - {{ $pendaftaran->jadwalKonfirmasi->jam }}
-            @else
-                Menunggu konfirmasi admin
-            @endif
-        </p>
-
-        @if($pendaftaran->file_upload)
-            <p><strong>File:</strong> <a href="{{ route('admin.guide.lihatfile', $pendaftaran->id) }}" target="_blank">Lihat File</a></p>
-        @endif
-    @else
-        <p>Belum ada data pendaftaran.</p>
-    @endif
-</div>
 @endsection
+
+

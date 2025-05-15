@@ -19,21 +19,21 @@ class PendaftaranProgramController extends Controller
         // Ambil program berdasarkan tipe_program yang diterima
         $program = Program::findOrFail($request->tipe_program);
 
-        // Simpan data pendaftaran program
-        $pendaftaran = PendaftaranProgram::create([
-            'user_id' => Auth::id(), // ID user yang sedang login
-            'tipe_program' => $program->id, // Menyimpan ID tipe_program dari tabel programs
-            'harga' => $program->harga, // Menyimpan harga dari tabel programs
-        ]);
+        // // Simpan data pendaftaran program
+        // $pendaftaran = PendaftaranProgram::create([
+        //     'user_id' => Auth::id(), // ID user yang sedang login
+        //     'tipe_program' => $program->id, // Menyimpan ID tipe_program dari tabel programs
+        //     'harga' => $program->harga, // Menyimpan harga dari tabel programs
+        // ]);
 
         // Arahkan ke form sesuai tipe program
         if ($program->tipe_program === 'GenZE Class') {
-            // return redirect()->route('siswa.pendaftaran.genze-class.form', ['program_id' => $pendaftaran->tipe_program]);
+            return redirect()->route('siswa.pendaftaran.genze-class.form');
 
         } elseif ($program->tipe_program === 'GenZE Guide') {
-            return redirect()->route('siswa.pendaftaran.genze-guide-form', $pendaftaran->id);
+            return redirect()->route('siswa.pendaftaran.genze-guide-form');
         } elseif ($program->tipe_program === 'GenZE Learn') {
-            return redirect()->route('pendaftaran.learn.create', $pendaftaran->id);
+            return redirect()->route('pendaftaran.learn.create');
         }
 
         return back()->with('error', 'Tipe program tidak valid.');
