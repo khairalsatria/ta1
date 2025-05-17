@@ -300,7 +300,7 @@
     @elseif ($pendaftaran->pendaftaranLearn)
         <div class="schedule-confirm text-center mb-3">
             <h6>Info Program (GenZE Learn)</h6>
-            <p><strong>Instansi:</strong> {{ $pendaftaran->pendaftaranLearn->instansi }}</p>
+            <p><strong>Instansi:</strong> {{ $pendaftaran->pendaftaranLearn->asal_instansi }}</p>
         </div>
     @else
         <div class="alert alert-info mt-4 text-center" role="alert">

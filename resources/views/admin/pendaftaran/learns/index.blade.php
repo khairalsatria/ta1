@@ -1,19 +1,19 @@
 @extends('admin.layout.main')
 
-@section('title', 'Daftar Genze Guide')
+@section('title', 'Daftar GenZE Learn')
 
 @section('content')
 <div class="page-heading">
     <div class="page-title">
         <div class="row">
             <div class="col-12 col-md-6 order-md-1 order-last">
-                <h3>Genze Guide</h3>
-                <p class="text-subtitle text-muted">Daftar pendaftar program Genze Guide</p>
+                <h3>GenZE Learn</h3>
+                <p class="text-subtitle text-muted">Daftar pendaftar program GenZE Learn</p>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item active" aria-current="page">Genze Guide</li>
+                        <li class="breadcrumb-item active" aria-current="page">GenZE Learn</li>
                     </ol>
                 </nav>
             </div>
@@ -23,7 +23,7 @@
     <section class="section">
         <div class="card">
             <div class="card-header">
-                <h5 class="card-title">Data Pendaftaran Genze Guide</h5>
+                <h5 class="card-title">Data Pendaftaran GenZE Learn</h5>
             </div>
             <div class="card-body">
                 @if(session('success'))
@@ -34,7 +34,7 @@
                         <tr>
                             <th>No</th>
                             <th>Nama</th>
-                            <th>Paket</th>
+                            <th>Instansi</th>
                             <th>Status</th>
                             <th>Aksi</th>
                         </tr>
@@ -44,10 +44,10 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $p->pendaftaran->user->name ?? '-' }}</td>
-                            <td>{{ $p->paketGuide->paket_guide ?? '-' }}</td>
+                            <td>{{ $p->asal_instansi ?? '-' }}</td>
                             <td>{{ ucfirst($p->pendaftaran->status) }}</td>
                             <td>
-                                <a href="{{ route('admin.pendaftaran.guides.show', $p->id) }}" class="btn btn-sm btn-primary">Lihat Detail</a>
+                                <a href="{{ route('admin.pendaftaran.learns.show', $p->id) }}" class="btn btn-sm btn-primary">Lihat Detail</a>
                             </td>
                         </tr>
                         @endforeach

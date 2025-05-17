@@ -27,14 +27,14 @@ class PendaftaranProgramController extends Controller
         // ]);
 
         // Arahkan ke form sesuai tipe program
-        if ($program->tipe_program === 'GenZE Class') {
-            return redirect()->route('siswa.pendaftaran.genze-class.form');
+        // if ($program->tipe_program === 'GenZE Class') {
+        //     return redirect()->route('siswa.pendaftaran.genze-class.form');
 
-        } elseif ($program->tipe_program === 'GenZE Guide') {
-            return redirect()->route('siswa.pendaftaran.genze-guide-form');
-        } elseif ($program->tipe_program === 'GenZE Learn') {
-            return redirect()->route('pendaftaran.learn.create');
-        }
+        // } elseif ($program->tipe_program === 'GenZE Guide') {
+        //     return redirect()->route('siswa.pendaftaran.genze-guide-form');
+        // } elseif ($program->tipe_program === 'GenZE Learn') {
+        //     return redirect()->route('pendaftaran.learn.create');
+        // }
 
         return back()->with('error', 'Tipe program tidak valid.');
     }

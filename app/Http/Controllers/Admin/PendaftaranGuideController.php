@@ -11,10 +11,16 @@ use App\Models\PendaftaranProgram;
 class PendaftaranGuideController extends Controller
 {
     public function index()
-    {
-        $pendaftarans = PendaftaranGuides::with(['pendaftaran.user', 'jadwalKonfirmasi'])->latest()->get();
-        return view('admin.pendaftaran.guides.index', compact('pendaftarans'));
-    }
+{
+    $pendaftarans = PendaftaranGuides::with([
+        'pendaftaran.user',
+        'jadwalKonfirmasi',
+        'paketGuide' // Tambahkan ini
+    ])->latest()->get();
+
+    return view('admin.pendaftaran.guides.index', compact('pendaftarans'));
+}
+
 
         public function show($id)
     {

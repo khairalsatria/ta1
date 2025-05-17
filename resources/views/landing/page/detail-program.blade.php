@@ -372,4 +372,81 @@
 </script>
 
 
+<<!-- Modal GenZE Learn -->
+<div class="modal fade" id="daftarGenzeLearnModal" tabindex="-1" aria-labelledby="daftarLearnModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content border-0 shadow-lg rounded-5 overflow-hidden" style="background-color: #fff7ee;">
+      <div class="modal-body d-flex flex-column flex-md-row p-0">
+
+        <!-- Kiri - Ilustrasi -->
+        <div class="col-md-6 bg-light-green d-flex flex-column align-items-center justify-content-center text-center p-4">
+          <img src="{{ asset('assets2/img/login.png') }}" alt="Learn Illustration" class="img-fluid mb-3 login-illustration">
+          <h2 class="fw-bold text-dark">GenZE Learn<br><small class="text-muted">Upgrade Skill dengan Sertifikat</small></h2>
+        </div>
+
+        <!-- Kanan - Formulir -->
+        <div class="col-md-6 bg-white p-5">
+          <h4 class="fw-bold text-primary text-center">Pendaftaran</h4>
+          <h4 class="fw-bold text-primary text-center mb-4">GenZE Learn</h4>
+
+          <form action="{{ route('pendaftaran-learn.store') }}" method="POST" class="needs-validation" novalidate>
+            @csrf
+            <input type="hidden" name="tipe_program" value="{{ $program->id }}">
+
+            <div class="form-group mb-4">
+              <label for="asal_instansi" class="form-label">Asal Instansi</label>
+              <input type="text" class="form-control" id="asal_instansi" name="asal_instansi" required placeholder="Contoh: SMAN 1 Jakarta / Universitas ABC">
+              <div class="invalid-feedback">
+                Harap isi asal instansi Anda.
+              </div>
+            </div>
+
+            <button type="submit" class="btn w-100 rounded-3 fw-bold py-2" style="background-color: #3ddc97; color: white;">
+              Daftar Sekarang
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Style -->
+<style>
+  .bg-light-green {
+    background-color: #C6F6E2;
+  }
+
+  .login-illustration {
+    max-height: 280px;
+    width: auto;
+    object-fit: contain;
+  }
+
+  @media (max-width: 768px) {
+    .login-illustration {
+      max-height: 180px;
+    }
+  }
+</style>
+
+<!-- Validasi Bootstrap -->
+<script>
+  (() => {
+    'use strict';
+    const forms = document.querySelectorAll('.needs-validation');
+    Array.from(forms).forEach(form => {
+      form.addEventListener('submit', event => {
+        if (!form.checkValidity()) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+        form.classList.add('was-validated');
+      }, false);
+    });
+  })();
+</script>
+
+
+
 @endsection

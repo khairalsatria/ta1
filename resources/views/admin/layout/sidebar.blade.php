@@ -143,6 +143,26 @@
         </a>
     </li> --}}
 
+    <li class="sidebar-item {{ request()->is('admin/kontak*') ? 'active' : '' }}">
+        <a href="{{ url('admin/kontak') }}" class='sidebar-link'>
+            <i class="bi bi-globe"></i>
+            <span>Kontak</span>
+        </a>
+    </li>
+    <li class="sidebar-item {{ request()->is('') ? 'active' : '' }}">
+        <a href="{{ url('') }}" class='sidebar-link'>
+            <i class="bi bi-bank2"></i>
+            <span>Media Partners</span>
+        </a>
+    </li>
+
+    <li class="sidebar-item {{ request()->is('') ? 'active' : '' }}">
+        <a href="{{ url('') }}" class='sidebar-link'>
+            <i class="bi bi-telegram"></i>
+            <span>Testimoni</span>
+        </a>
+    </li>
+
     <li class="sidebar-item has-sub {{ request()->is('admin/blog*') || request()->is('admin/blog*') ? 'active' : '' }}">
         <a href="#" class='sidebar-link'>
             <i class="bi bi-mortarboard"></i>
@@ -159,19 +179,9 @@
         </ul>
     </li>
 
-    <li class="sidebar-item {{ request()->is('admin/kontak*') ? 'active' : '' }}">
-        <a href="{{ url('admin/kontak') }}" class='sidebar-link'>
-            <i class="bi bi-globe"></i>
-            <span>Kontak</span>
-        </a>
-    </li>
 
-    <li class="sidebar-item {{ request()->is('') ? 'active' : '' }}">
-        <a href="{{ url('') }}" class='sidebar-link'>
-            <i class="bi bi-telegram"></i>
-            <span>Testimoni</span>
-        </a>
-    </li>
+
+
 
 
 </ul>

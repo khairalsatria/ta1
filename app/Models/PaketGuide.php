@@ -16,5 +16,13 @@ public $incrementing = true;
 protected $keyType = 'int';
 
 protected $fillable = ['paket_guide'];
+// app/Models/PendaftaranGuides.php
+public function paketGuide()
+{
+    return $this->belongsTo(\App\Models\PaketGuide::class, 'paket_guide', 'id_paket_guide');
+}
+
 
 }
+
+

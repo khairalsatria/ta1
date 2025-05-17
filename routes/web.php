@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\{
     PendaftaranController,
     PendaftaranClassController as AdminPendaftaranClassController,
     PendaftaranGuideController as AdminPendaftaranGuideController,
+    PendaftaranLearnController as AdminPendaftaranLearnController
 };
 
 use App\Http\Controllers\Siswa\{
@@ -114,6 +115,19 @@ Route::prefix('pendaftaran/guides')->name('pendaftaran.guides.')->group(function
 });
 
 
+Route::prefix('pendaftaran/learns')->name('pendaftaran.learns.')->group(function () {
+    Route::get('/data', [AdminPendaftaranLearnController::class, 'index'])->name('index');
+    Route::get('/{id}', [AdminPendaftaranLearnController::class, 'show'])->name('show');
+
+    // Ubah konfirmasi jadi verifikasi pembayaran
+    Route::post('/{id}/verifikasi', [AdminPendaftaranLearnController::class, 'verifikasiPembayaran'])->name('verifikasi');
+
+    // Tambah route upload sertifikat
+    Route::post('/{id}/upload-sertifikat', [AdminPendaftaranLearnController::class, 'uploadSertifikat'])->name('uploadSertifikat');
+});
+
+
+
     // Tambahan admin untuk verifikasi pendaftaran umum (opsional)
     Route::get('/pendaftarann', [PendaftaranController::class, 'index'])->name('pendaftaran.index');
     Route::get('/pendaftarann/{id}', [PendaftaranController::class, 'show'])->name('pendaftaran.show');
@@ -192,3 +206,29 @@ Route::prefix('pendaftaran-guide')->group(function () {
 
 
 
+// routes/web.php
+
+
+// Halaman Form Pendaftaran GenZE Learn
+Route::get('/pendaftaran-learn/{program_id}', [PendaftaranLearnController::class, 'create'])
+    ->name('pendaftaran-learn.create');
+
+// Proses Penyimpanan Pendaftaran Learn
+Route::post('/pendaftaran-learn/store', [PendaftaranLearnController::class, 'store'])
+    ->name('pendaftaran-learn.store');
+
+// Form Email setelah pendaftaran berhasil
+Route::get('/pendaftaran-learn/form-email/{id}', [PendaftaranLearnController::class, 'formEmail'])
+    ->name('siswa.pendaftaran.formEmail');
+
+// Upload Sertifikat oleh Admin
+Route::post('/pendaftaran-learn/upload-sertifikat/{id}', [PendaftaranLearnController::class, 'uploadSertifikat'])
+    ->name('pendaftaran-learn.uploadSertifikat');
+
+
+    use App\Http\Controllers\Siswa\ProfileController;
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
+});
