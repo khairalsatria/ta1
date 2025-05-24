@@ -182,8 +182,8 @@ Route::prefix('siswa')->name('siswa.')->group(function () {
 // // ==========================
 // Route::get('/pendaftaran-guide/create/{program_id}', [PendaftaranGuideController::class, 'create'])->name('pendaftaran-guide.create');
 
-Route::post('/pendaftaran/store', [PendaftaranProgramController::class, 'store'])->name('pendaftaran.program.store');
-Route::post('/siswa/pendaftaran/upload/{id}', [PendaftaranProgramController::class, 'uploadBukti'])->name('siswa.pendaftaran.upload');
+// Route::post('/pendaftaran/store', [PendaftaranProgramController::class, 'store'])->name('pendaftaran.program.store');
+// Route::post('/siswa/pendaftaran/upload/{id}', [PendaftaranProgramController::class, 'uploadBukti'])->name('siswa.pendaftaran.upload');
 
 // Mata Pelajaran berdasarkan Jenjang
 Route::get('/mata-pelajaran/by-jenjang/{id}', [PendaftaranClassController::class, 'mataPelajaranByJenjang'])->name('mata-pelajaran.by-jenjang');
@@ -232,3 +232,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
+
+use App\Http\Controllers\MidtransWebhookController;
+
+Route::post('/midtrans/webhook', [MidtransWebhookController::class, 'handle']);
+
+

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Midtrans\Snap;
+use Midtrans\Config;
+
 use App\Models\{
     PendaftaranProgram,
     PendaftaranGuides,
@@ -29,66 +32,66 @@ class PendaftaranGuideController extends Controller
 
 
 
-    public function store(Request $request)
-    {
-        // Validasi inputan berdasarkan paket yang dipilih
-        $request->validate([
-            'paket_guide' => 'required|integer',
-        ]);
+   public function store(Request $request)
+{
+    $request->validate([
+        'paket_guide' => 'required|integer|in:1,2,3',
+        'file_upload' => 'nullable|file|mimes:pdf,doc,docx,jpg,png,jpeg',
+        'jadwalguide2_pilihan' => 'nullable|array|max:3',
+    ]);
 
-        // Ambil data program
-        $program = Program::findOrFail($request->tipe_program);
+    $program = Program::findOrFail($request->tipe_program);
 
-        // Buat entry utama pendaftaran program
-        $pendaftaranProgram = PendaftaranProgram::create([
-            'user_id' => Auth::id(),
-            'tipe_program' => $program->id,
-            'harga' => $program->harga,
-            'status' => 'menunggu',
-        ]);
+    // Setup Midtrans
+    Config::$serverKey = config('midtrans.serverKey');
+    Config::$isProduction = config('midtrans.isProduction');
+    Config::$isSanitized = config('midtrans.isSanitized');
+    Config::$is3ds = config('midtrans.is3ds');
 
-        // Cek paket guide yang dipilih
-        if ($request->paket_guide == 1 || $request->paket_guide == 3) {
-            // Paket 1 dan 3 memerlukan upload file dan langsung bayar
-            $request->validate([
-                'file_upload' => 'required|file|mimes:pdf,doc,docx,jpg,png,jpeg',
-            ]);
+    // Buat data utama pendaftaran
+    $pendaftaranProgram = PendaftaranProgram::create([
+        'user_id' => Auth::id(),
+        'tipe_program' => $program->id,
+        'harga' => $program->harga,
+        'status' => 'menunggu',
+    ]);
 
-            // Buat entry untuk PendaftaranGuide dengan file upload
-            PendaftaranGuides::create([
-                'pendaftaran_id' => $pendaftaranProgram->id,
-                'paket_guide' => $request->paket_guide,
-                'file_upload' => $request->file('file_upload')->store('guide_files', 'public'), // menyimpan file upload
-            ]);
-
-            $data = $request->all();
-
-        if ($request->hasFile('gambar')) {
-            $data['gambar'] = $request->file('gambar')->store('gambar_blog', 'public');
-        }
-
-
-            // Update status pendaftaran menjadi 'diterima' setelah file upload
-            $pendaftaranProgram->update(['status' => 'diterima']);
-        } elseif ($request->paket_guide == 2) {
-            // Paket 2 memerlukan pilihan jadwal dan konfirmasi admin
-            $request->validate([
-                'jadwalguide2_pilihan' => 'required|array|max:3',
-            ]);
-
-            // Buat entry untuk PendaftaranGuide dengan jadwal pilihan
-            PendaftaranGuides::create([
-                'pendaftaran_id' => $pendaftaranProgram->id,
-                'paket_guide' => $request->paket_guide,
-                'jadwalguide2_pilihan' => $request->jadwalguide2_pilihan,
-            ]);
-
-            // // Status masih menunggu konfirmasi admin
-            // $pendaftaranProgram->update(['status' => 'menunggu konfirmasi']);
-        }
-
-        return redirect()->route('siswa.pendaftaran.formEmail', $pendaftaranProgram->id)->with('success', 'Pendaftaran berhasil! Silakan cek email.');
+    // Simpan file jika ada
+    $filePath = null;
+    if ($request->hasFile('file_upload')) {
+        $filePath = $request->file('file_upload')->store('guide_files', 'public');
     }
+
+    // Simpan data ke tabel pendaftaran_guides
+    PendaftaranGuides::create([
+        'pendaftaran_id' => $pendaftaranProgram->id,
+        'paket_guide' => $request->paket_guide,
+        'file_upload' => $filePath,
+        'jadwalguide2_pilihan' => $request->jadwalguide2_pilihan,
+    ]);
+
+    // Generate Midtrans Snap Token
+    $snapToken = Snap::getSnapToken([
+        'transaction_details' => [
+            'order_id' => 'ORDER-' . $pendaftaranProgram->id,
+            'gross_amount' => (int) $program->harga,
+        ],
+        'customer_details' => [
+            'first_name' => Auth::user()->name,
+            'email' => Auth::user()->email,
+        ],
+    ]);
+
+    // Simpan link pembayaran
+    $pendaftaranProgram->update([
+        'link_pembayaran' => $snapToken,
+    ]);
+
+    return redirect()->route('siswa.pendaftaran.status', $pendaftaranProgram->id)
+        ->with('success', 'Pendaftaran berhasil! Silakan lanjut ke pembayaran.');
+}
+
+
 
     public function formEmail($id)
     {

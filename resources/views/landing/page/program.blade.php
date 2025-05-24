@@ -30,23 +30,24 @@
         <div class="row">
             @foreach ($programs as $program)
             <div class="col-lg-4 col-md-6 pb-4">
-                <a class="courses-list-item d-block position-relative overflow-hidden mb-2 rounded-lg shadow-sm" href="{{ route('landing.page.detail-program', $program->id) }}" style="text-decoration: none; color: inherit; background: rgba(255, 255, 255, 0.8); backdrop-filter: saturate(180%) blur(12px); border-radius: 16px; transition: all 0.4s ease;">
-                    <div class="img-wrapper position-relative overflow-hidden rounded-top-lg" style="height: 250px;">
-                        <img class="img-fluid w-100 h-100 object-fit-cover" src="{{ asset('storage/' . $program->gambar) }}" alt="{{ $program->nama_program }}" style="transition: transform 0.5s ease;">
-                        <div class="img-overlay position-absolute w-100 h-100 top-0 left-0" style="background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.6) 100%); transition: background 0.5s ease;"></div>
-                    </div>
-                    <div class="courses-text px-3 py-4 text-center">
-                        <h4 class="text-dark font-weight-bold mb-3" style="color:font-size: 1.35rem; transition: color 0.4s;">{{ $program->nama_program }}</h4>
-                        <div class="d-flex justify-content-center align-items-center gap-4">
-                            <span class="badge badge-success d-flex align-items-center px-3 py-2 rounded-pill shadow-sm" style="gap: 0.5rem; font-weight: 600;">
-                                <i class="fa fa-user" style="color: #fff;"></i> {{ $program->instruktur }}
-                            </span>
-                            <span class="badge badge-success-light d-flex align-items-center px-3 py-2 rounded-pill shadow-sm" style="gap: 0.5rem; font-weight: 600; color: #28a745; background-color: #e6f4ea;">
-                                <i class="fa fa-star"></i> {{ $program->rating }}
-                            </span>
+                <div class="card courses-list-item shadow-sm rounded-lg overflow-hidden" style="transition: transform 0.3s;">
+                    <a href="{{ route('landing.page.detail-program', $program->id) }}" style="text-decoration: none; color: inherit;">
+                        <div class="img-wrapper position-relative overflow-hidden" style="height: 250px;">
+                            <img class="img-fluid w-100 h-100 object-fit-cover" src="{{ asset('storage/' . $program->gambar) }}" alt="{{ $program->nama_program }}">
                         </div>
-                    </div>
-                </a>
+                        <div class="card-body text-center">
+                            <h4 class="text-dark font-weight-bold mb-3" style="font-size: 1.35rem;">{{ $program->nama_program }}</h4>
+                            <div class="d-flex justify-content-center align-items-center gap-4">
+                                <span class="badge badge-success d-flex align-items-center px-3 py-2 rounded-pill shadow-sm">
+                                    <i class="fa fa-user" style="color: #fff;"></i> {{ $program->instruktur }}
+                                </span>
+                                <span class="badge badge-success-light d-flex align-items-center px-3 py-2 rounded-pill shadow-sm">
+                                    <i class="fa fa-star"></i> {{ $program->rating }}
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
             </div>
             @endforeach
         </div>
@@ -59,22 +60,12 @@
 <!-- Courses End -->
 
 <style>
+    .courses-list-item {
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
     .courses-list-item:hover {
-        background: rgba(255, 255, 255, 1) !important;
-        box-shadow: 0 10px 30px rgb(40 167 69 / 0.3); /* lighter green shadow */
-        transform: translateY(-8px);
-        text-decoration: none;
-        color: #212529 !important;
-    }
-    .courses-list-item:hover .img-wrapper img {
-        transform: scale(1.1);
-    }
-    .courses-list-item:hover .img-overlay {
-        background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.2) 100%);
-    }
-    .courses-list-item:hover h4 {
-        color: #28a745 !important;
-        text-decoration: underline;
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     }
     .badge-success {
         background-color: #28a745 !important;
@@ -86,14 +77,17 @@
     }
     .object-fit-cover {
         object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    .img-wrapper:hover .object-fit-cover {
+        transform: scale(1.05);
     }
     @media (max-width: 576px) {
         .badge {
             font-size: 0.8rem !important;
             padding: 0.4rem 0.8rem !important;
-            gap: 0.3rem !important;
         }
-        .courses-text h4 {
+        .card-body h4 {
             font-size: 1.15rem !important;
         }
     }

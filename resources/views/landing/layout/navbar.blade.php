@@ -18,27 +18,24 @@
             </div>
 
             {{-- Login / Authenticated Button --}}
-            @auth
-                <div class="d-flex align-items-center gap-2">
-                    <!-- Link ke profile -->
-                    <a class="btn btn-primary py-2 px-4 d-none d-lg-block">
-                        {{ Auth::user()->name }}
-                    </a>
+@auth
+    <div class="d-flex align-items-center gap-2">
+        <!-- Link ke profile -->
+        <a href="{{ url('/profile') }}" class="btn btn-primary py-2 px-4 d-none d-lg-block">
+            {{-- {{ Auth::user()->name }} --}}
+        </a>
 
-                    <!-- Logout button dengan ikon -->
-                    <form method="POST" action="{{ route('logout') }}" class="m-0 p-0">
-                        @csrf
-                        <button type="submit" class="btn btn-primary d-none d-lg-block" title="Logout">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </button>
-                    </form>
-
-                </div>
-            @else
-                <a href="#" class="btn btn-primary py-2 px-4 d-none d-lg-block" data-toggle="modal" data-target="#loginModal">Login</a>
-
-                {{-- <a href="#" class="btn btn-primary py-2 px-4 d-none d-lg-block" data-toggle="modal" data-target="#loginModal">Login</a> --}}
-            @endauth
+        <!-- Logout button dengan ikon -->
+        <form method="POST" action="{{ route('logout') }}" class="m-0 p-0">
+            @csrf
+            <button type="submit" class="btn btn-primary d-none d-lg-block" title="Logout">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </form>
+    </div>
+@else
+    <a href="#" class="btn btn-primary py-2 px-4 d-none d-lg-block" data-toggle="modal" data-target="#loginModal">Login</a>
+@endauth
         </div>
 
     </nav>

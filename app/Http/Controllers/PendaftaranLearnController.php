@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+
+use Midtrans\Snap;
+use Midtrans\Config;
 use App\Models\{
     PendaftaranProgram,
     PendaftaranLearns,
@@ -23,33 +26,56 @@ class PendaftaranLearnController extends Controller
     }
 
     public function store(Request $request)
-    {
-        // Validasi input
-        $request->validate([
-            'asal_instansi' => 'required|string|max:255',
-            'tipe_program' => 'required|exists:programs,id',
-        ]);
+{
+    $request->validate([
+        'asal_instansi' => 'required|string|max:255',
+        'tipe_program' => 'required|exists:programs,id',
+    ]);
 
-        // Ambil program terkait
-        $program = Program::findOrFail($request->tipe_program);
+    $program = Program::findOrFail($request->tipe_program);
 
-        // Buat entry utama pendaftaran program
-        $pendaftaranProgram = PendaftaranProgram::create([
-            'user_id' => Auth::id(),
-            'tipe_program' => $program->id,
-            'harga' => $program->harga,
-            'status' => 'menunggu', // status menunggu bukti pembayaran
-        ]);
+    // Setup Midtrans
+    Config::$serverKey = config('midtrans.serverKey');
+    Config::$isProduction = config('midtrans.isProduction');
+    Config::$isSanitized = config('midtrans.isSanitized');
+    Config::$is3ds = config('midtrans.is3ds');
 
-        // Buat entri detail Learn
-        PendaftaranLearns::create([
-            'pendaftaran_id' => $pendaftaranProgram->id,
-            'asal_instansi' => $request->asal_instansi,
-        ]);
+    // Buat entry pendaftaran program tanpa token dulu
+    $pendaftaranProgram = PendaftaranProgram::create([
+        'user_id' => Auth::id(),
+        'tipe_program' => $program->id,
+        'harga' => $program->harga,
+        'status' => 'menunggu',
+    ]);
 
-        return redirect()->route('siswa.pendaftaran.formEmail', $pendaftaranProgram->id)
-            ->with('success', 'Pendaftaran berhasil. Silakan upload bukti pembayaran.');
-    }
+    // Buat entry detail Learn
+    PendaftaranLearns::create([
+        'pendaftaran_id' => $pendaftaranProgram->id,
+        'asal_instansi' => $request->asal_instansi,
+    ]);
+
+    // Generate Snap Token Midtrans
+    $snapToken = Snap::getSnapToken([
+        'transaction_details' => [
+            'order_id' => 'ORDER-' . $pendaftaranProgram->id,
+            'gross_amount' => (int) $program->harga,
+        ],
+        'customer_details' => [
+            'first_name' => Auth::user()->name,
+            'email' => Auth::user()->email,
+        ],
+    ]);
+
+    // Simpan token sebagai link pembayaran
+    $pendaftaranProgram->update([
+        'link_pembayaran' => $snapToken,
+    ]);
+
+    return redirect()->route('siswa.pendaftaran.status', $pendaftaranProgram->id)
+        ->with('success', 'Pendaftaran berhasil. Silakan lanjut ke pembayaran.');
+}
+
+
 
     public function uploadSertifikat(Request $request, $id)
     {

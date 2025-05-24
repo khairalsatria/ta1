@@ -163,49 +163,49 @@
             @endforeach
         </div>
 
-        @php
-    use App\Models\MediaPartner;
-    $mediaPartners = MediaPartner::all();
-@endphp
+            @php
+        use App\Models\MediaPartner;
+        $mediaPartners = MediaPartner::all();
+    @endphp
 
-<div class="row justify-content-center bg-image mx-0 mb-5">
-    <div class="col-lg-8 py-5">
-        <div class="p-5 my-5">
-            <h1 class="text-center mb-5">Our Trusted Partners</h1>
-            <div class="row">
-                @forelse($mediaPartners as $partner)
-                    <div class="col-4 col-md-2 mb-4 d-flex justify-content-center">
-                        <img src="{{ asset('storage/' . $partner->logo) }}" alt="{{ $partner->nama }}" class="img-fluid logo-size">
-                    </div>
-                @empty
-                    <div class="col-12 text-center">
-                        <p>Belum ada media partner.</p>
-                    </div>
-                @endforelse
-                @forelse($mediaPartners as $partner)
-                    <div class="col-4 col-md-2 mb-4 d-flex justify-content-center">
-                        <img src="{{ asset('storage/' . $partner->logo) }}" alt="{{ $partner->nama }}" class="img-fluid logo-size">
-                    </div>
-                @empty
-                    <div class="col-12 text-center">
-                        <p>Belum ada media partner.</p>
-                    </div>
-                @endforelse
+    <div class="row justify-content-center bg-image mx-0 mb-5">
+        <div class="col-lg-8 py-5">
+            <div class="p-5 my-5">
+                <h1 class="text-center mb-5">Our Trusted Partners</h1>
+                <div class="row">
+                    @forelse($mediaPartners as $partner)
+                        <div class="col-4 col-md-2 mb-4 d-flex justify-content-center">
+                            <img src="{{ asset('storage/' . $partner->logo) }}" alt="{{ $partner->nama }}" class="img-fluid logo-size">
+                        </div>
+                    @empty
+                        <div class="col-12 text-center">
+                            <p>Belum ada media partner.</p>
+                        </div>
+                    @endforelse
+                    @forelse($mediaPartners as $partner)
+                        <div class="col-4 col-md-2 mb-4 d-flex justify-content-center">
+                            <img src="{{ asset('storage/' . $partner->logo) }}" alt="{{ $partner->nama }}" class="img-fluid logo-size">
+                        </div>
+                    @empty
+                        <div class="col-12 text-center">
+                            <p>Belum ada media partner.</p>
+                        </div>
+                    @endforelse
+
+                </div>
 
             </div>
-
         </div>
     </div>
-</div>
 
-<style>
-    .logo-size {
-        width: 100%;
-        max-width: 150px;
-        height: auto;
-        object-fit: contain;
-    }
-</style>
+    <style>
+        .logo-size {
+            width: 100%;
+            max-width: 150px;
+            height: auto;
+            object-fit: contain;
+        }
+    </style>
 
 
     </div>

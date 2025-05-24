@@ -241,8 +241,8 @@
     <h3>Status Pendaftaran</h3>
 </div>
 
-<div class="card shadow-sm">
-    <div class="info-row">
+<div class="card shadow-sm p-4">
+    <div class="info-row mb-3">
         <div class="info-col">
             <i class="bi bi-book-half"></i>
             <div>
@@ -262,69 +262,81 @@
     <div class="text-center mb-4">
         <div class="text-muted mb-2">Status</div>
         @php
-            $badge = match($pendaftaran->status) {
+            $badgeClass = match($pendaftaran->status) {
                 'pending' => 'bg-warning',
                 'confirmed' => 'bg-success',
                 'cancelled' => 'bg-danger',
                 default => 'bg-secondary'
             };
         @endphp
-        <span class="badge {{ $badge }}">{{ ucfirst($pendaftaran->status) }}</span>
+        <span class="badge {{ $badgeClass }}">{{ ucfirst($pendaftaran->status) }}</span>
     </div>
 
-    {{-- INFO JADWAL --}}
+    @php $tampilkanTombolBayar = false; @endphp
+
+    {{-- === JENIS PENDAFTARAN === --}}
     @if ($pendaftaran->pendaftaranClass && $pendaftaran->pendaftaranClass->jadwalKonfirmasi)
         <div class="schedule-confirm text-center mb-3">
             <h6>Jadwal Ditetapkan (GenZE Class)</h6>
             <p>{{ $pendaftaran->pendaftaranClass->jadwalKonfirmasi->jadwalkelas }}</p>
         </div>
-    @elseif ($pendaftaran->pendaftaranGuide)
-    @php
-        $guide = $pendaftaran->pendaftaranGuide;
-    @endphp
+        @php $tampilkanTombolBayar = true; @endphp
 
-    @if ($guide->paket_guide == 2 && $guide->jadwalKonfirmasi)
-        <div class="schedule-confirm text-center mb-3">
-            <h6>Jadwal Ditetapkan (GenZE Guide - Paket 2)</h6>
-            <p>{{ $guide->jadwalKonfirmasi->jadwalguide2 }}</p>
-        </div>
-    @elseif (in_array($guide->paket_guide, [1, 3]) && $guide->file_upload)
-        <div class="schedule-confirm text-center mb-3">
-            <h6>File Upload (GenZE Guide - Paket {{ $guide->paket_guide }})</h6>
-            <a href="{{ asset('storage/' . $guide->file_upload) }}" target="_blank" class="btn btn-outline-primary">
-                <i class="bi bi-file-earmark-arrow-down"></i> Lihat File
-            </a>
-        </div>
-    @endif
+    @elseif ($pendaftaran->pendaftaranGuide)
+        @php $guide = $pendaftaran->pendaftaranGuide; @endphp
+
+        @if ($guide->paket_guide == 2 && $guide->jadwalKonfirmasi)
+            <div class="schedule-confirm text-center mb-3">
+                <h6>Jadwal Ditetapkan (GenZE Guide - Paket 2)</h6>
+                <p>{{ $guide->jadwalKonfirmasi->jadwalguide2 }}</p>
+            </div>
+            @php $tampilkanTombolBayar = true; @endphp
+
+        @elseif (in_array($guide->paket_guide, [1, 3]) && $guide->file_upload)
+            <div class="schedule-confirm text-center mb-3">
+                <h6>File Upload (GenZE Guide - Paket {{ $guide->paket_guide }})</h6>
+                <a href="{{ asset('storage/' . $guide->file_upload) }}" target="_blank" class="btn btn-outline-primary">
+                    <i class="bi bi-file-earmark-arrow-down"></i> Lihat File
+                </a>
+            </div>
+            @php $tampilkanTombolBayar = true; @endphp
+        @endif
 
     @elseif ($pendaftaran->pendaftaranLearn)
         <div class="schedule-confirm text-center mb-3">
             <h6>Info Program (GenZE Learn)</h6>
             <p><strong>Instansi:</strong> {{ $pendaftaran->pendaftaranLearn->asal_instansi }}</p>
         </div>
+        @php $tampilkanTombolBayar = true; @endphp
+
     @else
-        <div class="alert alert-info mt-4 text-center" role="alert">
-            Jadwal belum dikonfirmasi oleh admin. Silakan tunggu informasi selanjutnya.
+        <div class="alert alert-info text-center mt-3" role="alert">
+            Jadwal atau data belum dikonfirmasi admin. Silakan tunggu informasi selanjutnya.
         </div>
     @endif
 
-    {{-- FORM UPLOAD BUKTI PEMBAYARAN --}}
-    @if (!$pendaftaran->bukti_pembayaran && ($pendaftaran->pendaftaranClass?->jadwalKonfirmasi || $pendaftaran->pendaftaranGuide?->jadwalKonfirmasi || $pendaftaran->pendaftaranLearn))
-        <form action="{{ route('siswa.pendaftaran.upload', $pendaftaran->id) }}" method="POST" enctype="multipart/form-data" class="p-3">
-            @csrf
-            <label for="bukti_pembayaran" class="form-label">Upload Bukti Pembayaran</label>
-            <input type="file" name="bukti_pembayaran" id="bukti_pembayaran" class="form-control" required>
-            <button type="submit" class="btn btn-success mt-3">
-                <i class="bi bi-upload me-1"></i> Upload
+    {{-- === TOMBOL BAYAR MIDTRANS === --}}
+    @if ($tampilkanTombolBayar && $pendaftaran->link_pembayaran)
+        <div class="text-center mt-4">
+            <p class="text-muted mb-2">Lanjutkan ke pembayaran:</p>
+            <button id="pay-button" class="btn btn-primary">
+                <i class="bi bi-credit-card me-1"></i> Bayar Sekarang
             </button>
-        </form>
-    @elseif ($pendaftaran->bukti_pembayaran)
-        <div class="text-center mt-3">
-            <p class="fw-bold mb-1">Bukti Pembayaran:</p>
-            <img src="{{ asset('storage/' . $pendaftaran->bukti_pembayaran) }}" alt="Bukti Pembayaran" style="max-width: 300px;" class="img-thumbnail">
         </div>
+
+        <script src="https://app.sandbox.midtrans.com/snap/snap.js"
+            data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
+        <script type="text/javascript">
+            document.getElementById('pay-button').addEventListener('click', function() {
+                snap.pay('{{ $pendaftaran->link_pembayaran }}');
+            });
+        </script>
     @endif
 </div>
+
+
+
+
 
 
 @endsection

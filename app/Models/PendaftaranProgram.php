@@ -16,7 +16,7 @@ class PendaftaranProgram extends Model
         'tipe_program',
         'harga',
         'status',
-        'bukti_pembayaran'
+        'link_pembayaran'
     ];
 
     public function user()
