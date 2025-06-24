@@ -42,12 +42,12 @@
                         <h6 class="text-white my-3">{{ $program->instruktur }}</h6>
                     </div>
                     <div class="d-flex justify-content-between border-bottom px-4">
-                        <h6 class="text-white my-3">Tipe Kelas</h6>
-                        <h6 class="text-white my-3">{{ ucfirst($program->tipe_kelas) }}</h6>
+                        <h6 class="text-white my-3">Program</h6>
+                        <h6 class="text-white my-3">{{ ucfirst($program->tipe_program) }}</h6>
                     </div>
                     <div class="d-flex justify-content-between border-bottom px-4">
                         <h6 class="text-white my-3">Durasi</h6>
-                        <h6 class="text-white my-3">{{ $program->durasi }} Jam</h6>
+                        <h6 class="text-white my-3">{{ $program->durasi }}</h6>
                     </div>
                     <div class="d-flex justify-content-between border-bottom px-4">
                         <h6 class="text-white my-3">Pendidikan</h6>

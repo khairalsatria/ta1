@@ -87,7 +87,7 @@
                 <a href="{{ url('admin/pendaftaran/guides/data') }}" class="submenu-link">Pendaftar Guide</a>
             </li>
             <li class="submenu-item {{ request()->is('') ? 'active' : '' }}">
-                <a href="{{ url('') }}" class="submenu-link">Pendaftar Learn</a>
+                <a href="{{ url('admin/pendaftaran/learns/data') }}" class="submenu-link">Pendaftar Learn</a>
             </li>
         </ul>
     </li>

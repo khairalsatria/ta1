@@ -13,7 +13,7 @@
                 <a href="{{ url('/about') }}" class="nav-item nav-link {{ request()->is('about') ? 'active' : '' }}">About</a>
                 <a href="{{ url('/program') }}" class="nav-item nav-link {{ request()->is('program') ? 'active' : '' }}">Program</a>
                 <a href="{{ url('/team') }}" class="nav-item nav-link {{ request()->is('team') ? 'active' : '' }}">Team</a>
-                <a href="{{ url('/testimoni') }}" class="nav-item nav-link {{ request()->is('testimoni') ? 'active' : '' }}">Testimoni</a>
+                {{-- <a href="{{ url('/testimoni') }}" class="nav-item nav-link {{ request()->is('testimoni') ? 'active' : '' }}">Testimoni</a> --}}
                 <a href="{{ url('/kontak') }}" class="nav-item nav-link {{ request()->is('kontak') ? 'active' : '' }}">Contact</a>
             </div>
 
@@ -22,7 +22,7 @@
     <div class="d-flex align-items-center gap-2">
         <!-- Link ke profile -->
         <a href="{{ url('/profile') }}" class="btn btn-primary py-2 px-4 d-none d-lg-block">
-            {{-- {{ Auth::user()->name }} --}}
+            {{ auth()->user()->name }}
         </a>
 
         <!-- Logout button dengan ikon -->
@@ -36,6 +36,7 @@
 @else
     <a href="#" class="btn btn-primary py-2 px-4 d-none d-lg-block" data-toggle="modal" data-target="#loginModal">Login</a>
 @endauth
+
         </div>
 
     </nav>
