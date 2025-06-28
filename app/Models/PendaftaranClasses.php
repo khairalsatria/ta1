@@ -4,6 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\PendaftaranProgram;
+use App\Models\JenisKelas;
+use App\Models\JenjangPendidikan;
+use App\Models\MataPelajaran;
+use App\Models\JadwalKelas;
+use App\Models\KelasGenze;
 
 class PendaftaranClasses extends Model
 {
@@ -14,7 +20,7 @@ class PendaftaranClasses extends Model
     protected $fillable = [
         'pendaftaran_id',
         'jeniskelas',
-        'kelas',
+        'kelas_id',
         'jenjang_pendidikan',
         'mata_pelajaran',
         'jadwalkelas_pilihan',
@@ -53,6 +59,11 @@ class PendaftaranClasses extends Model
     public function getJadwalPilihanObjectsAttribute()
 {
     return JadwalKelas::whereIn('id_jadwalkelas', $this->jadwalkelas_pilihan ?? [])->get();
+}
+
+public function kelasGenze()
+{
+    return $this->belongsTo(KelasGenze::class, 'kelas_id');
 }
 
 }

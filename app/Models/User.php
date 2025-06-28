@@ -31,6 +31,16 @@ class User extends Authenticatable
         return $this->hasMany(PendaftaranProgram::class, 'user_id');
     }
 
+    public function kelasYangDikelola()
+{
+    return $this->hasMany(KelasGenze::class, 'mentor_id');
+}
+
+public function pendaftaranKelas()
+{
+    return $this->hasOne(PendaftaranClasses::class, 'pendaftaran_id', 'id');
+}
+
     /**
      * The attributes that should be hidden for serialization.
      *

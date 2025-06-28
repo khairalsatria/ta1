@@ -5,100 +5,125 @@
 @section('content')
 
 <!-- Header Start -->
-<div class="jumbotron jumbotron-fluid page-header position-relative overlay-bottom" style="margin-bottom: 90px;">
+<div class="jumbotron jumbotron-fluid page-header position-relative overlay-bottom mb-5">
     <div class="container text-center py-5">
-        <h1 class="text-white display-1">{{ $program->tipe_program }}</h1> <!-- Menampilkan nama program -->
-        <div class="d-inline-flex text-white mb-5">
-            {{-- <p class="m-0 text-uppercase"><a class="text-white" href="{{ route('beranda') }}">Beranda</a></p> --}}
+        <h1 class="text-white display-4 font-weight-bold" style="text-shadow: 2px 2px 10px rgba(0,0,0,0.7);">
+            {{ $program->tipe_program }}
+        </h1>
+        <div class="d-inline-flex text-white mt-3 font-weight-semibold">
+            <p class="m-0 text-uppercase"><a class="text-white" href="{{ url('/') }}">Home</a></p>
             <i class="fa fa-angle-double-right pt-1 px-3"></i>
-            <p class="m-0 text-uppercase">Detail Program</p>
+            <p class="m-0 text-uppercase text-white">Detail Program</p>
         </div>
     </div>
 </div>
 <!-- Header End -->
 
 <!-- Detail Start -->
-    <div class="container-fluid py-5">
-        <div class="container py-5">
-            <div class="row">
-                <!-- Konten Kiri -->
-                <div class="col-lg-8">
-                    <div class="mb-5">
-                        <div class="section-title position-relative mb-5">
-                            <h6 class="d-inline-block position-relative text-secondary text-uppercase pb-2">Deskripsi Program</h6>
-                            <h1 class="display-4">{{ $program->nama_program }}</h1>
-                        </div>
-                        <img class="img-fluid rounded w-100 mb-4" src="{{ asset('storage/' . $program->gambar) }}" alt="{{ $program->nama_program }}">
-                        <p>{!! nl2br(e($program->deskripsi)) !!}</p>
-                    </div>
+<div class="container py-5">
+    <div class="row">
+        <!-- Konten Kiri -->
+        <div class="col-lg-8 mb-5">
+            <div class="mb-4">
+                <h6 class="text-success text-uppercase font-weight-bold mb-2">Deskripsi Program</h6>
+                <h2 class="display-5 font-weight-bold text-dark mb-3">{{ $program->nama_program }}</h2>
+                <div class="detail-img-wrapper mb-4">
+                    <img class="img-fluid w-100 h-100" src="{{ asset('storage/' . $program->gambar) }}" alt="{{ $program->nama_program }}">
                 </div>
+                <p class="text-muted" style="line-height: 1.8;">{!! nl2br(e($program->deskripsi)) !!}</p>
+            </div>
+        </div>
 
-                <!-- Sidebar Kanan -->
-            <div class="col-lg-4 mt-5 mt-lg-0">
-                <div class="bg-primary mb-5 py-3">
-                    <h3 class="text-white py-3 px-4 m-0">Fitur Program</h3>
-                    <div class="d-flex justify-content-between border-bottom px-4">
-                        <h6 class="text-white my-3">Instruktur</h6>
-                        <h6 class="text-white my-3">{{ $program->instruktur }}</h6>
-                    </div>
-                    <div class="d-flex justify-content-between border-bottom px-4">
-                        <h6 class="text-white my-3">Program</h6>
-                        <h6 class="text-white my-3">{{ ucfirst($program->tipe_program) }}</h6>
-                    </div>
-                    <div class="d-flex justify-content-between border-bottom px-4">
-                        <h6 class="text-white my-3">Durasi</h6>
-                        <h6 class="text-white my-3">{{ $program->durasi }}</h6>
-                    </div>
-                    <div class="d-flex justify-content-between border-bottom px-4">
-                        <h6 class="text-white my-3">Pendidikan</h6>
-                        <h6 class="text-white my-3">{{ $program->level }}</h6>
-                    </div>
-                    <div class="d-flex justify-content-between border-bottom px-4">
-                        <h6 class="text-white my-3">Rating</h6>
-                        <h6 class="text-white my-3">{{ $program->rating ?? '4.5' }}</h6>
-                    </div>
-                    <div class="py-3 px-4">
-                        @if ($program->tipe_program === 'GenZE Class')
-                            <button class="btn btn-block btn-secondary py-3 px-5" data-bs-toggle="modal" data-bs-target="#daftarGenzeClassModal">
-                                Daftar GenZE Class
-                            </button>
-                        @elseif ($program->tipe_program === 'GenZE Guide')
-                            <button class="btn btn-block btn-secondary py-3 px-5" data-bs-toggle="modal" data-bs-target="#daftarGenzeGuideModal">
-                                Daftar GenZE Guide
-                            </button>
-                        @elseif ($program->tipe_program === 'GenZE Learn')
-                            <button class="btn btn-block btn-secondary py-3 px-5" data-bs-toggle="modal" data-bs-target="#daftarGenzeLearnModal">
-                                Daftar GenZE Learn
-                            </button>
-                        @else
-                            <button class="btn btn-block btn-warning py-3 px-5" disabled>
-                                Jenis Program Tidak Dikenal
-                            </button>
-                        @endif
-                    </div>
-                </div>
+        <!-- Sidebar Kanan -->
+        <div class="col-lg-4">
+            <div class="bg-primary text-white p-4 rounded mb-4 shadow-sm">
+                <h4 class="mb-3">Fitur Program</h4>
+                <ul class="list-unstyled">
+                    <li class="d-flex justify-content-between border-bottom py-2">
+                        <span>Instruktur</span> <strong>{{ $program->instruktur }}</strong>
+                    </li>
+                    <li class="d-flex justify-content-between border-bottom py-2">
+                        <span>Program</span> <strong>{{ ucfirst($program->tipe_program) }}</strong>
+                    </li>
+                    <li class="d-flex justify-content-between border-bottom py-2">
+                        <span>Durasi</span> <strong>{{ $program->durasi }}</strong>
+                    </li>
+                    <li class="d-flex justify-content-between border-bottom py-2">
+                        <span>Pendidikan</span> <strong>{{ $program->level }}</strong>
+                    </li>
+                    <li class="d-flex justify-content-between border-bottom py-2">
+                        <span>Rating</span> <strong>{{ $program->rating ?? '4.5' }}</strong>
+                    </li>
+                </ul>
 
-                <!-- Program Terkait Dipindahkan ke Sini -->
-                <div class="mb-5">
-                    <h4 class="mb-4">Program Lainnya</h4>
-                    @foreach ($relatedPrograms as $related)
-                    <a class="d-flex align-items-center text-decoration-none mb-4" href="{{ route('landing.page.detail-program', $related->id) }}">
-                        <img class="img-fluid rounded" src="{{ asset('storage/' . $related->gambar) }}" alt="{{ $related->nama_program }}" style="width: 80px; height: 80px; object-fit: cover;">
-                        <div class="pl-3">
-                            <h6 class="text-dark mb-1">{{ $related->nama_program }}</h6>
-                            <div class="d-flex">
-                                <small class="text-body mr-3"><i class="fa fa-user text-primary mr-2"></i>{{ $related->instruktur ?? 'Mentor' }}</small>
-                                <small class="text-body"><i class="fa fa-star text-primary mr-2"></i>{{ $related->rating ?? '4.5' }}</small>
-                            </div>
-                        </div>
-                    </a>
-                    @endforeach
+                <div class="text-center mt-4">
+                    @if ($program->tipe_program === 'GenZE Class')
+                        <button class="btn btn-light w-100" data-bs-toggle="modal" data-bs-target="#daftarGenzeClassModal">Daftar GenZE Class</button>
+                    @elseif ($program->tipe_program === 'GenZE Guide')
+                        <button class="btn btn-light w-100" data-bs-toggle="modal" data-bs-target="#daftarGenzeGuideModal">Daftar GenZE Guide</button>
+                    @elseif ($program->tipe_program === 'GenZE Learn')
+                        <button class="btn btn-light w-100" data-bs-toggle="modal" data-bs-target="#daftarGenzeLearnModal">Daftar GenZE Learn</button>
+                    @else
+                        <button class="btn btn-warning w-100" disabled>Jenis Program Tidak Dikenal</button>
+                    @endif
                 </div>
+            </div>
+
+            <!-- Program Lainnya -->
+            <div class="bg-white border rounded p-4 shadow-sm">
+                <h5 class="mb-4">Program Lainnya</h5>
+                @foreach ($relatedPrograms as $related)
+                <a class="d-flex mb-3 align-items-center text-decoration-none" href="{{ route('landing.page.detail-program', $related->id) }}">
+                    <div class="me-3 flex-shrink-0" style="width: 70px; height: 70px;">
+                        <img src="{{ asset('storage/' . $related->gambar) }}" class="img-fluid rounded object-fit-cover" style="width: 70px; height: 70px;" alt="{{ $related->nama_program }}">
+                    </div>
+                    <div>
+                        <h6 class="mb-1 text-dark">{{ $related->nama_program }}</h6>
+                        <small class="text-muted d-block"><i class="fa fa-user me-1 text-success"></i> {{ $related->instruktur }}</small>
+                        <small class="text-muted d-block"><i class="fa fa-star me-1 text-warning"></i> {{ $related->rating ?? '4.5' }}</small>
+                    </div>
+                </a>
+                @endforeach
             </div>
         </div>
     </div>
 </div>
 <!-- Detail End -->
+
+<style>
+    .detail-img-wrapper {
+        height: 300px;
+        overflow: hidden;
+        border-radius: 8px;
+        background-color: #f5f5f5;
+    }
+
+    .detail-img-wrapper img {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.4s ease;
+    }
+
+    .detail-img-wrapper:hover img {
+        transform: scale(1.03);
+    }
+
+    .object-fit-cover {
+        object-fit: cover;
+    }
+
+    @media (max-width: 768px) {
+        .detail-img-wrapper {
+            height: 200px;
+        }
+
+        .display-5 {
+            font-size: 1.75rem;
+        }
+    }
+</style>
+
 
 <!-- Modal GenZE Clas -->
 <div class="modal fade" id="daftarGenzeClassModal" tabindex="-1" aria-labelledby="daftarModalLabel" aria-hidden="true">

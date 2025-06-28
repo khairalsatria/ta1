@@ -3,342 +3,116 @@
 @section('title', 'Status Pendaftaran')
 
 @section('content')
-<style>
-    /* Base and Layout */
-    .page-heading {
-        background: linear-gradient(135deg, #2ecc71, #27ae60);
-        padding: 2rem 1rem;
-        border-radius: 12px;
-        color: #fff;
-        margin-bottom: 2rem;
-        text-align: center;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        user-select: none;
-    }
-    .page-heading h3 {
-        font-weight: 700;
-        font-size: 2.2rem;
-        position: relative;
-        display: inline-block;
-        padding-bottom: 0.5rem;
-        letter-spacing: 0.05em;
-    }
-    .page-heading h3::after {
-        content: "";
-        position: absolute;
-        width: 50%;
-        height: 3px;
-        background: #a3e635;
-        bottom: 0;
-        left: 25%;
-        border-radius: 2px;
-        animation: underlineGlowGreen 2s ease-in-out infinite;
-    }
-    @keyframes underlineGlowGreen {
-        0%, 100% {
-            box-shadow: 0 0 8px #a3e635, 0 0 18px #a3e635;
-        }
-        50% {
-            box-shadow: 0 0 16px #a3e635, 0 0 36px #a3e635;
-        }
-    }
 
-    /* Card */
-    .card {
-        background: #fff;
-        border-radius: 16px;
-        box-shadow: 0 16px 40px rgba(39, 174, 96, 0.15);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        max-width: 600px;
-        margin: auto;
-        padding: 2rem;
-        font-size: 1rem;
-    }
-    .card:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 24px 56px rgba(39, 174, 96, 0.3);
-    }
-
-    /* Section Titles */
-    .text-muted {
-        font-size: 0.9rem;
-        letter-spacing: 0.05em;
-        color: #678d58;
-        margin-bottom: 0.3rem;
-        text-transform: uppercase;
-    }
-    p.fw-bold {
-        font-size: 1.2rem;
-        color: #2f6627;
-    }
-    p.fw-semibold {
-        font-weight: 600;
-        font-size: 1.15rem;
-    }
-
-    /* Info Columns */
-    .info-row {
-        display: flex;
-        justify-content: space-between;
-        gap: 1rem;
-        margin-bottom: 2rem;
-        flex-wrap: wrap;
-    }
-    .info-col {
-        flex: 1 1 45%;
-        min-width: 180px;
-        background: #e6f4ea;
-        border-radius: 12px;
-        padding: 1rem 1.5rem;
-        box-shadow: inset 0 0 10px #b7d9b8cc;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        color: #2e7d32;
-        font-weight: 600;
-        font-size: 1.1rem;
-    }
-    .info-col i {
-        font-size: 1.7rem;
-        color: #4caf50;
-        flex-shrink: 0;
-        transition: color 0.3s ease;
-    }
-    .info-col:hover i {
-        color: #2e7d32;
-    }
-
-    /* Status Badge */
-    .badge {
-        font-weight: 600 !important;
-        font-size: 1rem !important;
-        padding: 0.6em 1.1em !important;
-        border-radius: 50px !important;
-        text-transform: uppercase !important;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.07);
-        transition: background 0.4s ease, box-shadow 0.4s ease;
-        display: inline-block;
-        min-width: 110px;
-        text-align: center;
-        letter-spacing: 0.08em;
-        user-select: none;
-    }
-    .bg-warning {
-        background: linear-gradient(45deg, #cddc39, #afb42b);
-        color: #3e2723 !important;
-        box-shadow: 0 4px 12px #cddc3988;
-    }
-    .bg-success {
-        background: linear-gradient(45deg, #4caf50, #2e7d32);
-        color: #e8f5e9 !important;
-        box-shadow: 0 4px 12px #388e3c99;
-    }
-    .bg-danger {
-        background: linear-gradient(45deg, #e57373, #c62828);
-        color: #fff !important;
-        box-shadow: 0 4px 12px #e5393599;
-    }
-    .bg-secondary {
-        background: linear-gradient(45deg, #a5d6a7, #6b8e23);
-        color: #eceff1 !important;
-        box-shadow: 0 4px 12px #78909c99;
-    }
-
-    /* Schedule Section */
-    .schedule-confirm {
-        text-align: center;
-        margin: 2rem 0 1.5rem;
-    }
-    .schedule-confirm h6 {
-        color: #678d58;
-        margin-bottom: 0.5rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-        font-weight: 700;
-    }
-    .schedule-confirm p {
-        color: #2e7d32;
-        font-weight: 700;
-        font-size: 1.25rem;
-        text-shadow: 0 1px 2px #aed581;
-    }
-
-    /* Upload Form */
-    form.mt-3 {
-        max-width: 400px;
-        margin: 1rem auto 0 auto;
-    }
-    label.form-label {
-        font-weight: 600;
-        color: #2e7d32;
-    }
-    input[type="file"].form-control {
-        border: 2px solid #66bb6a;
-        border-radius: 8px;
-        padding: 0.5rem 0.75rem;
-        transition: border-color 0.3s ease;
-        cursor: pointer;
-    }
-    input[type="file"].form-control:hover,
-    input[type="file"].form-control:focus {
-        border-color: #2e7d32;
-        outline: none;
-    }
-
-    button.btn-success {
-        background: linear-gradient(90deg, #43a047, #2e7d32);
-        border: none;
-        padding: 0.65rem 1.8rem;
-        font-weight: 700;
-        font-size: 1.15rem;
-        border-radius: 50px;
-        box-shadow: 0 6px 12px #43a047aa;
-        transition: background 0.4s ease, box-shadow 0.4s ease;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 0.5rem;
-        cursor: pointer;
-        user-select: none;
-    }
-    button.btn-success:hover {
-        background: linear-gradient(90deg, #2e7d32, #145214);
-        box-shadow: 0 8px 20px #2e7d32bb;
-    }
-
-    /* Info Alert */
-    .alert-info {
-        max-width: 520px;
-        margin: 2rem auto 0 auto;
-        background: #e8f5e9;
-        border-color: #81c784;
-        color: #2e7d32;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-        font-size: 1rem;
-        box-shadow: 0 0 12px #81c78466;
-        border-radius: 12px;
-        text-align: center;
-    }
-
-    /* Responsive */
-    @media (max-width: 576px) {
-        .info-col {
-            flex: 1 1 100%;
-        }
-        form.mt-3 {
-            width: 100%;
-            padding: 0 1rem;
-        }
-        button.btn-success {
-            font-size: 1.05rem;
-            padding: 0.65rem 1.3rem;
-        }
-    }
-</style>
-<div class="page-heading">
-    <h3>Status Pendaftaran</h3>
+<!-- Header Start -->
+<div class="jumbotron jumbotron-fluid page-header position-relative overlay-bottom mb-5">
+    <div class="container text-center py-5">
+        <h1 class="text-white display-4 font-weight-bold" style="text-shadow: 2px 2px 10px rgba(0,0,0,0.7);">Status Pendaftaran</h1>
+        <div class="d-inline-flex text-white mt-3 font-weight-semibold">
+            <p class="m-0 text-uppercase"><a class="text-white" href="{{ url('/') }}">Home</a></p>
+            <i class="fa fa-angle-double-right pt-1 px-3"></i>
+            <p class="m-0 text-uppercase text-white">Status</p>
+        </div>
+    </div>
 </div>
+<!-- Header End -->
 
-<div class="card shadow-sm p-4">
-    <div class="info-row mb-3">
-        <div class="info-col">
-            <i class="bi bi-book-half"></i>
-            <div>
-                <div class="text-muted">Program</div>
-                <p class="fw-bold mb-0">{{ $pendaftaran->program->nama_program }}</p>
+<!-- Content Start -->
+<div class="container py-5">
+    <div class="card shadow-sm border-0 rounded-4 p-4 mx-auto" style="max-width: 720px;">
+        <h4 class="text-success font-weight-bold mb-4 text-center">Informasi Pendaftaran Anda</h4>
+
+        <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+                <div class="bg-light rounded p-3 h-100 shadow-sm">
+                    <div class="text-muted small">Program</div>
+                    <h5 class="mb-0 text-dark">{{ $pendaftaran->program->nama_program }}</h5>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="bg-light rounded p-3 h-100 shadow-sm">
+                    <div class="text-muted small">Harga</div>
+                    <h5 class="mb-0 text-dark">Rp{{ number_format($pendaftaran->harga, 0, ',', '.') }}</h5>
+                </div>
             </div>
         </div>
-        <div class="info-col">
-            <i class="bi bi-currency-dollar"></i>
-            <div>
-                <div class="text-muted">Harga</div>
-                <p class="fw-bold mb-0">Rp{{ number_format($pendaftaran->harga, 0, ',', '.') }}</p>
-            </div>
+
+        <!-- Status -->
+        <div class="text-center my-3">
+            <div class="text-muted small mb-2">Status</div>
+            @php
+                $badgeClass = match($pendaftaran->status) {
+                    'pending' => 'bg-warning',
+                    'confirmed' => 'bg-success',
+                    'cancelled' => 'bg-danger',
+                    default => 'bg-secondary'
+                };
+            @endphp
+            <span class="badge {{ $badgeClass }} py-2 px-4 rounded-pill text-uppercase shadow-sm">
+                {{ ucfirst($pendaftaran->status) }}
+            </span>
         </div>
-    </div>
 
-    <div class="text-center mb-4">
-        <div class="text-muted mb-2">Status</div>
-        @php
-            $badgeClass = match($pendaftaran->status) {
-                'pending' => 'bg-warning',
-                'confirmed' => 'bg-success',
-                'cancelled' => 'bg-danger',
-                default => 'bg-secondary'
-            };
-        @endphp
-        <span class="badge {{ $badgeClass }}">{{ ucfirst($pendaftaran->status) }}</span>
-    </div>
+        <!-- Jadwal / Upload -->
+        @php $tampilkanTombolBayar = false; @endphp
 
-    @php $tampilkanTombolBayar = false; @endphp
-
-    {{-- === JENIS PENDAFTARAN === --}}
-    @if ($pendaftaran->pendaftaranClass && $pendaftaran->pendaftaranClass->jadwalKonfirmasi)
-        <div class="schedule-confirm text-center mb-3">
-            <h6>Jadwal Ditetapkan (GenZE Class)</h6>
-            <p>{{ $pendaftaran->pendaftaranClass->jadwalKonfirmasi->jadwalkelas }}</p>
-        </div>
-        @php $tampilkanTombolBayar = true; @endphp
-
-    @elseif ($pendaftaran->pendaftaranGuide)
-        @php $guide = $pendaftaran->pendaftaranGuide; @endphp
-
-        @if ($guide->paket_guide == 2 && $guide->jadwalKonfirmasi)
-            <div class="schedule-confirm text-center mb-3">
-                <h6>Jadwal Ditetapkan (GenZE Guide - Paket 2)</h6>
-                <p>{{ $guide->jadwalKonfirmasi->jadwalguide2 }}</p>
+        @if ($pendaftaran->pendaftaranClass && $pendaftaran->pendaftaranClass->jadwalKonfirmasi)
+            <div class="text-center mt-4">
+                <div class="text-muted small">Jadwal Ditetapkan (GenZE Class)</div>
+                <p class="fw-bold text-success mb-0">{{ $pendaftaran->pendaftaranClass->jadwalKonfirmasi->jadwalkelas }}</p>
             </div>
             @php $tampilkanTombolBayar = true; @endphp
 
-        @elseif (in_array($guide->paket_guide, [1, 3]) && $guide->file_upload)
-            <div class="schedule-confirm text-center mb-3">
-                <h6>File Upload (GenZE Guide - Paket {{ $guide->paket_guide }})</h6>
-                <a href="{{ asset('storage/' . $guide->file_upload) }}" target="_blank" class="btn btn-outline-primary">
-                    <i class="bi bi-file-earmark-arrow-down"></i> Lihat File
-                </a>
+        @elseif ($pendaftaran->pendaftaranGuide)
+            @php $guide = $pendaftaran->pendaftaranGuide; @endphp
+            @if ($guide->paket_guide == 2 && $guide->jadwalKonfirmasi)
+                <div class="text-center mt-4">
+                    <div class="text-muted small">Jadwal Ditetapkan (GenZE Guide - Paket 2)</div>
+                    <p class="fw-bold text-success mb-0">{{ $guide->jadwalKonfirmasi->jadwalguide2 }}</p>
+                </div>
+                @php $tampilkanTombolBayar = true; @endphp
+            @elseif (in_array($guide->paket_guide, [1, 3]) && $guide->file_upload)
+                <div class="text-center mt-4">
+                    <div class="text-muted small">File Upload (GenZE Guide - Paket {{ $guide->paket_guide }})</div>
+                    <a href="{{ asset('storage/' . $guide->file_upload) }}" target="_blank" class="btn btn-outline-success mt-2">
+                        <i class="bi bi-file-earmark-arrow-down"></i> Lihat File
+                    </a>
+                </div>
+                @php $tampilkanTombolBayar = true; @endphp
+            @endif
+
+        @elseif ($pendaftaran->pendaftaranLearn)
+            <div class="text-center mt-4">
+                <div class="text-muted small">Asal Instansi (GenZE Learn)</div>
+                <p class="fw-bold text-success mb-0">{{ $pendaftaran->pendaftaranLearn->asal_instansi }}</p>
             </div>
             @php $tampilkanTombolBayar = true; @endphp
+
+        @else
+            <div class="alert alert-info text-center mt-4">
+                Jadwal atau data belum dikonfirmasi admin. Silakan tunggu informasi selanjutnya.
+            </div>
         @endif
 
-    @elseif ($pendaftaran->pendaftaranLearn)
-        <div class="schedule-confirm text-center mb-3">
-            <h6>Info Program (GenZE Learn)</h6>
-            <p><strong>Instansi:</strong> {{ $pendaftaran->pendaftaranLearn->asal_instansi }}</p>
-        </div>
-        @php $tampilkanTombolBayar = true; @endphp
+        <!-- Tombol Bayar -->
+        @if ($tampilkanTombolBayar && $pendaftaran->link_pembayaran)
+            <div class="text-center mt-5">
+                <p class="text-muted mb-2">Lanjutkan ke pembayaran:</p>
+                <button id="pay-button" class="btn btn-success px-4 py-2 rounded-pill fw-semibold shadow">
+                    <i class="bi bi-credit-card me-1"></i> Bayar Sekarang
+                </button>
+            </div>
 
-    @else
-        <div class="alert alert-info text-center mt-3" role="alert">
-            Jadwal atau data belum dikonfirmasi admin. Silakan tunggu informasi selanjutnya.
-        </div>
-    @endif
-
-    {{-- === TOMBOL BAYAR MIDTRANS === --}}
-    @if ($tampilkanTombolBayar && $pendaftaran->link_pembayaran)
-        <div class="text-center mt-4">
-            <p class="text-muted mb-2">Lanjutkan ke pembayaran:</p>
-            <button id="pay-button" class="btn btn-primary">
-                <i class="bi bi-credit-card me-1"></i> Bayar Sekarang
-            </button>
-        </div>
-
-        <script src="https://app.sandbox.midtrans.com/snap/snap.js"
-            data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
-        <script type="text/javascript">
-            document.getElementById('pay-button').addEventListener('click', function() {
-                snap.pay('{{ $pendaftaran->link_pembayaran }}');
-            });
-        </script>
-    @endif
+            <script src="https://app.sandbox.midtrans.com/snap/snap.js"
+                data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
+            <script>
+                document.getElementById('pay-button').addEventListener('click', function () {
+                    snap.pay('{{ $pendaftaran->link_pembayaran }}');
+                });
+            </script>
+        @endif
+    </div>
 </div>
-
-
-
-
-
+<!-- Content End -->
 
 @endsection
-
-

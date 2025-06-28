@@ -23,16 +23,19 @@ use App\Http\Controllers\Admin\{
     PendaftaranController,
     PendaftaranClassController as AdminPendaftaranClassController,
     PendaftaranGuideController as AdminPendaftaranGuideController,
-    PendaftaranLearnController as AdminPendaftaranLearnController
+    PendaftaranLearnController as AdminPendaftaranLearnController,
+    KelasGenzeController
 };
 
 use App\Http\Controllers\Siswa\{
     PendaftaranController as SiswaPendaftaranController,
     DashboardController as SiswaDashboardController,
+    LatihanController,
     StatusPendaftaranController
 };
 
 use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
+use App\Http\Controllers\Mentor\SoalController;
 
 use App\Http\Controllers\Landing\PageController;
 use App\Http\Controllers\Auth\{
@@ -88,6 +91,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         'kontak' => KontakController::class,
         'genze_learn' => GenzeLearnController::class,
         'jadwal_kelas' => JadwalKelasController::class,
+        'kelas' => KelasGenzeController::class,
         'jadwal_guide2' => JadwalGuide2Controller::class,
         'kategori_blog' => KategoriBlogController::class,
         'blog' => BlogController::class,
@@ -105,6 +109,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/data', [AdminPendaftaranClassController::class, 'index'])->name('index');
         Route::get('/{id}', [AdminPendaftaranClassController::class, 'show'])->name('show');
         Route::put('/{id}/konfirmasi', [AdminPendaftaranClassController::class, 'konfirmasiJadwal'])->name('konfirmasi');
+        Route::post('/pendaftaran/{id}/assign-kelas', [AdminPendaftaranClassController::class, 'assignKelas'])->name('admin.pendaftaran.assignKelas');
     });
 
 // Pendaftaran GenZE
@@ -143,10 +148,23 @@ Route::prefix('mentor')->name('mentor.')->group(function () {
     Route::get('/dashboard', [MentorDashboardController::class, 'index'])->name('dashboard');
 });
 
+use App\Http\Controllers\Mentor\MateriController as MentorMateriController;
+Route::prefix('mentor')->name('mentor.')->middleware('auth')->group(function () {
+    Route::get('/materi/create/{kelas_id}', [MentorMateriController::class, 'create'])->name('materi.create');
+    Route::post('/materi', [MentorMateriController::class, 'store'])->name('materi.store');
+});
+
+Route::prefix('mentor')->middleware('auth')->name('mentor.')->group(function () {
+    Route::get('/kelas/{kelas_id}/soal/create', [SoalController::class, 'create'])->name('soal.create');
+    Route::post('/soal', [SoalController::class, 'store'])->name('soal.store');
+});
+
+
 // ==========================
 // SISWA ROUTES
 // ==========================
-Route::prefix('siswa')->name('siswa.')->group(function () {
+
+Route::prefix('siswa')->middleware('auth')->name('siswa.')->group(function () {
     Route::get('/dashboard', [SiswaDashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/pendaftaran', [SiswaPendaftaranController::class, 'create'])->name('pendaftaran.form');
@@ -173,6 +191,17 @@ Route::prefix('siswa')->name('siswa.')->group(function () {
         $pendaftaran = \App\Models\PendaftaranProgram::with('pendaftaranClass.jadwalKonfirmasi')->findOrFail($id);
         return view('siswa.pendaftaran.status', compact('pendaftaran'));
     })->name('pendaftaran.status');
+});
+
+use App\Http\Controllers\Siswa\MateriController as SiswaMateriController;
+
+Route::prefix('siswa')->name('siswa.')->middleware('auth')->group(function () {
+    Route::get('/materi', [siswaMateriController::class, 'index'])->name('materi.index');
+});
+
+Route::prefix('siswa')->middleware('auth')->name('siswa.')->group(function () {
+    Route::get('/latihan/{kelas_id}/{pertemuan}', [LatihanController::class, 'show'])->name('latihan.show');
+    Route::post('/latihan/{kelas_id}/{pertemuan}', [LatihanController::class, 'submit'])->name('latihan.submit');
 });
 
 
@@ -237,4 +266,12 @@ use App\Http\Controllers\MidtransWebhookController;
 
 Route::post('/midtrans/webhook', [MidtransWebhookController::class, 'handle']);
 
+// Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+//     Route::resource('kelas', KelasGenzeController::class);
+//     Route::post('/pendaftaran/{id}/assign-kelas', [AdminPendaftaranClassController::class, 'assignKelas'])->name('pendaftaran.assignKelas');
+// });
 
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::resource('kelas', KelasGenzeController::class);
+    Route::post('/pendaftaran/{id}/assign-kelas', [AdminPendaftaranClassController::class, 'assignKelas'])->name('pendaftaran.assignKelas');
+});

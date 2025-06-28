@@ -92,12 +92,14 @@
         </ul>
     </li>
 
-    <li class="sidebar-item has-sub {{ request()->is('admin/jenis_kelas*') || request()->is('admin/jenjang_pendidikan*') || request()->is('admin/mata_pelajaran*') || request()->is('admin/jadwal_kelas*') || request()->is('admin/soal*') ? 'active' : '' }}">
+    <li class="sidebar-item has-sub {{ request()->is('admin/kelas*') || request()->is('admin/jenis_kelas*') || request()->is('admin/jenjang_pendidikan*') || request()->is('admin/mata_pelajaran*') || request()->is('admin/jadwal_kelas*') || request()->is('admin/soal*') ? 'active' : '' }}">
         <a href="#" class='sidebar-link'>
             <i class="bi bi-mortarboard"></i>
             <span>GenZE Class</span>
         </a>
         <ul class="submenu">
+            <li class="submenu-item {{ request()->is('admin/kelas*') ? 'active' : '' }}">
+                <a href="{{ url('/admin/kelas') }}" class="submenu-link">Kelas Genze</a>
             <li class="submenu-item {{ request()->is('admin/jenis_kelas*') ? 'active' : '' }}">
                 <a href="{{ url('/admin/jenis_kelas') }}" class="submenu-link">Jenis Kelas</a>
             </li>
