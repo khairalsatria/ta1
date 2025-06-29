@@ -1,46 +1,96 @@
 @extends('admin.layout.main')
-@section('content')
-<h2 class="text-xl font-bold mb-4">Edit Kelas Genze</h2>
 
-<form action="{{ route('admin.kelas.update', $kelas->id) }}" method="POST">
-    @csrf @method('PUT')
-    <div class="mb-3">
-        <label>Nama Kelas</label>
-        <input type="text" name="nama_kelas" value="{{ $kelas->nama_kelas }}" class="form-control" required>
+@section('title', 'Edit Kelas Genze')
+
+@section('content')
+<div class="page-heading">
+    <div class="page-title">
+        <div class="row">
+            <div class="col-md-6">
+                <h3>Edit Kelas Genze</h3>
+            </div>
+            <div class="col-md-6">
+                <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ route('admin.kelas.index') }}">Kelas Genze</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Edit</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
     </div>
-    <div class="mb-3">
-        <label>Program</label>
-        <select name="program_id" class="form-control" required>
-            @foreach($programs as $p)
-                <option value="{{ $p->id }}" {{ $kelas->program_id == $p->id ? 'selected' : '' }}>
-                    {{ $p->nama_program }}
-                </option>
-            @endforeach
-        </select>
-    </div>
-    <div class="mb-3">
-        <label>Mentor</label>
-        <select name="mentor_id" class="form-control">
-            <option value="">-- Pilih Mentor --</option>
-            @foreach($mentors as $m)
-                <option value="{{ $m->id }}" {{ $kelas->mentor_id == $m->id ? 'selected' : '' }}>
-                    {{ $m->name }}
-                </option>
-            @endforeach
-        </select>
-    </div>
-    <div class="mb-3">
-        <label>Kuota</label>
-        <input type="number" name="kuota" value="{{ $kelas->kuota }}" class="form-control" required>
-    </div>
-    <div class="mb-3">
-        <label>Deskripsi</label>
-        <textarea name="deskripsi" class="form-control">{{ $kelas->deskripsi }}</textarea>
-    </div>
-    <div class="mb-3">
-        <label>Link Zoom Default</label>
-        <input type="url" name="link_zoom_default" value="{{ $kelas->link_zoom_default }}" class="form-control">
-    </div>
-    <button type="submit" class="btn btn-primary">Update</button>
-</form>
+
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title">Form Edit Kelas Genze</h5>
+            </div>
+            <div class="card-body">
+                <form action="{{ route('admin.kelas.update', $kelas->id) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="form-group mb-3">
+                        <label for="nama_kelas">Nama Kelas</label>
+                        <input type="text" class="form-control @error('nama_kelas') is-invalid @enderror" id="nama_kelas" name="nama_kelas" value="{{ old('nama_kelas', $kelas->nama_kelas) }}" required>
+                        @error('nama_kelas')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="program_id">Program</label>
+                        <select name="program_id" id="program_id" class="form-control @error('program_id') is-invalid @enderror" required>
+                            @foreach($programs as $p)
+                                <option value="{{ $p->id }}" {{ old('program_id', $kelas->program_id) == $p->id ? 'selected' : '' }}>{{ $p->nama_program }}</option>
+                            @endforeach
+                        </select>
+                        @error('program_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="mentor_id">Mentor</label>
+                        <select name="mentor_id" id="mentor_id" class="form-control @error('mentor_id') is-invalid @enderror">
+                            <option value="">-- Pilih Mentor --</option>
+                            @foreach($mentors as $m)
+                                <option value="{{ $m->id }}" {{ old('mentor_id', $kelas->mentor_id) == $m->id ? 'selected' : '' }}>{{ $m->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('mentor_id')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="kuota">Kuota</label>
+                        <input type="number" class="form-control @error('kuota') is-invalid @enderror" id="kuota" name="kuota" value="{{ old('kuota', $kelas->kuota) }}" required>
+                        @error('kuota')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="deskripsi">Deskripsi</label>
+                        <textarea class="form-control @error('deskripsi') is-invalid @enderror" id="deskripsi" name="deskripsi">{{ old('deskripsi', $kelas->deskripsi) }}</textarea>
+                        @error('deskripsi')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="link_zoom_default">Link Zoom Default</label>
+                        <input type="url" class="form-control @error('link_zoom_default') is-invalid @enderror" id="link_zoom_default" name="link_zoom_default" value="{{ old('link_zoom_default', $kelas->link_zoom_default) }}">
+                        @error('link_zoom_default')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mt-3">Update</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>
 @endsection

@@ -9,9 +9,10 @@ use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
     public function showLoginForm()
-    {
-        return view('landing.layout.navbar'); // Ganti dengan view login yang sesuai
-    }
+{
+    return redirect()->route('landing.page.home', ['login' => 'modal']);
+}
+
 
     public function login(Request $request)
 {

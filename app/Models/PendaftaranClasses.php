@@ -20,11 +20,12 @@ class PendaftaranClasses extends Model
     protected $fillable = [
         'pendaftaran_id',
         'jeniskelas',
-        'kelas_id',
+        'kelas',
         'jenjang_pendidikan',
         'mata_pelajaran',
         'jadwalkelas_pilihan',
-        'jadwalkelas_konfirmasi'
+        'jadwalkelas_konfirmasi',
+        'kelas_id'
     ];
 
     protected $casts = [

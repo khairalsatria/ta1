@@ -7,6 +7,10 @@
     @csrf
     <input type="hidden" name="kelas_id" value="{{ $kelas->id }}">
 
+    <label for="tanggal_pertemuan">Tanggal Pertemuan:</label>
+<input type="datetime-local" name="tanggal_pertemuan" class="form-control mb-3" required>
+
+
     <label>Pertemuan Ke:</label>
     <input type="number" name="pertemuan_ke" class="form-control mb-2" min="1" max="8" required>
 

@@ -1,6 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Landing\PageController;
+use App\Http\Controllers\Auth\{GoogleController, LoginController, RegisterController};
+use App\Http\Controllers\{MidtransWebhookController, PendaftaranProgramController, PendaftaranClassController, PendaftaranGuideController, PendaftaranLearnController};
+
 use App\Http\Controllers\Admin\{
     JenisKelasController,
     DashboardController as AdminDashboardController,
@@ -31,56 +35,53 @@ use App\Http\Controllers\Siswa\{
     PendaftaranController as SiswaPendaftaranController,
     DashboardController as SiswaDashboardController,
     LatihanController,
-    StatusPendaftaranController
+    StatusPendaftaranController,
+    MateriController as SiswaMateriController,
+    ProfileController
 };
 
-use App\Http\Controllers\Mentor\DashboardController as MentorDashboardController;
-use App\Http\Controllers\Mentor\SoalController;
-
-use App\Http\Controllers\Landing\PageController;
-use App\Http\Controllers\Auth\{
-    GoogleController,
-    LoginController,
-    RegisterController
-};
-
-use App\Http\Controllers\{
-    PendaftaranProgramController,
-    PendaftaranClassController,
-    PendaftaranGuideController,
-    PendaftaranLearnController
+use App\Http\Controllers\Mentor\{
+    DashboardController as MentorDashboardController,
+    MateriController as MentorMateriController,
+    SoalController
 };
 
 // ==========================
-// ROOT & LANDING PAGE
+// LANDING PAGE
 // ==========================
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', fn() => view('welcome'));
+Route::controller(PageController::class)->group(function () {
+    Route::get('/home', 'home')->name('landing.page.home');
+    Route::get('/about', 'about')->name('landing.page.about');
+    Route::get('/program', 'program')->name('landing.page.program');
+    Route::get('/program/{id}', 'detailProgram')->name('landing.page.detail-program');
+    Route::get('/team', 'team')->name('landing.page.team');
+    Route::get('/kontak', 'kontak')->name('landing.page.kontak');
 });
 
-Route::get('/home', [PageController::class, 'home'])->name('landing.page.home');
-Route::get('/about', [PageController::class, 'about'])->name('landing.page.about');
-Route::get('/program', [PageController::class, 'program'])->name('landing.page.program');
-Route::get('/program/{id}', [PageController::class, 'detailProgram'])->name('landing.page.detail-program');
-Route::get('/team', [PageController::class, 'team'])->name('landing.page.team');
-Route::get('/kontak', [PageController::class, 'kontak'])->name('landing.page.kontak');
+// ==========================
+// AUTHENTICATION
+// ==========================
+Route::controller(GoogleController::class)->group(function () {
+    Route::get('auth/google', 'redirectToGoogle')->name('google.login');
+    Route::get('auth/google/callback', 'handleGoogleCallback');
+});
+
+Route::controller(LoginController::class)->group(function () {
+    Route::get('login', 'showLoginForm')->name('login');
+    Route::post('login', 'login');
+    Route::post('logout', 'logout')->name('logout');
+});
+
+Route::controller(RegisterController::class)->group(function () {
+    Route::get('register', 'showRegistrationForm')->name('register');
+    Route::post('register', 'register');
+});
 
 // ==========================
-// AUTH
+// ADMIN ROUTES (Protected)
 // ==========================
-Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
-Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback']);
-
-Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('login', [LoginController::class, 'login']);
-Route::post('logout', [LoginController::class, 'logout'])->name('logout');
-Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('register', [RegisterController::class, 'register']);
-
-// ==========================
-// ADMIN ROUTES
-// ==========================
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
 
     Route::resources([
@@ -91,7 +92,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         'kontak' => KontakController::class,
         'genze_learn' => GenzeLearnController::class,
         'jadwal_kelas' => JadwalKelasController::class,
-        'kelas' => KelasGenzeController::class,
+        'kelas' => KelasGenzeController::class, // ✅ SUDAH DI SINI
         'jadwal_guide2' => JadwalGuide2Controller::class,
         'kategori_blog' => KategoriBlogController::class,
         'blog' => BlogController::class,
@@ -104,69 +105,53 @@ Route::prefix('admin')->name('admin.')->group(function () {
         'pembayaran' => AdminPendaftaranProgramController::class,
     ]);
 
-    // Pendaftaran GenZE Class
+    // Masukkan di sini:
+    Route::post('/pendaftaran/{id}/assign-kelas', [AdminPendaftaranClassController::class, 'assignKelas'])->name('pendaftaran.assignKelas');
+
+
+
+    // Pendaftaran Class
     Route::prefix('pendaftaran/classes')->name('pendaftaran.classes.')->group(function () {
         Route::get('/data', [AdminPendaftaranClassController::class, 'index'])->name('index');
         Route::get('/{id}', [AdminPendaftaranClassController::class, 'show'])->name('show');
         Route::put('/{id}/konfirmasi', [AdminPendaftaranClassController::class, 'konfirmasiJadwal'])->name('konfirmasi');
-        Route::post('/pendaftaran/{id}/assign-kelas', [AdminPendaftaranClassController::class, 'assignKelas'])->name('admin.pendaftaran.assignKelas');
+        // Route::post('/pendaftaran/{id}/assign-kelas', [AdminPendaftaranClassController::class, 'assignKelas'])->name('assignKelas');
     });
 
-// Pendaftaran GenZE
-Route::prefix('pendaftaran/guides')->name('pendaftaran.guides.')->group(function () {
-    Route::get('/data', [AdminPendaftaranGuideController::class, 'index'])->name('index');
-    Route::get('/{id}', [AdminPendaftaranGuideController::class, 'show'])->name('show');
-    Route::post('/{id}/konfirmasi', [AdminPendaftaranGuideController::class, 'konfirmasiJadwal'])->name('konfirmasi');
-});
+    // Pendaftaran Guide
+    Route::prefix('pendaftaran/guides')->name('pendaftaran.guides.')->group(function () {
+        Route::get('/data', [AdminPendaftaranGuideController::class, 'index'])->name('index');
+        Route::get('/{id}', [AdminPendaftaranGuideController::class, 'show'])->name('show');
+        Route::post('/{id}/konfirmasi', [AdminPendaftaranGuideController::class, 'konfirmasiJadwal'])->name('konfirmasi');
+    });
+
+    // Pendaftaran Learn
+    Route::prefix('pendaftaran/learns')->name('pendaftaran.learns.')->group(function () {
+        Route::get('/data', [AdminPendaftaranLearnController::class, 'index'])->name('index');
+        Route::get('/{id}', [AdminPendaftaranLearnController::class, 'show'])->name('show');
+        Route::post('/{id}/verifikasi', [AdminPendaftaranLearnController::class, 'verifikasiPembayaran'])->name('verifikasi');
+        Route::post('/{id}/upload-sertifikat', [AdminPendaftaranLearnController::class, 'uploadSertifikat'])->name('uploadSertifikat');
+    });
+
+    // Pendaftaran Program Umum
+    Route::prefix('pendaftarann')->name('pendaftaran.')->group(function () {
+        Route::get('/', [PendaftaranController::class, 'index'])->name('index');
+        Route::get('/{id}', [PendaftaranController::class, 'show'])->name('show');
+        Route::post('/{id}/konfirmasi-jadwal', [PendaftaranController::class, 'konfirmasiJadwal'])->name('konfirmasiJadwal');
+        Route::get('/{id}/verifikasi-pembayaran', [PendaftaranController::class, 'showVerifikasiPembayaranForm'])->name('showVerifikasiPembayaranForm');
+        Route::post('/{id}/verifikasi-pembayaran', [PendaftaranController::class, 'verifikasiPembayaran'])->name('verifikasiPembayaran');
+    });
 
 
-Route::prefix('pendaftaran/learns')->name('pendaftaran.learns.')->group(function () {
-    Route::get('/data', [AdminPendaftaranLearnController::class, 'index'])->name('index');
-    Route::get('/{id}', [AdminPendaftaranLearnController::class, 'show'])->name('show');
-
-    // Ubah konfirmasi jadi verifikasi pembayaran
-    Route::post('/{id}/verifikasi', [AdminPendaftaranLearnController::class, 'verifikasiPembayaran'])->name('verifikasi');
-
-    // Tambah route upload sertifikat
-    Route::post('/{id}/upload-sertifikat', [AdminPendaftaranLearnController::class, 'uploadSertifikat'])->name('uploadSertifikat');
-});
-
-
-
-    // Tambahan admin untuk verifikasi pendaftaran umum (opsional)
-    Route::get('/pendaftarann', [PendaftaranController::class, 'index'])->name('pendaftaran.index');
-    Route::get('/pendaftarann/{id}', [PendaftaranController::class, 'show'])->name('pendaftaran.show');
-    Route::post('/pendaftarann/{id}/konfirmasi-jadwal', [PendaftaranController::class, 'konfirmasiJadwal'])->name('pendaftaran.konfirmasiJadwal');
-    Route::get('/pendaftarann/{id}/verifikasi-pembayaran', [PendaftaranController::class, 'showVerifikasiPembayaranForm'])->name('pendaftaran.showVerifikasiPembayaranForm');
-    Route::post('/pendaftarann/{id}/verifikasi-pembayaran', [PendaftaranController::class, 'verifikasiPembayaran'])->name('pendaftaran.verifikasiPembayaran');
 });
 
 // ==========================
-// MENTOR ROUTES
+// SISWA ROUTES (Protected)
 // ==========================
-Route::prefix('mentor')->name('mentor.')->group(function () {
-    Route::get('/dashboard', [MentorDashboardController::class, 'index'])->name('dashboard');
-});
-
-use App\Http\Controllers\Mentor\MateriController as MentorMateriController;
-Route::prefix('mentor')->name('mentor.')->middleware('auth')->group(function () {
-    Route::get('/materi/create/{kelas_id}', [MentorMateriController::class, 'create'])->name('materi.create');
-    Route::post('/materi', [MentorMateriController::class, 'store'])->name('materi.store');
-});
-
-Route::prefix('mentor')->middleware('auth')->name('mentor.')->group(function () {
-    Route::get('/kelas/{kelas_id}/soal/create', [SoalController::class, 'create'])->name('soal.create');
-    Route::post('/soal', [SoalController::class, 'store'])->name('soal.store');
-});
-
-
-// ==========================
-// SISWA ROUTES
-// ==========================
-
-Route::prefix('siswa')->middleware('auth')->name('siswa.')->group(function () {
+Route::middleware('auth')->prefix('siswa')->name('siswa.')->group(function () {
     Route::get('/dashboard', [SiswaDashboardController::class, 'index'])->name('dashboard');
 
+    // Pendaftaran Umum
     Route::get('/pendaftaran', [SiswaPendaftaranController::class, 'create'])->name('pendaftaran.form');
     Route::post('/pendaftaran', [SiswaPendaftaranController::class, 'store'])->name('pendaftaran.store');
     Route::get('/pendaftaran/email/{id}', [SiswaPendaftaranController::class, 'formEmail'])->name('pendaftaran.formEmail');
@@ -174,13 +159,13 @@ Route::prefix('siswa')->middleware('auth')->name('siswa.')->group(function () {
     Route::get('/pendaftaran/upload/{id}', [SiswaPendaftaranController::class, 'uploadForm'])->name('pendaftaran.uploadForm');
     Route::post('/pendaftaran/upload/{id}', [SiswaPendaftaranController::class, 'uploadBukti'])->name('pendaftaran.uploadBukti');
 
-    // GenZE Class
+    // Pendaftaran GenZE Class
     Route::prefix('pendaftaran/genze-class')->name('pendaftaran.genze-class.')->group(function () {
         Route::get('/', [PendaftaranClassController::class, 'create'])->name('form');
         Route::post('/store', [PendaftaranClassController::class, 'store'])->name('store');
     });
 
-    // GenZE Guide
+    // Pendaftaran GenZE Guide
     Route::prefix('pendaftaran/genze-guide')->name('pendaftaran.genze-guide.')->group(function () {
         Route::get('/', [PendaftaranGuideController::class, 'create'])->name('form');
         Route::post('/store', [PendaftaranGuideController::class, 'store'])->name('store');
@@ -191,87 +176,63 @@ Route::prefix('siswa')->middleware('auth')->name('siswa.')->group(function () {
         $pendaftaran = \App\Models\PendaftaranProgram::with('pendaftaranClass.jadwalKonfirmasi')->findOrFail($id);
         return view('siswa.pendaftaran.status', compact('pendaftaran'));
     })->name('pendaftaran.status');
-});
 
-use App\Http\Controllers\Siswa\MateriController as SiswaMateriController;
+    // Materi
+    Route::get('/materi', [SiswaMateriController::class, 'index'])->name('materi.index');
 
-Route::prefix('siswa')->name('siswa.')->middleware('auth')->group(function () {
-    Route::get('/materi', [siswaMateriController::class, 'index'])->name('materi.index');
-});
-
-Route::prefix('siswa')->middleware('auth')->name('siswa.')->group(function () {
+    // Latihan
     Route::get('/latihan/{kelas_id}/{pertemuan}', [LatihanController::class, 'show'])->name('latihan.show');
     Route::post('/latihan/{kelas_id}/{pertemuan}', [LatihanController::class, 'submit'])->name('latihan.submit');
 });
 
-
-
 // ==========================
-// PENDAFTARAN UMUM
-// // ==========================
-// Route::get('/pendaftaran-guide/create/{program_id}', [PendaftaranGuideController::class, 'create'])->name('pendaftaran-guide.create');
+// MENTOR ROUTES (Protected)
+// ==========================
+Route::middleware('auth')->prefix('mentor')->name('mentor.')->group(function () {
+    Route::get('/dashboard', [MentorDashboardController::class, 'index'])->name('dashboard');
 
-// Route::post('/pendaftaran/store', [PendaftaranProgramController::class, 'store'])->name('pendaftaran.program.store');
-// Route::post('/siswa/pendaftaran/upload/{id}', [PendaftaranProgramController::class, 'uploadBukti'])->name('siswa.pendaftaran.upload');
+    // Materi
+    Route::get('/materi/create/{kelas_id}', [MentorMateriController::class, 'create'])->name('materi.create');
+    Route::post('/materi', [MentorMateriController::class, 'store'])->name('materi.store');
 
-// Mata Pelajaran berdasarkan Jenjang
-Route::get('/mata-pelajaran/by-jenjang/{id}', [PendaftaranClassController::class, 'mataPelajaranByJenjang'])->name('mata-pelajaran.by-jenjang');
-
-
-Route::prefix('pendaftaran-guide')->group(function () {
-    // Halaman pendaftaran guide (tanpa program_id di URL)
-    Route::get('/create', [PendaftaranGuideController::class, 'create'])->name('pendaftaran-guide.create');
-
-    // Store data pendaftaran guide
-    Route::post('/store', [PendaftaranGuideController::class, 'store'])->name('pendaftaran-guide.store');
-
-    // Halaman form email setelah pendaftaran
-    Route::get('/form-email/{id}', [PendaftaranGuideController::class, 'formEmail'])->name('siswa.pendaftaran.formEmail');
-
-    // Ambil jadwal guide berdasarkan paket
-    Route::get('/jadwal-guide/{id}', [PendaftaranGuideController::class, 'jadwalGuide2ByPaket'])->name('pendaftaran-guide.jadwal');
-
+    // Soal
+    Route::get('/kelas/{kelas_id}/soal/create', [SoalController::class, 'create'])->name('soal.create');
+    Route::post('/soal', [SoalController::class, 'store'])->name('soal.store');
 });
 
+// ==========================
+// PENDAFTARAN GENZE (UMUM)
+// ==========================
+Route::get('/pendaftaran-learn/{program_id}', [PendaftaranLearnController::class, 'create'])->name('pendaftaran-learn.create');
+Route::post('/pendaftaran-learn/store', [PendaftaranLearnController::class, 'store'])->name('pendaftaran-learn.store');
+Route::get('/pendaftaran-learn/form-email/{id}', [PendaftaranLearnController::class, 'formEmail'])->name('siswa.pendaftaran.formEmail');
+Route::post('/pendaftaran-learn/upload-sertifikat/{id}', [PendaftaranLearnController::class, 'uploadSertifikat'])->name('pendaftaran-learn.uploadSertifikat');
 
+// Pendaftaran Guide Umum
+Route::prefix('pendaftaran-guide')->group(function () {
+    Route::get('/create', [PendaftaranGuideController::class, 'create'])->name('pendaftaran-guide.create');
+    Route::post('/store', [PendaftaranGuideController::class, 'store'])->name('pendaftaran-guide.store');
+    Route::get('/form-email/{id}', [PendaftaranGuideController::class, 'formEmail'])->name('siswa.pendaftaran.formEmail');
+    Route::get('/jadwal-guide/{id}', [PendaftaranGuideController::class, 'jadwalGuide2ByPaket'])->name('pendaftaran-guide.jadwal');
+});
 
-// routes/web.php
+// Mata Pelajaran by Jenjang
+Route::get('/mata-pelajaran/by-jenjang/{id}', [PendaftaranClassController::class, 'mataPelajaranByJenjang'])->name('mata-pelajaran.by-jenjang');
 
-
-// Halaman Form Pendaftaran GenZE Learn
-Route::get('/pendaftaran-learn/{program_id}', [PendaftaranLearnController::class, 'create'])
-    ->name('pendaftaran-learn.create');
-
-// Proses Penyimpanan Pendaftaran Learn
-Route::post('/pendaftaran-learn/store', [PendaftaranLearnController::class, 'store'])
-    ->name('pendaftaran-learn.store');
-
-// Form Email setelah pendaftaran berhasil
-Route::get('/pendaftaran-learn/form-email/{id}', [PendaftaranLearnController::class, 'formEmail'])
-    ->name('siswa.pendaftaran.formEmail');
-
-// Upload Sertifikat oleh Admin
-Route::post('/pendaftaran-learn/upload-sertifikat/{id}', [PendaftaranLearnController::class, 'uploadSertifikat'])
-    ->name('pendaftaran-learn.uploadSertifikat');
-
-
-    use App\Http\Controllers\Siswa\ProfileController;
-
-Route::middleware(['auth'])->group(function () {
+// ==========================
+// PROFILE SISWA
+// ==========================
+Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::post('/profile', [ProfileController::class, 'update'])->name('profile.update');
 });
 
-use App\Http\Controllers\MidtransWebhookController;
-
+// ==========================
+// WEBHOOK (Midtrans)
+// ==========================
 Route::post('/midtrans/webhook', [MidtransWebhookController::class, 'handle']);
 
-// Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+// Route::prefix('admin')->name('admin.')->group(function () {
 //     Route::resource('kelas', KelasGenzeController::class);
 //     Route::post('/pendaftaran/{id}/assign-kelas', [AdminPendaftaranClassController::class, 'assignKelas'])->name('pendaftaran.assignKelas');
 // });
-
-Route::prefix('admin')->name('admin.')->group(function () {
-    Route::resource('kelas', KelasGenzeController::class);
-    Route::post('/pendaftaran/{id}/assign-kelas', [AdminPendaftaranClassController::class, 'assignKelas'])->name('pendaftaran.assignKelas');
-});

@@ -34,9 +34,11 @@
                         <tr>
                             <th>No</th>
                             <th>Nama</th>
-                            <th>Program</th>
+                            <th>Kelas</th>
+                            <th>Grup Mapel</th>
                             <th>Jadwal Konfirmasi</th>
                             <th>Aksi</th>
+                            <th>Detail</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -44,10 +46,86 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $class->pendaftaran->user->name }}</td>
-                            <td>GenZE Class</td>
+                            <td>{{ $class->kelas }}</td>
+                            <td>{{ $class->kelasGenze->nama_kelas ?? '-' }}</td>
                             <td>{{ $class->jadwalKonfirmasi->jadwalkelas ?? 'Belum dikonfirmasi' }}</td>
                             <td>
-                                <a href="{{ route('admin.pendaftaran.classes.show', $class->id) }}" class="btn btn-sm btn-primary">Lihat & Konfirmasi</a>
+                                <button type="button"
+                                    class="btn btn-sm btn-primary"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#modalKonfirmasi{{ $class->id }}">
+                                    Konfirmasi
+                                </button>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="modalKonfirmasi{{ $class->id }}" tabindex="-1"
+                                    aria-labelledby="modalLabel{{ $class->id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="modalLabel{{ $class->id }}">
+                                                    Konfirmasi Jadwal & Kelas - {{ $class->pendaftaran->user->name }}
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <!-- Konfirmasi Jadwal -->
+                                                    <div class="col-md-6 mb-4">
+                                                        <h6>Konfirmasi Jadwal</h6>
+                                                        <form method="POST"
+                                                            action="{{ route('admin.pendaftaran.classes.konfirmasi', $class->id) }}">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <select name="jadwal_konfirmasi" class="form-select mb-3">
+                                                                @foreach($class->getJadwalPilihanObjectsAttribute() as $jadwal)
+                                                                <option value="{{ $jadwal->id_jadwalkelas }}"
+                                                                    @selected($class->jadwalkelas_konfirmasi == $jadwal->id_jadwalkelas)>
+                                                                    {{ $jadwal->jadwalkelas }}
+                                                                </option>
+                                                                @endforeach
+                                                            </select>
+                                                            <button class="btn btn-primary">Konfirmasi Jadwal</button>
+                                                        </form>
+                                                    </div>
+
+                                                    <!-- Tetapkan Kelas -->
+                                                    <div class="col-md-6 mb-4">
+                                                        <h6>Tetapkan Kelas</h6>
+                                                        @if($class->jadwalkelas_konfirmasi)
+                                                        <form method="POST"
+                                                            action="{{ route('admin.pendaftaran.assignKelas', $class->id) }}">
+                                                            @csrf
+                                                            <select name="kelas_id" class="form-select mb-3">
+                                                                @foreach($daftar_kelas as $kelas)
+                                                                <option value="{{ $kelas->id }}"
+                                                                    @selected($class->kelas_id == $kelas->id)>
+                                                                    {{ $kelas->nama_kelas }}
+                                                                </option>
+                                                                @endforeach
+                                                            </select>
+                                                            <button class="btn btn-success">Tetapkan Kelas</button>
+                                                        </form>
+                                                        @else
+                                                        <div class="text-muted">Jadwal belum dikonfirmasi.</div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Tutup</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Modal -->
+                            </td>
+                            <td>
+                                <a href="{{ route('admin.pendaftaran.classes.show', $class->id) }}" class="btn btn-sm btn-info">
+                                    <i class="bi bi-eye"></i> Detail
+                                </a>
                             </td>
                         </tr>
                         @endforeach
@@ -61,7 +139,7 @@
 
 @section('scripts')
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#table1').DataTable();
     });
 </script>

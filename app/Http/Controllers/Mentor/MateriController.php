@@ -21,6 +21,7 @@ class MateriController extends Controller
     {
         $request->validate([
             'kelas_id' => 'required|exists:kelas_genze,id',
+            'tanggal_pertemuan' => 'required|date',
             'pertemuan_ke' => 'required|integer|min:1|max:8',
             'judul' => 'required|string|max:255',
             'file_pdf' => 'nullable|file|mimes:pdf|max:2048',
@@ -35,6 +36,7 @@ class MateriController extends Controller
 
         MateriPertemuan::create([
             'kelas_id' => $request->kelas_id,
+            'tanggal_pertemuan' => $request->tanggal_pertemuan,
             'pertemuan_ke' => $request->pertemuan_ke,
             'judul' => $request->judul,
             'file_pdf' => $path,

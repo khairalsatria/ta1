@@ -15,9 +15,10 @@
         </div>
 
         <div class="form-group">
-            <label for="kelas">Kelas</label>
-            <input type="text" class="form-control" name="kelas" required>
-        </div>
+    <label for="kelas">Nama Kelas</label>
+    <input type="text" name="kelas" id="kelas" class="form-control" required value="{{ old('kelas') }}">
+</div>
+
 
         <div class="form-group">
             <label for="jenjang_pendidikan">Jenjang Pendidikan</label>

@@ -11,7 +11,7 @@ class MateriPertemuan extends Model
 
     protected $fillable = [
         'kelas_id', 'pertemuan_ke', 'judul',
-        'file_pdf', 'link_zoom', 'link_rekaman'
+        'file_pdf', 'link_zoom', 'link_rekaman','tanggal_pertemuan'
     ];
 
     public function kelas()

@@ -41,7 +41,7 @@ class PendaftaranClassController extends Controller
         $request->validate([
             'jadwal_pilihan' => 'required|array|max:3',
             'id_jeniskelas' => 'required|integer',
-            'kelas' => 'required|string',
+            'kelas' => 'required|string|max:10',
             'id_jenjang_pendidikan' => 'required|integer',
             'id_mata_pelajaran' => 'required|integer',
         ]);

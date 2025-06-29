@@ -13,10 +13,19 @@ class PendaftaranClassController extends Controller
 {
     // Menampilkan semua pendaftaran class untuk admin
     public function index()
-    {
-        $pendaftaranClasses = PendaftaranClasses::with('pendaftaran.user', 'jadwalKonfirmasi')->get();
-        return view('admin.pendaftaran.classes.index', compact('pendaftaranClasses'));
-    }
+{
+    $pendaftaranClasses = PendaftaranClasses::with([
+        'pendaftaran.user',
+        'jadwalKonfirmasi',
+        'kelasGenze'
+    ])->get();
+
+    $daftar_kelas = KelasGenze::all();
+
+    return view('admin.pendaftaran.classes.index', compact('pendaftaranClasses', 'daftar_kelas'));
+}
+
+
 
     // Menampilkan detail dan form konfirmasi jadwal
     public function show($id)
@@ -43,7 +52,7 @@ class PendaftaranClassController extends Controller
         'jadwalkelas_konfirmasi' => $request->jadwal_konfirmasi,
     ]);
 
-    return redirect()->route('admin.pendaftaran.classes.show', $id)
+    return redirect()->route('admin.pendaftaran.classes.index', $id)
         ->with('success', 'Jadwal berhasil dikonfirmasi.');
 }
 
@@ -57,7 +66,7 @@ public function assignKelas(Request $request, $id)
     $pendaftaran->kelas_id = $request->kelas_id;
     $pendaftaran->save();
 
-    return redirect()->route('admin.pendaftaran.classes.show', $id)
+    return redirect()->route('admin.pendaftaran.classes.index', $id)
         ->with('success', 'Kelas berhasil ditetapkan.');
 }
 
