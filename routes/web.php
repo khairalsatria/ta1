@@ -37,7 +37,9 @@ use App\Http\Controllers\Siswa\{
     LatihanController,
     StatusPendaftaranController,
     MateriController as SiswaMateriController,
-    ProfileController
+    ProfileController,
+    ProgramSayaController,
+    KelasSayaController
 };
 
 use App\Http\Controllers\Mentor\{
@@ -158,6 +160,8 @@ Route::middleware('auth')->prefix('siswa')->name('siswa.')->group(function () {
     Route::post('/pendaftaran/dashboard/{id}', [SiswaPendaftaranController::class, 'dashboard'])->name('pendaftaran.dashboard');
     Route::get('/pendaftaran/upload/{id}', [SiswaPendaftaranController::class, 'uploadForm'])->name('pendaftaran.uploadForm');
     Route::post('/pendaftaran/upload/{id}', [SiswaPendaftaranController::class, 'uploadBukti'])->name('pendaftaran.uploadBukti');
+    Route::get('/program-saya', [ProgramSayaController::class, 'index'])->name('program-saya.index');
+    Route::get('/kelas-saya', [KelasSayaController::class, 'index'])->name('kelas-saya');
 
     // Pendaftaran GenZE Class
     Route::prefix('pendaftaran/genze-class')->name('pendaftaran.genze-class.')->group(function () {
@@ -236,3 +240,6 @@ Route::post('/midtrans/webhook', [MidtransWebhookController::class, 'handle']);
 //     Route::resource('kelas', KelasGenzeController::class);
 //     Route::post('/pendaftaran/{id}/assign-kelas', [AdminPendaftaranClassController::class, 'assignKelas'])->name('pendaftaran.assignKelas');
 // });
+
+
+

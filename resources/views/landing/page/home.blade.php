@@ -296,7 +296,7 @@
         <!-- Section Title -->
         <div class="text-center mb-5">
             <h6 class="text-success text-uppercase font-weight-bold mb-2">Testimonial & FAQ</h6>
-            <h2 class="display-5 font-weight-bold text-dark">Apa Kata Mereka?</h2>
+            <h2 class="display-5 font-weight-bold text-dark">What Our Students Say?</h2>
             <p class="text-muted mx-auto" style="max-width: 600px;">
                 Simak pengalaman para siswa kami serta jawaban dari pertanyaan yang sering diajukan.
             </p>

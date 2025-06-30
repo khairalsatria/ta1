@@ -5,59 +5,41 @@ namespace App\Http\Controllers\Siswa;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\PendaftaranProgram;
 use App\Models\PendaftaranClasses;
 use App\Models\JawabanSoalLatihan;
-use App\Models\SoalLatihan;
 
 class DashboardController extends Controller
-{
-    public function index(Request $request)
     {
-        $user = Auth::user();
+        public function index(Request $request)
+{
+    $user = Auth::user();
 
-        // Ambil semua kelas yang diikuti siswa
-        $kelasList = PendaftaranClasses::with('kelasGenze')
-            ->whereHas('pendaftaran', fn($q) => $q->where('user_id', $user->id))
-            ->get();
+    // Jumlah semua program
+    $totalProgram = PendaftaranProgram::where('user_id', $user->id)->count();
 
-        $kelasDipilihId = $request->get('kelas_id');
-
-        $materi = collect();
-        $riwayatNilai = collect();
-
-        if ($kelasDipilihId) {
-            $kelas = $kelasList->firstWhere('kelas_id', $kelasDipilihId);
-
-            // Materi dari kelas yang dipilih
-            $materi = $kelas?->kelasGenze?->materi ?? collect();
-
-            // Nilai latihan hanya untuk kelas yang dipilih
-            $riwayatNilai = JawabanSoalLatihan::with('soal')
-                ->where('user_id', $user->id)
-                ->whereHas('soal', fn($q) => $q->where('kelas_id', $kelasDipilihId))
-                ->get()
-                ->groupBy(fn($j) => $j->soal->pertemuan_ke);
-        }
-
-        $totalPertemuan = 8; // Tetap: target 8 pertemuan per bulan
-$pertemuanSudahDilakukan = $materi->whereNotNull('link_zoom')->count();
-
-$progress = round(($pertemuanSudahDilakukan / $totalPertemuan) * 100);
-
-$materiBerikutnya = $materi
-    ->where('tanggal_pertemuan', '>', now())
-    ->sortBy('tanggal_pertemuan')
-    ->first();
+    // Jumlah berdasarkan tipe program
+    $jumlahClass = PendaftaranProgram::where('user_id', $user->id)
+        ->whereHas('program', fn($q) => $q->where('tipe_program', 'Genze Class'))
+        ->count();
 
 
-return view('siswa.dashboard', compact(
-    'kelasList', 'materi', 'riwayatNilai', 'kelasDipilihId',
-    'progress', 'pertemuanSudahDilakukan', 'totalPertemuan',
-    'materiBerikutnya'
-));
+    $jumlahGuide = PendaftaranProgram::where('user_id', $user->id)
+        ->whereHas('program', fn($q) => $q->where('tipe_program', 'Genze Guide'))
+        ->count();
 
+    $jumlahLearn = PendaftaranProgram::where('user_id', $user->id)
+        ->whereHas('program', fn($q) => $q->where('tipe_program', 'Genze Learn'))
+        ->count();
 
+    // Jumlah kelas yang sudah tergabung
+    $jumlahKelasIkut = PendaftaranClasses::whereHas('pendaftaran', fn($q) =>
+        $q->where('user_id', $user->id)
+    )->count();
 
-
-    }
+    return view('siswa.dashboard', compact(
+        'totalProgram', 'jumlahClass', 'jumlahGuide',
+        'jumlahLearn', 'jumlahKelasIkut'
+    ));
 }
+    }
