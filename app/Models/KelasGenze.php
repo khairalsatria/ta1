@@ -20,6 +20,11 @@ class KelasGenze extends Model
         'nama_kelas', 'program_id', 'mentor_id', 'kuota', 'deskripsi', 'link_zoom_default'
     ];
 
+     public function program()
+    {
+        return $this->belongsTo(Program::class, 'program_id'); // sesuaikan dengan foreign key-nya
+    }
+
     public function mentor() {
         return $this->belongsTo(User::class, 'mentor_id');
     }

@@ -185,8 +185,19 @@ Route::middleware('auth')->prefix('siswa')->name('siswa.')->group(function () {
     Route::get('/materi', [SiswaMateriController::class, 'index'])->name('materi.index');
 
     // Latihan
-    Route::get('/latihan/{kelas_id}/{pertemuan}', [LatihanController::class, 'show'])->name('latihan.show');
-    Route::post('/latihan/{kelas_id}/{pertemuan}', [LatihanController::class, 'submit'])->name('latihan.submit');
+
+Route::prefix('latihan')->group(function () {
+    Route::get('{kelas_id}/{pertemuan}', [LatihanController::class, 'show'])->name('latihan.show');
+    Route::post('{kelas_id}/{pertemuan}', [LatihanController::class, 'submit'])->name('latihan.submit');
+
+    // ✅ Route per soal (tampilkan satu soal per halaman)
+    Route::get('{kelas_id}/{pertemuan}/per-soal/{index?}', [LatihanController::class, 'showPerSoal'])
+        ->name('latihan.show.per.soal');
+
+    Route::post('{kelas_id}/{pertemuan}/per-soal/{index}', [LatihanController::class, 'submitPerSoal'])
+        ->name('latihan.submit.per.soal');
+});
+
 });
 
 // ==========================

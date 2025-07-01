@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Siswa;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -11,18 +12,15 @@ class ProgramSayaController extends Controller
     public function index()
     {
         $pendaftarans = PendaftaranProgram::with([
-            'program',
-            'pendaftaranClass.jadwalKonfirmasi',
-            'pendaftaranGuide.jadwalKonfirmasi',
-            'pendaftaranLearn'
-        ])
-        ->where('user_id', Auth::id())
-        ->latest()
-        ->get();
-
+                'program',
+                'pendaftaranClass.jadwalKonfirmasi',
+                'pendaftaranGuide.jadwalKonfirmasi',
+                'pendaftaranLearn'
+            ])
+            ->where('user_id', Auth::id())
+            ->latest()
+            ->paginate(5); // ✅ paginate 5 data per halaman
 
         return view('siswa.program-saya.index', compact('pendaftarans'));
     }
 }
-
-

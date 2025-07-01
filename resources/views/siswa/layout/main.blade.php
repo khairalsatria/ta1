@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{{ asset('assets/extensions/simple-datatables/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/compiled/css/table-datatable.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" />
+    
 </head>
 <body>
     <script src="assets/static/js/initTheme.js"></script>
