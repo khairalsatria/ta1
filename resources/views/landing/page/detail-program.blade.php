@@ -52,8 +52,10 @@
                         <span>Pendidikan</span> <strong>{{ $program->level }}</strong>
                     </li>
                     <li class="d-flex justify-content-between border-bottom py-2">
-                        <span>Rating</span> <strong>{{ $program->rating ?? '4.5' }}</strong>
-                    </li>
+    <span>Rating</span>
+    <strong>{{ is_numeric($program->rating) ? $program->rating . ' / 5' : $program->rating }}</strong>
+</li>
+
                 </ul>
 
                 <div class="text-center mt-4">
@@ -175,14 +177,17 @@
               </div>
 
               <div class="form-group mb-4">
-                <label class="form-label fw-semibold" style="font-size: 0.875rem;">Pilih Maksimal 3 Jadwal:</label>
-                @foreach($jadwalKelas as $jadwal)
-                  <div class="form-check" style="font-size: 0.875rem;">
-                    <input type="checkbox" class="form-check-input" name="jadwal_pilihan[]" value="{{ $jadwal->id_jadwalkelas }}" id="jadwal-{{ $jadwal->id_jadwalkelas }}">
-                    <label class="form-check-label" for="jadwal-{{ $jadwal->id_jadwalkelas }}" style="font-size: 0.875rem;">{{ $jadwal->jadwalkelas }}</label>
-                  </div>
-                @endforeach
-              </div>
+    <label class="form-label fw-semibold" style="font-size: 0.875rem;">Pilih Minimal 3 Jadwal:</label>
+    @foreach($jadwalKelas as $jadwal)
+        <div class="form-check" style="font-size: 0.875rem;">
+            <input type="checkbox" class="form-check-input jadwal-checkbox" name="jadwal_pilihan[]" value="{{ $jadwal->id_jadwalkelas }}" id="jadwal-{{ $jadwal->id_jadwalkelas }}">
+            <label class="form-check-label" for="jadwal-{{ $jadwal->id_jadwalkelas }}" style="font-size: 0.875rem;">
+                {{ $jadwal->jadwalkelas }}
+            </label>
+        </div>
+    @endforeach
+    <small id="jadwal-error" class="text-danger d-none">Silakan pilih minimal 3 jadwal.</small>
+</div>
 
 
               <button type="submit" class="btn w-100 rounded-3 fw-bold py-2" style="background-color: #3ddc97; color: white;">

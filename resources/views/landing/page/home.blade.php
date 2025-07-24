@@ -303,34 +303,31 @@
         </div>
 
         <!-- Testimonials -->
-        <div class="row g-4 justify-content-center mb-5">
-            <div class="col-md-6 col-lg-4">
-                <div class="card border-0 shadow-sm rounded-4 h-100 p-4 bg-white">
-                    <i class="fa fa-3x fa-quote-left text-success mb-3"></i>
-                    <p class="text-muted">Saya sangat terbantu dengan GenZE Class. Materinya lengkap dan mentornya ramah!</p>
-                    <div class="d-flex align-items-center mt-4">
-                        <img src="{{ asset('assets2/img/testimonial-1.jpg') }}" class="rounded-circle me-3" width="50" height="50" alt="">
-                        <div>
-                            <h6 class="fw-bold mb-0">Rina Aulia</h6>
-                            <small class="text-muted">Siswa SMA</small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-4">
-                <div class="card border-0 shadow-sm rounded-4 h-100 p-4 bg-white">
-                    <i class="fa fa-3x fa-quote-left text-success mb-3"></i>
-                    <p class="text-muted">Belajarnya seru dan fleksibel. Saya bisa ikut kelas Zoom dari rumah.</p>
-                    <div class="d-flex align-items-center mt-4">
-                        <img src="{{ asset('assets2/img/testimonial-2.jpg') }}" class="rounded-circle me-3" width="50" height="50" alt="">
-                        <div>
-                            <h6 class="fw-bold mb-0">Andi Saputra</h6>
-                            <small class="text-muted">Siswa SMP</small>
-                        </div>
+@if($testimonials->count())
+    <div class="row g-4 justify-content-center mb-5">
+        @foreach($testimonials as $t)
+        <div class="col-md-6 col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100 p-4 bg-white">
+                <i class="fa fa-3x fa-quote-left text-success mb-3"></i>
+                <p class="text-muted">{{ $t->komentar }}</p>
+                <div class="d-flex align-items-center mt-4">
+                   <img src="{{ $t->user->photo ? asset('storage/' . $t->user->photo) : asset('assets2/img/default-user.jpg') }}"
+     class="rounded-circle me-3" width="50" height="50" alt="{{ $t->user->name }}">
+
+                    <div>
+                        <h6 class="fw-bold mb-0">{{ $t->user->name }}</h6>
+                        <small class="text-muted">{{ $t->program->tipe_program ?? 'Peserta GenZE' }}</small>
+
                     </div>
                 </div>
             </div>
         </div>
+        @endforeach
+    </div>
+@else
+    <p class="text-center text-muted">Belum ada testimonial saat ini.</p>
+@endif
+
 
         <!-- FAQ Section -->
         <div class="row align-items-stretch">

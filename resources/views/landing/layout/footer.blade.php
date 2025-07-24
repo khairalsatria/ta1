@@ -4,7 +4,7 @@
         <div class="row">
             <div class="text-center mb-5">
                 <a href="{{ url('/') }}" class="navbar-brand">
-                    <h1 class="mt-n2 text-white"><i class="fa fa-book-reader mr-3"></i>GenZE</h1>
+                    <h1 class="mt-n2 text-white"></i>GenZE</h1>
                 </a>
                 <p class="m-0">Accusam nonumy clita sed rebum kasd eirmod elitr. Ipsum ea lorem at et diam est, tempor rebum ipsum sit ea tempor stet et consetetur dolores. Justo stet diam ipsum lorem vero clita diam</p>
             </div>

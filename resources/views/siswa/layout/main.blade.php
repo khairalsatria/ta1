@@ -13,18 +13,24 @@
     <link rel="stylesheet" href="{{ asset('assets/extensions/simple-datatables/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/compiled/css/table-datatable.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" />
-    
 </head>
+
 <body>
-    <script src="assets/static/js/initTheme.js"></script>
+    <!-- JS untuk inisialisasi tema -->
+    <script src="{{ asset('assets/static/js/initTheme.js') }}"></script>
+
     <div id="app">
-        <div id="main" class="layout-horizontal">
-@include('siswa.layout.header')
-            <div class="content-wrapper container">
-                @yield('content')
-            </div>
-            @include('siswa.layout.footer')
-        </div>
+        {{-- Include bagian sidebar --}}
+        @include('siswa.layout.sidebar')
+      <div id="main">
+        {{-- Include bagian header --}}
+        @include('siswa.layout.header')
+
+        @yield('content')
+
+        {{-- Include bagian footer --}}
+        @include('siswa.layout.footer')
+      </div>
     </div>
     <script src="{{ asset('assets/static/js/components/dark.js') }}"></script>
     <script src="{{ asset('assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
@@ -46,3 +52,4 @@
 </body>
 
 </html>
+

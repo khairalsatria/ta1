@@ -4,18 +4,32 @@ namespace App\Http\Controllers\Mentor;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
 use App\Models\MateriPertemuan;
 use App\Models\KelasGenze;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class MateriController extends Controller
 {
-    public function create($kelas_id)
+    // List materi (hanya materi dari kelas milik mentor ini)
+    public function index()
     {
-        $kelas = KelasGenze::findOrFail($kelas_id);
-        return view('mentor.materi.create', compact('kelas'));
+        $materi = MateriPertemuan::whereHas('kelas', function ($q) {
+            $q->where('mentor_id', Auth::id());
+        })->with('kelas')->get();
+
+        return view('mentor.materi.index', compact('materi'));
     }
+
+    public function create(Request $request)
+{
+    $kelas_id = $request->query('kelas_id'); // Ambil id kelas dari query string
+    $kelas = KelasGenze::find($kelas_id);    // Cari kelas sesuai id
+    $semua_kelas = KelasGenze::all();
+
+    return view('mentor.materi.create', compact('semua_kelas', 'kelas_id', 'kelas'));
+}
+
 
     public function store(Request $request)
     {
@@ -29,13 +43,16 @@ class MateriController extends Controller
             'link_rekaman' => 'nullable|url'
         ]);
 
+        // Pastikan kelas_id benar-benar milik mentor login
+        $kelas = KelasGenze::where('mentor_id', Auth::id())->findOrFail($request->kelas_id);
+
         $path = null;
         if ($request->hasFile('file_pdf')) {
             $path = $request->file('file_pdf')->store('materi', 'public');
         }
 
         MateriPertemuan::create([
-            'kelas_id' => $request->kelas_id,
+            'kelas_id' => $kelas->id,
             'tanggal_pertemuan' => $request->tanggal_pertemuan,
             'pertemuan_ke' => $request->pertemuan_ke,
             'judul' => $request->judul,
@@ -44,6 +61,72 @@ class MateriController extends Controller
             'link_rekaman' => $request->link_rekaman,
         ]);
 
-        return redirect()->route('mentor.dashboard')->with('success', 'Materi berhasil ditambahkan.');
+        return redirect()->route('mentor.materi.index')->with('success', 'Materi berhasil ditambahkan.');
+    }
+
+    public function edit($id)
+    {
+        // Pastikan materi berasal dari kelas milik mentor login
+        $materi = MateriPertemuan::whereHas('kelas', function ($q) {
+            $q->where('mentor_id', Auth::id());
+        })->findOrFail($id);
+
+        $semua_kelas = KelasGenze::where('mentor_id', Auth::id())->get();
+        return view('mentor.materi.edit', compact('materi', 'semua_kelas'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'kelas_id' => 'required|exists:kelas_genze,id',
+            'tanggal_pertemuan' => 'required|date',
+            'pertemuan_ke' => 'required|integer|min:1|max:8',
+            'judul' => 'required|string|max:255',
+            'file_pdf' => 'nullable|file|mimes:pdf|max:2048',
+            'link_zoom' => 'nullable|url',
+            'link_rekaman' => 'nullable|url'
+        ]);
+
+        $materi = MateriPertemuan::whereHas('kelas', function ($q) {
+            $q->where('mentor_id', Auth::id());
+        })->findOrFail($id);
+
+        // Upload file baru jika ada
+        if ($request->hasFile('file_pdf')) {
+            // Hapus file lama kalau ada
+            if ($materi->file_pdf && Storage::disk('public')->exists($materi->file_pdf)) {
+                Storage::disk('public')->delete($materi->file_pdf);
+            }
+
+            $materi->file_pdf = $request->file('file_pdf')->store('materi', 'public');
+        }
+
+        $materi->update([
+            'kelas_id' => $request->kelas_id,
+            'tanggal_pertemuan' => $request->tanggal_pertemuan,
+            'pertemuan_ke' => $request->pertemuan_ke,
+            'judul' => $request->judul,
+            'link_zoom' => $request->link_zoom,
+            'link_rekaman' => $request->link_rekaman,
+            'file_pdf' => $materi->file_pdf,
+        ]);
+
+        return redirect()->route('mentor.kelas.show', $materi->kelas_id)->with('success', 'Materi berhasil diperbarui.')->with('success', 'Materi berhasil diperbarui.');
+    }
+
+    public function destroy($id)
+    {
+        $materi = MateriPertemuan::whereHas('kelas', function ($q) {
+            $q->where('mentor_id', Auth::id());
+        })->findOrFail($id);
+
+        // Hapus file PDF jika ada
+        if ($materi->file_pdf && Storage::disk('public')->exists($materi->file_pdf)) {
+            Storage::disk('public')->delete($materi->file_pdf);
+        }
+
+        $materi->delete();
+
+        return redirect()->route('mentor.materi.index')->with('success', 'Materi berhasil dihapus.');
     }
 }

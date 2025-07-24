@@ -101,6 +101,8 @@
                         @enderror
                     </div>
 
+                    
+
                     <div class="form-group mb-3">
                         <label for="level">Level</label>
                         <input type="text" class="form-control @error('level') is-invalid @enderror" id="level" name="level" value="{{ old('level') }}">

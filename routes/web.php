@@ -28,7 +28,8 @@ use App\Http\Controllers\Admin\{
     PendaftaranClassController as AdminPendaftaranClassController,
     PendaftaranGuideController as AdminPendaftaranGuideController,
     PendaftaranLearnController as AdminPendaftaranLearnController,
-    KelasGenzeController
+    KelasGenzeController,
+    GenzeLearnEventController
 };
 
 use App\Http\Controllers\Siswa\{
@@ -39,13 +40,16 @@ use App\Http\Controllers\Siswa\{
     MateriController as SiswaMateriController,
     ProfileController,
     ProgramSayaController,
-    KelasSayaController
+    KelasSayaController,
+    GuideController as SiswaGuideController,
+    TestimonialController
 };
 
 use App\Http\Controllers\Mentor\{
     DashboardController as MentorDashboardController,
     MateriController as MentorMateriController,
-    SoalController
+    SoalController,
+    KelasController as MentorKelasController
 };
 
 // ==========================
@@ -121,11 +125,42 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     });
 
     // Pendaftaran Guide
-    Route::prefix('pendaftaran/guides')->name('pendaftaran.guides.')->group(function () {
-        Route::get('/data', [AdminPendaftaranGuideController::class, 'index'])->name('index');
-        Route::get('/{id}', [AdminPendaftaranGuideController::class, 'show'])->name('show');
-        Route::post('/{id}/konfirmasi', [AdminPendaftaranGuideController::class, 'konfirmasiJadwal'])->name('konfirmasi');
-    });
+     Route::prefix('pendaftaran/guides')
+            ->name('pendaftaran.guides.')
+            ->group(function () {
+
+                // LIST (index)
+                // /admin/pendaftaran/guides/data
+                Route::get('/data', [AdminPendaftaranGuideController::class, 'index'])
+                    ->name('index');
+
+                // DETAIL
+                // /admin/pendaftaran/guides/{id}
+                Route::get('/{id}', [AdminPendaftaranGuideController::class, 'show'])
+                    ->whereNumber('id')
+                    ->name('show');
+
+                // KONFIRMASI JADWAL (paket 2)
+                Route::post('/{id}/konfirmasi', [AdminPendaftaranGuideController::class, 'konfirmasiJadwal'])
+                    ->whereNumber('id')
+                    ->name('konfirmasi');
+
+                // UPLOAD FILE HASIL (paket 1 & 3, status diterima)
+                Route::post('/{id}/hasil', [AdminPendaftaranGuideController::class, 'uploadHasil'])
+                    ->whereNumber('id')
+                    ->name('uploadHasil');
+
+                // SIMPAN LINK ZOOM (paket 2, setelah diterima & jadwal terkonfirmasi)
+                Route::post('/{id}/zoom', [AdminPendaftaranGuideController::class, 'simpanZoom'])
+                    ->whereNumber('id')
+                    ->name('simpanZoom');
+
+                // HAPUS FILE/LINK HASIL
+                // /admin/pendaftaran/guides/hasil/{fileId}
+                Route::delete('/hasil/{fileId}', [AdminPendaftaranGuideController::class, 'hapusHasil'])
+                    ->whereNumber('fileId')
+                    ->name('hapusHasil');
+            });
 
     // Pendaftaran Learn
     Route::prefix('pendaftaran/learns')->name('pendaftaran.learns.')->group(function () {
@@ -134,6 +169,20 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         Route::post('/{id}/verifikasi', [AdminPendaftaranLearnController::class, 'verifikasiPembayaran'])->name('verifikasi');
         Route::post('/{id}/upload-sertifikat', [AdminPendaftaranLearnController::class, 'uploadSertifikat'])->name('uploadSertifikat');
     });
+
+  Route::prefix('learn-events')->name('learn_events.')->group(function () {
+    Route::get('/', [GenzeLearnEventController::class, 'index'])->name('index');
+    Route::get('/{id}', [GenzeLearnEventController::class, 'show'])->name('show');
+    Route::put('/{id}/update-zoom', [GenzeLearnEventController::class, 'updateZoom'])->name('updateZoom');
+    Route::post('/{id}/upload-template', [GenzeLearnEventController::class, 'uploadTemplate'])->name('uploadTemplate');
+    Route::post('/{id}/generate-sertifikat', [GenzeLearnEventController::class, 'generateMassal'])->name('generateMassal');
+Route::post('/{id}/regenerate-sertifikat', [GenzeLearnEventController::class, 'regenerateMassal'])->name('regenerateMassal');
+    // Route Preview Sertifikat
+    Route::get('/{id}/preview-sertifikat', [GenzeLearnEventController::class, 'previewSertifikat'])
+        ->name('previewSertifikat');
+});
+
+
 
     // Pendaftaran Program Umum
     Route::prefix('pendaftarann')->name('pendaftaran.')->group(function () {
@@ -184,18 +233,38 @@ Route::middleware('auth')->prefix('siswa')->name('siswa.')->group(function () {
     // Materi
     Route::get('/materi', [SiswaMateriController::class, 'index'])->name('materi.index');
 
+     Route::get('/guide', [SiswaGuideController::class, 'index'])->name('guide.index');
+
+ Route::get('/program-saya/learn', [\App\Http\Controllers\Siswa\LearnController::class, 'index'])
+        ->name('program-saya.learn');
+    Route::get('/program-saya/learn/{id}/sertifikat', [\App\Http\Controllers\Siswa\LearnController::class, 'downloadSertifikat'])
+        ->name('program-saya.learn.sertifikat');
+ Route::resource('testimonial', TestimonialController::class)->only(['index', 'create', 'store', 'destroy']);
+
     // Latihan
-
 Route::prefix('latihan')->group(function () {
-    Route::get('{kelas_id}/{pertemuan}', [LatihanController::class, 'show'])->name('latihan.show');
-    Route::post('{kelas_id}/{pertemuan}', [LatihanController::class, 'submit'])->name('latihan.submit');
 
-    // ✅ Route per soal (tampilkan satu soal per halaman)
+    // ✅ Per-soal (utama)
     Route::get('{kelas_id}/{pertemuan}/per-soal/{index?}', [LatihanController::class, 'showPerSoal'])
         ->name('latihan.show.per.soal');
 
     Route::post('{kelas_id}/{pertemuan}/per-soal/{index}', [LatihanController::class, 'submitPerSoal'])
         ->name('latihan.submit.per.soal');
+
+    // (Opsional) Fallback legacy: kalau ada akses lama tanpa "per-soal"
+    Route::get('{kelas_id}/{pertemuan}', [LatihanController::class, 'show'])
+        ->name('latihan.show');
+    Route::post('{kelas_id}/{pertemuan}', [LatihanController::class, 'submit'])
+        ->name('latihan.submit');
+
+        // Review soal per pertemuan
+    Route::get('/kelas/{kelasId}/review/{pertemuanKe}', [LatihanController::class, 'review'])
+        ->name('kelas.review');
+
+
+
+
+
 });
 
 });
@@ -207,12 +276,22 @@ Route::middleware('auth')->prefix('mentor')->name('mentor.')->group(function () 
     Route::get('/dashboard', [MentorDashboardController::class, 'index'])->name('dashboard');
 
     // Materi
-    Route::get('/materi/create/{kelas_id}', [MentorMateriController::class, 'create'])->name('materi.create');
-    Route::post('/materi', [MentorMateriController::class, 'store'])->name('materi.store');
+   Route::resource('/materi', MentorMateriController::class)->names('materi');
+
 
     // Soal
     Route::get('/kelas/{kelas_id}/soal/create', [SoalController::class, 'create'])->name('soal.create');
     Route::post('/soal', [SoalController::class, 'store'])->name('soal.store');
+
+    // Daftar kelas & detail kelas
+    Route::get('/kelas', [MentorKelasController::class, 'index'])->name('kelas.index');
+    Route::get('/kelas/{id}', [MentorKelasController::class, 'show'])->name('kelas.show');
+
+    Route::get('/kelas/{kelas}/siswa', [MentorKelasController::class, 'siswa'])
+    ->name('kelas.siswa');
+
+    Route::get('kelas/{kelas}/soal/{pertemuan}', [SoalController::class, 'detail'])
+        ->name('kelas.soal.detail');
 });
 
 // ==========================

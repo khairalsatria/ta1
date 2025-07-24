@@ -3,8 +3,10 @@
 <div class="sidebar-header position-relative">
 <div class="d-flex justify-content-between align-items-center">
     <div class="logo">
-        <a href="index.html"><img src="./assets/compiled/svg/logo.svg" alt="Logo" srcset=""></a>
-    </div>
+    <a href="index.html">
+        <img src="/assets2/img/logo.png" alt="Logo" style="width: 120px; height: auto;">
+    </a>
+</div>
     <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
             role="img" class="iconify iconify--system-uicons" width="20" height="20"
@@ -42,37 +44,65 @@
 <ul class="menu">
     <li class="sidebar-title">Menu</li>
 
-    <li class="sidebar-item {{ request()->is('admin/dashboard*') ? 'active' : '' }}">
-        <a href="{{ url('admin/dashboard') }}" class='sidebar-link'>
+    <li class="sidebar-item {{ request()->is('mentor/dashboard*') ? 'active' : '' }}">
+        <a href="{{ url('mentor/dashboard') }}" class='sidebar-link'>
             <i class="bi bi-grid-fill"></i>
             <span>Dashboard</span>
         </a>
     </li>
-
-    <li class="sidebar-item {{ request()->is('') ? 'active' : '' }}">
-        <a href="{{ url('') }}" class='sidebar-link'>
-            <i class="bi bi-person-circle"></i>
-            <span>Data User</span>
+    <li class="sidebar-item {{ request()->is('mentor/kelas-saya*') ? 'active' : '' }}">
+        <a href="{{ url('mentor/kelas') }}" class='sidebar-link'>
+            <i class="bi bi-grid-fill"></i>
+            <span>Class</span>
         </a>
     </li>
 
-    <li class="sidebar-item has-sub {{ request()->is('') || request()->is('') || request()->is('') || request()->is('') || request()->is('') ? 'active' : '' }}">
+    @if(auth()->check() && auth()->user()->role === 'mentor')
+    <li class="sidebar-item {{ request()->is('profile') ? 'active' : '' }}">
+        <a href="{{ url('profile') }}" class='sidebar-link'>
+            <i class="bi bi-person-circle"></i>
+            <span>My Profile</span>
+        </a>
+    </li>
+@endif
+
+
+    @if(auth()->check() && auth()->user()->role === 'mentor' && auth()->user()->kelas_genze)
+    <li class="sidebar-item has-sub {{ request()->is('mentor/materi/create/*') ? 'active' : '' }}">
         <a href="#" class='sidebar-link'>
-            <i class="bi bi-person-check-fill"></i>
-            <span>Data Peserta</span>
+            <i class="bi bi-journal-text"></i>
+            <span>CRUD Materi</span>
         </a>
         <ul class="submenu">
-            <li class="submenu-item {{ request()->is('') ? 'active' : '' }}">
-                <a href="{{ url('') }}" class="submenu-link">GenZE Class</a>
-            </li>
-            <li class="submenu-item {{ request()->is('') ? 'active' : '' }}">
-                <a href="{{ url('') }}" class="submenu-link">GenZE Guide</a>
-            </li>
-            <li class="submenu-item {{ request()->is('') ? 'active' : '' }}">
-                <a href="{{ url('') }}" class="submenu-link">GenZE Learn</a>
-            </li>
+            @foreach(auth()->user()->kelas_genze as $kelas)
+                <li class="submenu-item {{ request()->is('mentor/materi/create/' . $kelas->id) ? 'active' : '' }}">
+                    <a href="{{ url('mentor/materi/create/' . $kelas->id) }}" class="submenu-link">
+                        {{ $kelas->nama_kelas }}
+                    </a>
+                </li>
+            @endforeach
         </ul>
     </li>
+@endif
+
+@if(auth()->check() && auth()->user()->role === 'mentor' && auth()->user()->kelas_genze)
+    <li class="sidebar-item has-sub {{ request()->is('mentor/materi/create/*') ? 'active' : '' }}">
+        <a href="#" class='sidebar-link'>
+            <i class="bi bi-journal-text"></i>
+            <span>CRUD Soal</span>
+        </a>
+        <ul class="submenu">
+            @foreach(auth()->user()->kelas_genze as $kelas)
+                <li class="submenu-item {{ request()->is('mentor/materi/create/' . $kelas->id) ? 'active' : '' }}">
+                    <a href="{{ url('mentor/materi/create/' . $kelas->id) }}" class="submenu-link">
+                        {{ $kelas->nama_kelas }}
+                    </a>
+                </li>
+            @endforeach
+        </ul>
+    </li>
+@endif
+
 
     {{-- <li class="sidebar-item has-sub {{ request()->is('admin/jenis_kelas*') || request()->is('admin/jenjang_pendidikan*') || request()->is('admin/mata_pelajaran*') || request()->is('admin/jadwal_kelas*') || request()->is('admin/soal*') ? 'active' : '' }}">
         <a href="#" class='sidebar-link'>

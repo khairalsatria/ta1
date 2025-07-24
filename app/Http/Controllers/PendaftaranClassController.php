@@ -39,7 +39,7 @@ class PendaftaranClassController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'jadwal_pilihan' => 'required|array|max:3',
+            'jadwal_pilihan' => 'required|array|min:3',
             'id_jeniskelas' => 'required|integer',
             'kelas' => 'required|string|max:10',
             'id_jenjang_pendidikan' => 'required|integer',
@@ -83,7 +83,12 @@ class PendaftaranClassController extends Controller
                 'first_name' => Auth::user()->name,
                 'email' => Auth::user()->email,
             ],
+
+            'callbacks' => [
+        'finish' => route('siswa.pendaftaran.status', $pendaftaranProgram->id)
+    ]
         ]);
+
 
         // Simpan Snap Token sebagai link pembayaran
         $pendaftaranProgram->update([

@@ -40,8 +40,10 @@
                                 <i class="fa fa-user mr-2 text-success"></i> {{ $program->instruktur }}
                             </span>
                             <span class="badge-rating text-warning small d-flex align-items-center">
-                                <i class="fa fa-star mr-1"></i> {{ $program->rating }}
-                            </span>
+    <i class="fa fa-star mr-1"></i>
+    {{ is_numeric($program->rating) ? $program->rating . ' / 5' : 'Belum ada' }}
+</span>
+
                         </div>
                     </div>
                 </a>

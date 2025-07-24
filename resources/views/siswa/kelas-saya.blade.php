@@ -35,15 +35,24 @@
             </div>
             <div class="card-body">
                 <ul class="list-group">
-                    @forelse($kelasList as $k)
-                        <li class="list-group-item">
-                            <a href="{{ route('siswa.kelas-saya', ['kelas_id' => $k->kelas_id]) }}">
-                                {{ $k->kelasGenze->nama_kelas ?? 'Nama Kelas Tidak Ditemukan' }}
-                            </a>
-                        </li>
-                    @empty
-                        <li class="list-group-item text-muted">Belum terdaftar di kelas manapun.</li>
-                    @endforelse
+                    @php
+    // Filter hanya kelas yang memiliki relasi kelasGenze
+    $kelasValid = $kelasList->filter(fn($k) => $k->kelasGenze);
+@endphp
+
+@if($kelasValid->isEmpty())
+    <li class="list-group-item text-muted">Belum terdaftar di kelas manapun.</li>
+@else
+    @foreach($kelasValid as $k)
+        <li class="list-group-item">
+            <a href="{{ route('siswa.kelas-saya', ['kelas_id' => $k->kelas_id]) }}">
+                {{ $k->kelasGenze->nama_kelas }}
+            </a>
+        </li>
+    @endforeach
+@endif
+
+
                 </ul>
             </div>
         </div>
@@ -55,8 +64,8 @@
                 <i class="bi bi-mortarboard-fill fs-3 text-primary"></i>
             </div>
             <div>
-                <h5 class="mb-1 fw-bold text-white">Kelas Aktif :
-                    <span class="text-white">
+                <h5 class="mb-1 fw-bold ">Kelas Aktif :
+                    <span>
                         {{ $kelasList->firstWhere('kelas_id', $kelasDipilihId)->kelasGenze->nama_kelas ?? '-' }}
                     </span>
                 </h5>
@@ -125,33 +134,45 @@
                             </ul>
 
                             @php
-                                $jumlahSoal = \App\Models\SoalLatihan::where('kelas_id', $kelasDipilihId)
-                                    ->where('pertemuan_ke', $m->pertemuan_ke)->count();
-                                $pernahJawab = \App\Models\JawabanSoalLatihan::where('user_id', Auth::id())
-                                    ->whereHas('soal', fn($q) => $q->where('kelas_id', $kelasDipilihId)
-                                                                 ->where('pertemuan_ke', $m->pertemuan_ke))
-                                    ->exists();
-                            @endphp
+    $jumlahSoal = \App\Models\SoalLatihan::where('kelas_id', $kelasDipilihId)
+        ->where('pertemuan_ke', $m->pertemuan_ke)
+        ->count();
 
-                            @if($jumlahSoal > 0)
-                                @if(!$pernahJawab)
-                                    <a href="{{ route('siswa.latihan.show', [$kelasDipilihId, $m->pertemuan_ke]) }}" class="btn btn-primary btn-sm mt-2">
-                                        ✍️ Kerjakan Soal
-                                    </a>
-                                @else
-                                    <p class="text-success mt-2">✅ Soal sudah dikerjakan.</p>
-                                @endif
-                            @endif
+    $pernahJawab = \App\Models\JawabanSoalLatihan::where('user_id', Auth::id())
+        ->whereHas('soal', function ($q) use ($kelasDipilihId, $m) {
+            $q->where('kelas_id', $kelasDipilihId)
+              ->where('pertemuan_ke', $m->pertemuan_ke);
+        })
+        ->exists();
+@endphp
+
+@if($jumlahSoal > 0)
+    @if(!$pernahJawab)
+        <a href="{{ route('siswa.latihan.show.per.soal', [$kelasDipilihId, $m->pertemuan_ke]) }}" class="btn btn-primary btn-sm mt-2">
+            ✍️ Kerjakan Soal
+        </a>
+    @else
+        <p class="text-success mt-2 mb-2">✅ Soal sudah dikerjakan.</p>
+        <a href="{{ route('siswa.kelas.review', [$kelasDipilihId, $m->pertemuan_ke]) }}" class="btn btn-outline-info btn-sm mt-1">
+            🔍 Review Soal
+        </a>
+    @endif
+@endif
+
 
                             @if(isset($riwayatNilai[$m->pertemuan_ke]))
-                                @php
-                                    $jawaban = $riwayatNilai[$m->pertemuan_ke];
-                                    $total = $jawaban->count();
-                                    $benar = $jawaban->where('benar', true)->count();
-                                    $skor = round($benar / max($total, 1) * 100);
-                                @endphp
-                                <p class="mt-1 text-muted">🎯 Skor: <strong>{{ $skor }}</strong> ({{ $benar }} dari {{ $total }} benar)</p>
-                            @endif
+    @php
+        $jawaban = $riwayatNilai[$m->pertemuan_ke];
+        $total = $jawaban->count();
+        $benar = $jawaban->where('benar', true)->count();
+        $skor = round($benar / max($total,1) * 100);
+    @endphp
+    <p class="mt-1 text-muted">
+        🎯 Skor: <strong>{{ $skor }}</strong> ({{ $benar }} / {{ $total }})
+    </p>
+
+@endif
+
                         </div>
                     @endforeach
                 </div>

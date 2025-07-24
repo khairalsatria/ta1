@@ -37,4 +37,11 @@ class PendaftaranGuides extends Model
     {
         return $this->belongsTo(JadwalGuide2::class, 'jadwalguide2_konfirmasi', 'id_jadwalguide2');
     }
+
+   public function hasilFiles()
+{
+    return $this->hasMany(\App\Models\GuideHasilFile::class, 'pendaftaran_guide_id');
+}
+
+
 }

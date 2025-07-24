@@ -8,9 +8,11 @@ use Illuminate\Http\Request;
 use App\Models\SoalLatihan;
 use App\Models\KelasGenze;
 use App\Models\JawabanSoalLatihan;
+use App\Models\MateriPertemuan;
 
 class LatihanController extends Controller
 {
+
     // Menampilkan satu soal per halaman
     public function showPerSoal($kelas_id, $pertemuan, $index = 0)
     {
@@ -58,4 +60,45 @@ class LatihanController extends Controller
 
         return redirect()->route('siswa.latihan.show.per.soal', [$kelas_id, $pertemuan, $index + 1]);
     }
+
+    public function show($kelas_id, $pertemuan)
+{
+    // Redirect langsung ke soal pertama (index 0)
+    return redirect()->route('siswa.latihan.show.per.soal', [$kelas_id, $pertemuan, 0]);
+}
+
+public function submit(Request $request, $kelas_id, $pertemuan)
+{
+    // Kalau ada submit lama (mis. form batch), lempar saja ke kelas-saya
+    // atau arahkan ke submitPerSoal index 0 tergantung kebutuhan
+    return redirect()->route('siswa.kelas-saya')
+        ->with('info', 'Gunakan format latihan per soal.');
+}
+
+public function review($kelasId, $pertemuanKe)
+{
+    $userId = Auth::id();
+
+    // Pastikan siswa terdaftar di kelas ini
+    $kelas = KelasGenze::whereHas('siswa.pendaftaran', function($q) use ($userId) {
+            $q->where('user_id', $userId);
+        })
+        ->findOrFail($kelasId);
+
+    $materi = MateriPertemuan::where('kelas_id', $kelasId)
+        ->where('pertemuan_ke', $pertemuanKe)
+        ->first();
+
+    // Soal + jawaban siswa saja
+    $soalList = SoalLatihan::where('kelas_id', $kelasId)
+        ->where('pertemuan_ke', $pertemuanKe)
+        ->with(['jawaban' => function($q) use ($userId) {
+            $q->where('user_id', $userId);
+        }])
+        ->get();
+
+    return view('siswa.latihan.review', compact('kelas','materi','pertemuanKe','soalList'));
+}
+
+
 }

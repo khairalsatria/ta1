@@ -42,9 +42,9 @@
             <div class="text-muted small mb-2">Status</div>
             @php
                 $badgeClass = match($pendaftaran->status) {
-                    'pending' => 'bg-warning',
-                    'confirmed' => 'bg-success',
-                    'cancelled' => 'bg-danger',
+                    'menunggu' => 'bg-warning',
+                    'diterima' => 'bg-success',
+                    'ditolak' => 'bg-danger',
                     default => 'bg-secondary'
                 };
             @endphp
@@ -94,6 +94,8 @@
             </div>
         @endif
 
+
+
         <!-- Tombol Bayar -->
         @if ($tampilkanTombolBayar && $pendaftaran->link_pembayaran)
             <div class="text-center mt-5">
@@ -115,4 +117,6 @@
 </div>
 <!-- Content End -->
 
+
 @endsection
+

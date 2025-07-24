@@ -41,6 +41,12 @@ public function pendaftaranKelas()
     return $this->hasOne(PendaftaranClasses::class, 'pendaftaran_id', 'id');
 }
 
+public function kelas_genze()
+{
+    return $this->hasMany(KelasGenze::class, 'mentor_id');
+}
+
+
     /**
      * The attributes that should be hidden for serialization.
      *

@@ -10,6 +10,7 @@ use App\Models\JenjangPendidikan;
 use App\Models\MataPelajaran;
 use App\Models\JadwalKelas;
 use App\Models\KelasGenze;
+use App\Models\User;
 
 class PendaftaranClasses extends Model
 {
@@ -31,6 +32,11 @@ class PendaftaranClasses extends Model
     protected $casts = [
         'jadwalkelas_pilihan' => 'array'
     ];
+     public function getUserAttribute()
+{
+    return $this->pendaftaran ? $this->pendaftaran->user : null;
+}
+
 
     public function pendaftaran()
     {

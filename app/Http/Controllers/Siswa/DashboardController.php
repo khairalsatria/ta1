@@ -4,42 +4,75 @@ namespace App\Http\Controllers\Siswa;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\Request;
 use App\Models\PendaftaranProgram;
 use App\Models\PendaftaranClasses;
-use App\Models\JawabanSoalLatihan;
 
 class DashboardController extends Controller
-    {
-        public function index(Request $request)
 {
-    $user = Auth::user();
+    public function index()
+    {
+        $userId = Auth::id();
 
-    // Jumlah semua program
-    $totalProgram = PendaftaranProgram::where('user_id', $user->id)->count();
+        // Total program (semua tipe) dengan status menunggu
+        $totalProgramMenunggu = PendaftaranProgram::where('user_id', $userId)
+            ->where('status', 'menunggu')
+            ->count();
 
-    // Jumlah berdasarkan tipe program
-    $jumlahClass = PendaftaranProgram::where('user_id', $user->id)
-        ->whereHas('program', fn($q) => $q->where('tipe_program', 'Genze Class'))
-        ->count();
+        // Total program (semua tipe) dengan status diterima
+        $totalProgramDiterima = PendaftaranProgram::where('user_id', $userId)
+            ->where('status', 'diterima')
+            ->count();
 
+        /**
+         * Total GenZE Class / Guide / Learn yang diikuti.
+         * Biasanya “diikuti” berarti sudah diterima (status diterima / aktif).
+         * Jika kamu punya status lain seperti 'aktif', tambahkan ke whereIn.
+         * Sesuaikan nilai 'tipe_program' sesuai penyimpanan di database.
+         * Contoh nilai: 'genze_class', 'genze_guide', 'genze_learn'
+         */
 
-    $jumlahGuide = PendaftaranProgram::where('user_id', $user->id)
-        ->whereHas('program', fn($q) => $q->where('tipe_program', 'Genze Guide'))
-        ->count();
+        $statusDianggapIkut = ['diterima']; // atau ['diterima','aktif'] jika ada
 
-    $jumlahLearn = PendaftaranProgram::where('user_id', $user->id)
-        ->whereHas('program', fn($q) => $q->where('tipe_program', 'Genze Learn'))
-        ->count();
+       $statusDianggapIkut = ['diterima'];
+$userId = Auth::id();
 
-    // Jumlah kelas yang sudah tergabung
-    $jumlahKelasIkut = PendaftaranClasses::whereHas('pendaftaran', fn($q) =>
-        $q->where('user_id', $user->id)
-    )->count();
+$totalGenzeClass = PendaftaranProgram::where('user_id', $userId)
+    ->whereIn('status', $statusDianggapIkut)
+    ->whereHas('program', function ($query) {
+        $query->where('tipe_program', 'GenZE Class');
+    })
+    ->count();
 
-    return view('siswa.dashboard', compact(
-        'totalProgram', 'jumlahClass', 'jumlahGuide',
-        'jumlahLearn', 'jumlahKelasIkut'
-    ));
-}
+$totalGenzeGuide = PendaftaranProgram::where('user_id', $userId)
+    ->whereIn('status', $statusDianggapIkut)
+    ->whereHas('program', function ($query) {
+        $query->where('tipe_program', 'GenZE Guide');
+    })
+    ->count();
+
+$totalGenzeLearn = PendaftaranProgram::where('user_id', $userId)
+    ->whereIn('status', $statusDianggapIkut)
+    ->whereHas('program', function ($query) {
+        $query->where('tipe_program', 'GenZE Learn');
+    })
+    ->count();
+
+$userId = Auth::id();
+
+$jumlahKelasIkut = PendaftaranClasses::whereNotNull('kelas_id') // sudah tergabung di kelas_genze
+    ->whereHas('pendaftaran', function($query) use ($userId) {
+        $query->where('user_id', $userId)
+              ->where('status', 'diterima'); // hanya kelas dengan status pendaftaran diterima
+    })
+    ->count();
+
+        return view('siswa.dashboard', compact(
+            'totalProgramMenunggu',
+            'totalProgramDiterima',
+            'totalGenzeClass',
+            'totalGenzeGuide',
+            'totalGenzeLearn',
+            'jumlahKelasIkut'
+        ));
     }
+}

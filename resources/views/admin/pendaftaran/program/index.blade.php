@@ -36,7 +36,7 @@
                             <th>Nama</th>
                             <th>Program</th>
                             <th>Status</th>
-                            <th>Bukti Pembayaran</th>
+                            {{-- <th>Bukti Pembayaran</th> --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -46,13 +46,13 @@
                             <td>{{ $pendaftaran->user->name }}</td>
                             <td>{{ $pendaftaran->program->tipe_program ?? '-' }} {{ $pendaftaran->program->nama_program ??  '-' }}</td>
                             <td>{{ ucfirst($pendaftaran->status) }}</td>
-                            <td>
+                            {{-- <td>
                                 @if($pendaftaran->bukti_pembayaran)
                                     <a href="{{ Storage::url($pendaftaran->bukti_pembayaran) }}" target="_blank" class="btn btn-sm btn-info">Lihat</a>
                                 @else
                                     <span class="text-muted">Belum upload</span>
                                 @endif
-                            </td>
+                            </td> --}}
                         </tr>
                         @endforeach
                     </tbody>

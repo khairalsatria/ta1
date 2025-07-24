@@ -1,29 +1,34 @@
 <!-- Navbar Start -->
 <div class="container-fluid p-0">
     <nav class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 px-lg-5">
-        <a href="{{ url('/') }}" class="navbar-brand ml-lg-3">
-            <h1 class="m-0 text-primary"><i class="fa fa-book-reader mr-3"></i>GenZE</h1>
-        </a>
-        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+       <a href="{{ url('/') }}" class="navbar-brand ml-lg-3">
+    <img src="{{ asset('/assets2/img/logo.png') }}" alt="GenZE Logo" style="height: 50px;">
+
+</a>
+<button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+    <span class="navbar-toggler-icon"></span>
+</button>
+
         <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
     <div class="navbar-nav mx-auto py-0">
         <a href="{{ url('/home') }}" class="nav-item nav-link {{ request()->is('home') ? 'active' : '' }}">Home</a>
         <a href="{{ url('/program') }}" class="nav-item nav-link {{ request()->is('program') ? 'active' : '' }}">Course</a>
         <a href="{{ url('/team') }}" class="nav-item nav-link {{ request()->is('team') ? 'active' : '' }}">Team</a>
-        <a href="{{ url('/testimoni') }}" class="nav-item nav-link {{ request()->is('team') ? 'active' : '' }}">Testimonial</a>
-        <a href="{{ url('/kontak') }}" class="nav-item nav-link {{ request()->is('team') ? 'active' : '' }}">Contact</a>
+
+        {{-- <a href="{{ url('/testimoni') }}" class="nav-item nav-link {{ request()->is('team') ? 'active' : '' }}">Testimonial</a> --}}
+        {{-- <a href="{{ url('/kontak') }}" class="nav-item nav-link {{ request()->is('team') ? 'active' : '' }}">Contact</a> --}}
         @auth
-        <div class="nav-item dropdown">
+        <a href="{{ url('/siswa/dashboard') }}" class="nav-item nav-link {{ request()->is('dashboard') ? 'active' : '' }}">Dashboard</a>
+        {{-- <div class="nav-item dropdown">
             <a href="#" class="nav-link dropdown-toggle {{ request()->is('akun*') || request()->is('status*') || request()->is('programku*') ? 'active' : '' }}"
-                data-bs-toggle="dropdown">Student Center</a>
+                data-bs-toggle="dropdown">Dashboard</a>
             <div class="dropdown-menu m-0">
                 <a href="{{ url('/profile') }}" class="dropdown-item {{ request()->is('akun') ? 'active' : '' }}">My Profile</a>
+                <a href="{{ url('/siswa/dashboard') }}" class="dropdown-item {{ request()->is('akun') ? 'active' : '' }}">Dashboard</a>
                 <a href="{{ url('/status') }}" class="dropdown-item {{ request()->is('status') ? 'active' : '' }}">Registration</a>
                 <a href="{{ url('/programku') }}" class="dropdown-item {{ request()->is('programku') ? 'active' : '' }}">My Course</a>
             </div>
-        </div>
+        </div> --}}
         @endauth
             </div>
 
