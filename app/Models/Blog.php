@@ -20,7 +20,20 @@ class Blog extends Model
     ];
 
     public function kategoriBlog()
-    {
-        return $this->belongsTo(KategoriBlog::class, 'kategori', 'id_kategori_blog');
-    }
+{
+    return $this->belongsTo(KategoriBlog::class, 'kategori', 'id_kategori_blog');
+}
+
+public function penulisUser()
+{
+    return $this->belongsTo(User::class, 'penulis', 'id');
+}
+
+// Blog.php
+public function user()
+{
+    return $this->belongsTo(User::class, 'penulis');
+}
+
+
 }

@@ -56,6 +56,7 @@
         <!-- Jadwal / Upload -->
         @php $tampilkanTombolBayar = false; @endphp
 
+        {{-- Jadwal Konfirmasi untuk GenZE Class --}}
         @if ($pendaftaran->pendaftaranClass && $pendaftaran->pendaftaranClass->jadwalKonfirmasi)
             <div class="text-center mt-4">
                 <div class="text-muted small">Jadwal Ditetapkan (GenZE Class)</div>
@@ -63,6 +64,30 @@
             </div>
             @php $tampilkanTombolBayar = true; @endphp
 
+        {{-- Jadwal Alternatif Ditawarkan --}}
+        @elseif ($pendaftaran->pendaftaranClass && $pendaftaran->pendaftaranClass->jadwalAlternatif && $pendaftaran->pendaftaranClass->status_alternatif === 'ditawarkan')
+            <div class="alert alert-warning text-center mt-4">
+                <div class="text-muted small mb-2">Jadwal Alternatif Ditawarkan oleh Admin</div>
+                <p class="fw-bold text-dark mb-3">{{ $pendaftaran->pendaftaranClass->jadwalAlternatif->jadwalkelas }}</p>
+
+                <form action="{{ route('siswa.pendaftaran.genze-class.responAlternatif', $pendaftaran->pendaftaranClass->id) }}" method="POST" class="d-inline">
+                    @csrf
+                    <input type="hidden" name="respon" value="terima">
+                    <button type="submit" class="btn btn-success btn-sm px-3 me-2">
+                        <i class="bi bi-check-circle"></i> Setuju
+                    </button>
+                </form>
+
+                <form action="{{ route('siswa.pendaftaran.genze-class.responAlternatif', $pendaftaran->pendaftaranClass->id) }}" method="POST" class="d-inline">
+                    @csrf
+                    <input type="hidden" name="respon" value="tolak">
+                    <button type="submit" class="btn btn-danger btn-sm px-3">
+                        <i class="bi bi-x-circle"></i> Tolak
+                    </button>
+                </form>
+            </div>
+
+        {{-- GenZE Guide - Paket 2 --}}
         @elseif ($pendaftaran->pendaftaranGuide)
             @php $guide = $pendaftaran->pendaftaranGuide; @endphp
             @if ($guide->paket_guide == 2 && $guide->jadwalKonfirmasi)
@@ -81,6 +106,7 @@
                 @php $tampilkanTombolBayar = true; @endphp
             @endif
 
+        {{-- GenZE Learn --}}
         @elseif ($pendaftaran->pendaftaranLearn)
             <div class="text-center mt-4">
                 <div class="text-muted small">Asal Instansi (GenZE Learn)</div>
@@ -88,13 +114,12 @@
             </div>
             @php $tampilkanTombolBayar = true; @endphp
 
+        {{-- Belum ada konfirmasi apapun --}}
         @else
             <div class="alert alert-info text-center mt-4">
                 Jadwal atau data belum dikonfirmasi admin. Silakan tunggu informasi selanjutnya.
             </div>
         @endif
-
-
 
         <!-- Tombol Bayar -->
         @if ($tampilkanTombolBayar && $pendaftaran->link_pembayaran)
@@ -116,7 +141,11 @@
     </div>
 </div>
 <!-- Content End -->
-
+<!-- Tombol Kembali -->
+<div class="text-center mt-4">
+    <a href="{{ route('siswa.pendaftaran.riwayat') }}" class="btn btn-outline-secondary px-4 py-2 rounded-pill fw-semibold shadow-sm">
+        <i class="bi bi-arrow-left"></i> Kembali ke Riwayat
+    </a>
+</div>
 
 @endsection
-

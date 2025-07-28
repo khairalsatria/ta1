@@ -48,7 +48,8 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $blog->judul }}</td>
                             <td>{{ \Carbon\Carbon::parse($blog->tanggal_posting)->translatedFormat('d M Y') }}</td>
-                            <td>{{ $blog->penulis }}</td>
+                            <td>{{ $blog->user->name ?? '-' }}</td>
+
                             <td>{{ $blog->kategoriBlog->kategori_blog ?? '-' }}</td>
                             <td>
                                 @if($blog->gambar)

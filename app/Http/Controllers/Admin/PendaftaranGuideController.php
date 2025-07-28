@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 use App\Models\PendaftaranGuides;
@@ -98,7 +99,7 @@ class PendaftaranGuideController extends Controller
             'pendaftaran_guide_id' => $pendaftaran->id,
             'file_hasil'           => $path,
             'link_zoom'            => null,
-            'uploaded_by'          => auth()->id(),
+            'uploaded_by'          => Auth::id(),
             'keterangan'           => $request->keterangan,
         ]);
 
@@ -135,7 +136,7 @@ class PendaftaranGuideController extends Controller
             'pendaftaran_guide_id' => $pendaftaran->id,
             'file_hasil'           => null,
             'link_zoom'            => $request->link_zoom,
-            'uploaded_by'          => auth()->id(),
+            'uploaded_by'          => Auth::id(),
             'keterangan'           => $request->keterangan ?? 'Link Zoom pertemuan',
         ]);
 

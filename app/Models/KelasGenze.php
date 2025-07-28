@@ -29,9 +29,20 @@ class KelasGenze extends Model
         return $this->belongsTo(User::class, 'mentor_id');
     }
 
-    public function siswa() {
-        return $this->hasMany(PendaftaranClasses::class, 'kelas_id');
-    }
+    // app/Models/KelasGenze.php
+
+public function siswa()
+{
+    return $this->hasMany(PendaftaranClasses::class, 'kelas_id')
+                ->where('status', 'aktif');
+}
+
+// Jika kamu juga punya relasi semua siswa tanpa filter, buat terpisah:
+public function semuaSiswa()
+{
+    return $this->hasMany(PendaftaranClasses::class, 'kelas_id');
+}
+
 
     public function materi()
 {

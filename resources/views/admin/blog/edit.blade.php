@@ -54,13 +54,18 @@
                         @enderror
                     </div>
 
-                    <div class="form-group mb-3">
-                        <label for="penulis">Penulis</label>
-                        <input type="text" class="form-control @error('penulis') is-invalid @enderror" id="penulis" name="penulis" value="{{ old('penulis', $blog->penulis) }}">
-                        @error('penulis')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
+                    <div class="form-group">
+    <label for="penulis">Penulis</label>
+    <select name="penulis" id="penulis" class="form-control" required>
+        <option value="">-- Pilih Penulis --</option>
+        @foreach($users as $user)
+            <option value="{{ $user->id }}" {{ old('penulis', $blog->penulis ?? '') == $user->id ? 'selected' : '' }}>
+                {{ $user->name }} ({{ $user->role }})
+            </option>
+        @endforeach
+    </select>
+</div>
+
 
                     <div class="form-group mb-3">
                         <label for="kategori">Kategori</label>

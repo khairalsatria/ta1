@@ -56,8 +56,19 @@
                 </ul>
             </div>
         </div>
+        @if(isset($statusKelas) && $statusKelas === 'aktif')
+    {{-- tampilkan konten kelas --}}
+@elseif(isset($statusKelas) && $statusKelas === 'selesai')
+    <div class="alert alert-info mt-3">
+        🎉 Anda telah menyelesaikan seluruh pertemuan untuk kelas ini.
+        <br>
+       <a href="{{ url('/program') }}" class="btn btn-primary mt-2">🔁 Daftar Ulang Program</a>
 
-@if($kelasDipilihId)
+    </div>
+@endif
+
+@if($kelasDipilihId && isset($statusKelas) && $statusKelas === 'aktif')
+    <!-- Card Kelas Aktif -->
     <div class="card border-start border-4 border-primary shadow-sm mb-4">
         <div class="card-body d-flex align-items-center">
             <div class="me-3">
@@ -75,20 +86,21 @@
     </div>
 
     <!-- Card Progress -->
-            <div class="card mt-4">
-                <div class="card-header">
-                    <h4>📈 Progress Kelas</h4>
-                </div>
-                <div class="card-body">
-                    <p class="mb-2">Pertemuan: {{ $pertemuanSudahDilakukan }} dari {{ $totalPertemuan }}</p>
-                    <div class="progress">
-                        <div class="progress-bar bg-success" style="width: {{ $progress }}%" role="progressbar">
-                            {{ $progress }}%
-                        </div>
-                    </div>
+    <div class="card mt-4">
+        <div class="card-header">
+            <h4>📈 Progress Kelas</h4>
+        </div>
+        <div class="card-body">
+            <p class="mb-2">Pertemuan: {{ $pertemuanSudahDilakukan }} dari {{ $totalPertemuan }}</p>
+            <div class="progress">
+                <div class="progress-bar bg-success" style="width: {{ $progress }}%" role="progressbar">
+                    {{ $progress }}%
                 </div>
             </div>
+        </div>
+    </div>
 @endif
+
 
 
 

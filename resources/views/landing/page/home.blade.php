@@ -392,6 +392,53 @@
 </style>
 <!-- Testimonial & FAQ End -->
 
+@php
+    use Illuminate\Support\Str;
+@endphp
+
+<!-- Blog Start -->
+@if($blogs->count())
+<div class="container-fluid py-5 bg-white">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h6 class="text-success text-uppercase font-weight-bold mb-2">Blog</h6>
+            <h2 class="display-5 font-weight-bold text-dark">Artikel & Berita Terbaru</h2>
+            <p class="text-muted mx-auto" style="max-width: 600px;">
+                Simak artikel informatif seputar pendidikan, strategi belajar, dan tips sukses dari GenZE.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            @foreach($blogs as $blog)
+            <div class="col-md-6 col-lg-4">
+                <div class="card border-0 shadow-sm h-100 rounded-4 overflow-hidden">
+                    <img src="{{ asset('storage/' . $blog->gambar) }}"
+                         alt="{{ $blog->judul }}"
+                         class="img-fluid w-100"
+                         style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="fw-bold text-dark mb-2">{{ Str::limit($blog->judul, 60) }}</h5>
+                        <div class="mb-2 text-muted small">
+                            <i class="fa fa-calendar-alt me-1"></i> {{ \Carbon\Carbon::parse($blog->tanggal_posting)->translatedFormat('d F Y') }} <br>
+                            <i class="fa fa-user me-1"></i> {{ $blog->penulis }} |
+                            <i class="fa fa-folder-open me-1"></i> {{ $blog->kategoriBlog->nama_kategori ?? 'Uncategorized' }}
+                        </div>
+                        <p class="text-muted mb-0">{{ Str::limit(strip_tags($blog->isi), 100) }}</p>
+                    </div>
+                    <div class="card-footer bg-white border-0 text-center pb-4">
+                        {{-- <a href="{{ route('landing.page.detail-blog', $blog->id_blog) }}" class="btn btn-outline-success btn-sm px-4 rounded-pill">Baca Selengkapnya</a> --}}
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+</div>
+@endif
+<!-- Blog End -->
+
+
+
 
  <!-- Contact Start -->
 <div class="container-fluid py-5 bg-white">

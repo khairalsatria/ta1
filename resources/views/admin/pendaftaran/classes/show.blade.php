@@ -77,6 +77,19 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <th>Jadwal Alternatif</th>
+                                    <td>
+                                        @if($pendaftaranClass->jadwalAlternatif)
+                                            <div class="mb-2">
+                                                <span class="badge bg-info">{{ $pendaftaranClass->jadwalAlternatif->jadwalkelas }}</span>
+                                                <small class="d-block text-muted mt-1">Status: {{ ucfirst($pendaftaranClass->status_alternatif) }}</small>
+                                            </div>
+                                        @else
+                                            <span class="text-muted">Belum ditawarkan</span>
+                                        @endif
+                                    </td>
+                                </tr>
+                                <tr>
                                     <th>Grup Mapel</th>
                                     <td>
                                         @if($pendaftaranClass->kelasGenze)
@@ -89,6 +102,28 @@
                             </table>
                         </div>
                     </div>
+
+                    <!-- Tawarkan Jadwal Alternatif -->
+                    @if(!$pendaftaranClass->jadwalKonfirmasi)
+                        <div class="mb-4">
+                            <form action="{{ route('admin.pendaftaran.classes.alternatif', $pendaftaranClass->id) }}" method="POST">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="jadwal_alternatif">Tawarkan Jadwal Alternatif</label>
+                                    <select name="jadwal_alternatif" id="jadwal_alternatif" class="form-select" required>
+                                        <option value="">-- Pilih Jadwal --</option>
+                                        @foreach ($jadwalKelas as $jadwal)
+    <option value="{{ $jadwal->id_jadwalkelas }}">{{ $jadwal->jadwalkelas }}</option>
+@endforeach
+
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-warning mt-2">
+                                    <i class="bi bi-calendar2-plus me-1"></i> Tawarkan Jadwal Alternatif
+                                </button>
+                            </form>
+                        </div>
+                    @endif
 
                     <div class="text-end">
                         <a href="{{ route('admin.pendaftaran.classes.index') }}" class="btn btn-outline-secondary">

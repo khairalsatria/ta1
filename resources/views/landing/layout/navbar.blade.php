@@ -14,6 +14,7 @@
         <a href="{{ url('/home') }}" class="nav-item nav-link {{ request()->is('home') ? 'active' : '' }}">Home</a>
         <a href="{{ url('/program') }}" class="nav-item nav-link {{ request()->is('program') ? 'active' : '' }}">Course</a>
         <a href="{{ url('/team') }}" class="nav-item nav-link {{ request()->is('team') ? 'active' : '' }}">Team</a>
+        <a href="{{ url('/blog') }}" class="nav-item nav-link {{ request()->is('blog') ? 'active' : '' }}">Blog</a>
 
         {{-- <a href="{{ url('/testimoni') }}" class="nav-item nav-link {{ request()->is('team') ? 'active' : '' }}">Testimonial</a> --}}
         {{-- <a href="{{ url('/kontak') }}" class="nav-item nav-link {{ request()->is('team') ? 'active' : '' }}">Contact</a> --}}

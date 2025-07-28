@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Program extends Model
 {
@@ -31,6 +32,8 @@ class Program extends Model
 {
     return $this->hasOne(GenzeLearnEvent::class, 'program_id');
 }
+
+
 public function testimonials()
 {
     return $this->hasMany(Testimonial::class);
@@ -41,6 +44,7 @@ public function getRatingAttribute()
     // Jika ingin override kolom `rating`, kamu bisa return dari testimonial
     return $this->testimonials()->avg('rating') ? number_format($this->testimonials()->avg('rating'), 1) : 'Belum ada';
 }
+
 
 
 }

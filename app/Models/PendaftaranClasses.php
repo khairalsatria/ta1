@@ -26,7 +26,10 @@ class PendaftaranClasses extends Model
         'mata_pelajaran',
         'jadwalkelas_pilihan',
         'jadwalkelas_konfirmasi',
-        'kelas_id'
+        'jadwalkelas_alternatif',
+        'status_alternatif',
+        'kelas_id',
+        'status', // Added status field
     ];
 
     protected $casts = [
@@ -62,6 +65,11 @@ class PendaftaranClasses extends Model
     {
         return $this->belongsTo(JadwalKelas::class, 'jadwalkelas_konfirmasi', 'id_jadwalkelas');
     }
+
+    public function jadwalAlternatif()
+{
+    return $this->belongsTo(JadwalKelas::class, 'jadwalkelas_alternatif', 'id_jadwalkelas');
+}
 
     public function getJadwalPilihanObjectsAttribute()
 {

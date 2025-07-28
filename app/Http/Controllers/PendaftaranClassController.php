@@ -12,10 +12,11 @@ use App\Models\{
     JenjangPendidikan,
     MataPelajaran,
     JadwalKelas,
-    Program
+    Program,
 };
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 
 class PendaftaranClassController extends Controller
 {
@@ -110,4 +111,26 @@ class PendaftaranClassController extends Controller
             MataPelajaran::where('jenjang_pendidikan', $id)->get()
         );
     }
+
+    public function responAlternatif(Request $request, $id)
+{
+    $pendaftaran = PendaftaranClasses::with('pendaftaran')->findOrFail($id);
+
+    if ($request->respon == 'terima') {
+        $pendaftaran->status_alternatif = 'diterima';
+        $pendaftaran->jadwalkelas_konfirmasi = $pendaftaran->jadwalkelas_alternatif;
+        $pendaftaran->save();
+
+        return redirect()->route('siswa.pendaftaran.status', $pendaftaran->pendaftaran_id)
+            ->with('success', 'Anda telah menyetujui jadwal alternatif. Silakan lanjut ke pembayaran.');
+    } else {
+        $pendaftaran->status_alternatif = 'ditolak';
+        $pendaftaran->save();
+
+        return redirect()->route('siswa.pendaftaran.status', $pendaftaran->pendaftaran_id)
+            ->with('error', 'Anda menolak jadwal alternatif. Pendaftaran dihentikan.');
+    }
+}
+
+    
 }

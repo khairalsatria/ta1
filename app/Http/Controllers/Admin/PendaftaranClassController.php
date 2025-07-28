@@ -33,9 +33,10 @@ class PendaftaranClassController extends Controller
     $pendaftaranClass = PendaftaranClasses::with('pendaftaran.user')->findOrFail($id);
     $jadwalPilihan = $pendaftaranClass->jadwalPilihanObjects;
     $daftar_kelas = KelasGenze::all(); // untuk dropdown pilih kelas
+    $jadwalKelas = JadwalKelas::all(); // untuk dropdown konfirmasi jadwal
 
     return view('admin.pendaftaran.classes.show', compact(
-        'pendaftaranClass', 'jadwalPilihan', 'daftar_kelas'
+        'pendaftaranClass', 'jadwalPilihan', 'daftar_kelas','jadwalKelas'
     ));
 }
 
@@ -55,6 +56,22 @@ class PendaftaranClassController extends Controller
     return redirect()->route('admin.pendaftaran.classes.index', $id)
         ->with('success', 'Jadwal berhasil dikonfirmasi.');
 }
+
+public function tawarkanJadwalAlternatif(Request $request, $id)
+{
+    $request->validate([
+        'jadwal_alternatif' => 'required|exists:jadwal_kelas,id_jadwalkelas',
+    ]);
+
+    $pendaftaran = PendaftaranClasses::findOrFail($id);
+    $pendaftaran->update([
+        'jadwalkelas_alternatif' => $request->jadwal_alternatif,
+        'status_alternatif' => 'ditawarkan',
+    ]);
+
+    return redirect()->back()->with('success', 'Jadwal alternatif telah ditawarkan kepada siswa.');
+}
+
 
 public function assignKelas(Request $request, $id)
 {

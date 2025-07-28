@@ -6,19 +6,21 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Blog;
 use App\Models\KategoriBlog;
+use App\Models\User; // Tambahkan ini
 
 class BlogController extends Controller
 {
     public function index()
     {
-        $blogs = Blog::with('kategoriBlog')->get();
+        $blogs = Blog::with(['kategoriBlog', 'penulisUser'])->get(); // agar bisa ambil relasi user
         return view('admin.blog.index', compact('blogs'));
     }
 
     public function create()
     {
         $kategoriBlogs = KategoriBlog::all();
-        return view('admin.blog.create', compact('kategoriBlogs'));
+        $users = User::whereIn('role', ['admin', 'mentor'])->get(); // ambil user dengan role admin & mentor
+        return view('admin.blog.create', compact('kategoriBlogs', 'users'));
     }
 
     public function store(Request $request)
@@ -27,7 +29,7 @@ class BlogController extends Controller
             'judul' => 'required',
             'tanggal_posting' => 'required|date',
             'isi' => 'required',
-            'penulis' => 'required',
+            'penulis' => 'required|exists:users,id',
             'kategori' => 'required|exists:kategori_blogs,id_kategori_blog',
             'gambar' => 'nullable|image|max:2048',
         ]);
@@ -47,7 +49,8 @@ class BlogController extends Controller
     {
         $blog = Blog::findOrFail($id);
         $kategoriBlogs = KategoriBlog::all();
-        return view('admin.blog.edit', compact('blog', 'kategoriBlogs'));
+        $users = User::whereIn('role', ['admin', 'mentor'])->get();
+        return view('admin.blog.edit', compact('blog', 'kategoriBlogs', 'users'));
     }
 
     public function update(Request $request, $id)
@@ -58,7 +61,7 @@ class BlogController extends Controller
             'judul' => 'required',
             'tanggal_posting' => 'required|date',
             'isi' => 'required',
-            'penulis' => 'required',
+            'penulis' => 'required|exists:users,id',
             'kategori' => 'required|exists:kategori_blogs,id_kategori_blog',
             'gambar' => 'nullable|image|max:2048',
         ]);
