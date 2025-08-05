@@ -1,44 +1,30 @@
+
 @extends('admin.layout.main')
 
 @section('title', 'Dashboard Admin')
 
 @section('content')
+
 <div class="page-heading">
-    <h3>Profile Statistics</h3>
+    <h3>Dashboard Admin</h3>
 </div>
 <div class="page-content">
     <section class="row">
         <div class="col-12 col-lg-9">
+            {{-- Statistik --}}
             <div class="row">
                 <div class="col-6 col-lg-3 col-md-6">
                     <div class="card">
                         <div class="card-body px-4 py-4-5">
                             <div class="row">
-                                <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
-                                    <div class="stats-icon purple mb-2">
-                                        <i class="iconly-boldShow"></i>
-                                    </div>
-                                </div>
-                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                    <h6 class="text-muted font-semibold">Profile Views</h6>
-                                    <h6 class="font-extrabold mb-0">112.000</h6>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-6 col-lg-3 col-md-6">
-                    <div class="card">
-                        <div class="card-body px-4 py-4-5">
-                            <div class="row">
-                                <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
+                                <div class="col-12 d-flex justify-content-start">
                                     <div class="stats-icon blue mb-2">
-                                        <i class="iconly-boldProfile"></i>
+                                        <i class="iconly-boldDocument"></i>
                                     </div>
                                 </div>
-                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                    <h6 class="text-muted font-semibold">Followers</h6>
-                                    <h6 class="font-extrabold mb-0">183.000</h6>
+                                <div class="col-12">
+                                    <h6 class="text-muted font-semibold">Total Pendaftaran</h6>
+                                    <h6 class="font-extrabold mb-0">{{ $jumlahPendaftaran }}</h6>
                                 </div>
                             </div>
                         </div>
@@ -48,14 +34,14 @@
                     <div class="card">
                         <div class="card-body px-4 py-4-5">
                             <div class="row">
-                                <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
+                                <div class="col-12 d-flex justify-content-start">
                                     <div class="stats-icon green mb-2">
-                                        <i class="iconly-boldAdd-User"></i>
+                                        <i class="iconly-boldUser"></i>
                                     </div>
                                 </div>
-                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                    <h6 class="text-muted font-semibold">Following</h6>
-                                    <h6 class="font-extrabold mb-0">80.000</h6>
+                                <div class="col-12">
+                                    <h6 class="text-muted font-semibold">Total Siswa</h6>
+                                    <h6 class="font-extrabold mb-0">{{ $jumlahSiswa }}</h6>
                                 </div>
                             </div>
                         </div>
@@ -65,138 +51,83 @@
                     <div class="card">
                         <div class="card-body px-4 py-4-5">
                             <div class="row">
-                                <div class="col-md-4 col-lg-12 col-xl-12 col-xxl-5 d-flex justify-content-start ">
+                                <div class="col-12 d-flex justify-content-start">
                                     <div class="stats-icon red mb-2">
-                                        <i class="iconly-boldBookmark"></i>
+                                        <i class="iconly-boldEdit-Square"></i>
                                     </div>
                                 </div>
-                                <div class="col-md-8 col-lg-12 col-xl-12 col-xxl-7">
-                                    <h6 class="text-muted font-semibold">Saved Post</h6>
-                                    <h6 class="font-extrabold mb-0">112</h6>
+                                <div class="col-12">
+                                    <h6 class="text-muted font-semibold">Total Mentor</h6>
+                                    <h6 class="font-extrabold mb-0">{{ $jumlahMentor }}</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body px-4 py-4-5">
+                            <div class="row">
+                                <div class="col-12 d-flex justify-content-start">
+                                    <div class="stats-icon purple mb-2">
+                                        <i class="iconly-boldHome"></i>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <h6 class="text-muted font-semibold">Total Kelas</h6>
+                                    <h6 class="font-extrabold mb-0">{{ $jumlahKelas }}</h6>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            {{-- Grafik Pendaftaran Bulanan --}}
             <div class="row">
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Profile Visit</h4>
+                            <h4>Grafik Pendaftaran Bulanan</h4>
                         </div>
                         <div class="card-body">
-                            <div id="chart-profile-visit"></div>
+                            <canvas id="chartPendaftaran" style="height: 300px;"></canvas>
+
                         </div>
                     </div>
                 </div>
             </div>
+
+
+
+
+            {{-- Pendaftaran Terbaru --}}
             <div class="row">
-                <div class="col-12 col-xl-4">
+                <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h4>Profile Visit</h4>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-7">
-                                    <div class="d-flex align-items-center">
-                                        <svg class="bi text-primary" width="32" height="32" fill="blue"
-                                            style="width:10px">
-                                            <use
-                                                xlink:href="assets/static/images/bootstrap-icons.svg#circle-fill" />
-                                        </svg>
-                                        <h5 class="mb-0 ms-3">Europe</h5>
-                                    </div>
-                                </div>
-                                <div class="col-5">
-                                    <h5 class="mb-0 text-end">862</h5>
-                                </div>
-                                <div class="col-12">
-                                    <div id="chart-europe"></div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-7">
-                                    <div class="d-flex align-items-center">
-                                        <svg class="bi text-success" width="32" height="32" fill="blue"
-                                            style="width:10px">
-                                            <use
-                                                xlink:href="assets/static/images/bootstrap-icons.svg#circle-fill" />
-                                        </svg>
-                                        <h5 class="mb-0 ms-3">America</h5>
-                                    </div>
-                                </div>
-                                <div class="col-5">
-                                    <h5 class="mb-0 text-end">375</h5>
-                                </div>
-                                <div class="col-12">
-                                    <div id="chart-america"></div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-7">
-                                    <div class="d-flex align-items-center">
-                                        <svg class="bi text-danger" width="32" height="32" fill="blue"
-                                            style="width:10px">
-                                            <use
-                                                xlink:href="assets/static/images/bootstrap-icons.svg#circle-fill" />
-                                        </svg>
-                                        <h5 class="mb-0 ms-3">Indonesia</h5>
-                                    </div>
-                                </div>
-                                <div class="col-5">
-                                    <h5 class="mb-0 text-end">1025</h5>
-                                </div>
-                                <div class="col-12">
-                                    <div id="chart-indonesia"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-xl-8">
-                    <div class="card">
-                        <div class="card-header">
-                            <h4>Latest Comments</h4>
+                            <h4>Pendaftaran Terbaru</h4>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-hover table-lg">
+                                <table class="table table-hover mb-0">
                                     <thead>
                                         <tr>
-                                            <th>Name</th>
-                                            <th>Comment</th>
+                                            <th>Nama</th>
+                                            <th>Program</th>
+                                            <th>Status</th>
+                                            <th>Tanggal</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td class="col-3">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar avatar-md">
-                                                        <img src="./assets/compiled/jpg/5.jpg">
-                                                    </div>
-                                                    <p class="font-bold ms-3 mb-0">Si Cantik</p>
-                                                </div>
-                                            </td>
-                                            <td class="col-auto">
-                                                <p class=" mb-0">Congratulations on your graduation!</p>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="col-3">
-                                                <div class="d-flex align-items-center">
-                                                    <div class="avatar avatar-md">
-                                                        <img src="./assets/compiled/jpg/2.jpg">
-                                                    </div>
-                                                    <p class="font-bold ms-3 mb-0">Si Ganteng</p>
-                                                </div>
-                                            </td>
-                                            <td class="col-auto">
-                                                <p class=" mb-0">Wow amazing design! Can you make another tutorial for
-                                                    this design?</p>
-                                            </td>
-                                        </tr>
+                                        @foreach($pendaftaranTerbaru as $p)
+                                            <tr>
+                                                <td>{{ $p->user->name ?? '-' }}</td>
+                                                <td>{{ $p->program->nama_program ?? '-' }}</td>
+                                                <td>{{ ucfirst($p->status) }}</td>
+                                                <td>{{ $p->created_at->format('d M Y') }}</td>
+                                            </tr>
+                                        @endforeach
                                     </tbody>
                                 </table>
                             </div>
@@ -204,67 +135,165 @@
                     </div>
                 </div>
             </div>
+
         </div>
+
+        {{-- Sidebar Kanan --}}
         <div class="col-12 col-lg-3">
             <div class="card">
                 <div class="card-body py-4 px-4">
                     <div class="d-flex align-items-center">
                         <div class="avatar avatar-xl">
-                            <img src="./assets/compiled/jpg/1.jpg" alt="Face 1">
-                        </div>
-                        <div class="ms-3 name">
-                            <h5 class="font-bold">John Duck</h5>
-                            <h6 class="text-muted mb-0">@johnducky</h6>
-                        </div>
+                    @if ($user->photo)
+                        <img src="{{ asset('storage/' . $user->photo) }}" class="rounded-circle" width="80" alt="Foto Admin">
+                    @else
+                        <img src="{{ asset('default-avatar.png') }}" class="rounded-circle" width="80" alt="Foto Admin Default">
+                    @endif
+                </div>
+                <div class="ms-3 name">
+                    <h5 class="font-bold">Admin GenZE</h5>
+                    <h6 class="text-muted mb-0">Administrator</h6>
+                </div>
                     </div>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-header">
-                    <h4>Recent Messages</h4>
-                </div>
-                <div class="card-content pb-4">
-                    <div class="recent-message d-flex px-4 py-3">
-                        <div class="avatar avatar-lg">
-                            <img src="./assets/compiled/jpg/4.jpg">
-                        </div>
-                        <div class="name ms-4">
-                            <h5 class="mb-1">Hank Schrader</h5>
-                            <h6 class="text-muted mb-0">@johnducky</h6>
-                        </div>
-                    </div>
-                    <div class="recent-message d-flex px-4 py-3">
-                        <div class="avatar avatar-lg">
-                            <img src="./assets/compiled/jpg/5.jpg">
-                        </div>
-                        <div class="name ms-4">
-                            <h5 class="mb-1">Dean Winchester</h5>
-                            <h6 class="text-muted mb-0">@imdean</h6>
-                        </div>
-                    </div>
-                    <div class="recent-message d-flex px-4 py-3">
-                        <div class="avatar avatar-lg">
-                            <img src="./assets/compiled/jpg/1.jpg">
-                        </div>
-                        <div class="name ms-4">
-                            <h5 class="mb-1">John Dodol</h5>
-                            <h6 class="text-muted mb-0">@dodoljohn</h6>
-                        </div>
-                    </div>
-                    <div class="px-4">
-                        <button class='btn btn-block btn-xl btn-outline-primary font-bold mt-3'>Start Conversation</button>
-                    </div>
-                </div>
+
+            <div class="card mt-3">
+    <div class="card-body py-3 px-4">
+        <div class="d-flex align-items-center justify-content-between">
+            <div>
+                <h6 class="text-muted mb-1">Saldo Akhir</h6>
+                <h5 class="font-bold">Rp {{ number_format($totalSaldo, 0, ',', '.') }}</h5>
             </div>
+            <i class="bi bi-wallet2 fs-3"></i>
+        </div>
+    </div>
+</div>
+
+            {{-- Placeholder visitor profile / custom --}}
             <div class="card">
-                <div class="card-header">
-                    <h4>Visitors Profile</h4>
-                </div>
-                <div class="card-body">
-                    <div id="chart-visitors-profile"></div>
+    <div class="card-header">
+        <h4>Statistik Pengunjung Berdasarkan Jenis Kelamin</h4>
+    </div>
+    <div class="card-body">
+        <canvas id="genderChart" height="150"></canvas>
+    </div>
+</div>
+
+
+            {{-- Siswa Aktif per Kelas --}}
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Siswa Aktif per Kelas</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group">
+                                @foreach($siswaAktifPerKelas as $kelas)
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        {{ $kelas->nama_kelas }}
+                                        <span class="badge bg-primary rounded-pill">{{ $kelas->siswa_count }} siswa</span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 </div>
+
 @endsection
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+@push('scripts')
+<script>
+    const ctxGender = document.getElementById('genderChart')?.getContext('2d');
+    if (ctxGender) {
+        new Chart(ctxGender, {
+            type: 'doughnut',
+            data: {
+                labels: ['Laki-laki', 'Perempuan'],
+                datasets: [{
+                    data: [{{ $jumlahLaki }}, {{ $jumlahPerempuan }}],
+                    backgroundColor: ['#4e73df', '#e74a3b'],
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                }
+            }
+        });
+    }
+
+    const ctxPendaftaran = document.getElementById('chartPendaftaran')?.getContext('2d');
+    if (ctxPendaftaran) {
+        new Chart(ctxPendaftaran, {
+            type: 'bar',
+            data: {
+                labels: {!! json_encode($chartLabels) !!},
+                datasets: [{
+                    label: 'Pendaftaran',
+                    data: {!! json_encode($chartData) !!},
+                    backgroundColor: '#3b82f6',
+                    borderRadius: 6,
+                    barPercentage: 0.6,
+                    categoryPercentage: 0.5
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: '#1f2937',
+                        titleColor: '#ffffff',
+                        bodyColor: '#ffffff',
+                        padding: 10
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: '#cbd5e1',
+                            font: {
+                                size: 12
+                            }
+                        },
+                        grid: {
+                            display: false
+                        }
+                    },
+                    y: {
+                        ticks: {
+                            color: '#cbd5e1',
+                            font: {
+                                size: 12
+                            },
+                            precision: 0
+                        },
+                        grid: {
+                            color: '#334155'
+                        },
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+</script>
+@endpush
+
+
+
+
+

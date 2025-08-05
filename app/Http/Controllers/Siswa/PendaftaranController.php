@@ -11,14 +11,15 @@ use App\Models\Program;
 class PendaftaranController extends Controller
 {
     public function riwayat()
-    {
-        $riwayat = PendaftaranProgram::with('program')
-                    ->where('user_id', Auth::id())
-                    ->latest()
-                    ->get();
+{
+    $riwayat = PendaftaranProgram::with('program')
+                ->where('user_id', Auth::id())
+                ->latest()
+                ->paginate(10); // HANYA paginate
 
-        return view('siswa.pendaftaran.riwayat', compact('riwayat'));
-    }
+    return view('siswa.pendaftaran.riwayat', compact('riwayat'));
+}
+
 
     public function status($id)
     {

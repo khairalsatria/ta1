@@ -10,6 +10,7 @@
                 <h3>GenZE Learn</h3>
                 <p class="text-subtitle text-muted">Daftar pendaftar program GenZE Learn</p>
             </div>
+
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
@@ -22,9 +23,14 @@
 
     <section class="section">
         <div class="card">
-            <div class="card-header">
-                <h5 class="card-title">Data Pendaftaran GenZE Learn</h5>
-            </div>
+            <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="card-title mb-0">Data Pendaftaran GenZE Learn</h5>
+    <a href="{{ route('admin.learn_events.index') }}" class="btn btn-primary btn-sm">
+        <i class="bi bi-file-earmark-medical"></i> Kelola Sertifikat
+    </a>
+</div>
+
+
             <div class="card-body">
                 @if(session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
@@ -36,7 +42,7 @@
                             <th>Nama</th>
                             <th>Instansi</th>
                             <th>Status</th>
-                            <th>Aksi</th>
+                            <th>Detail</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,9 +51,15 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $p->pendaftaran->user->name ?? '-' }}</td>
                             <td>{{ $p->asal_instansi ?? '-' }}</td>
-                            <td>{{ ucfirst($p->pendaftaran->status) }}</td>
                             <td>
-                                <a href="{{ route('admin.pendaftaran.learns.show', $p->id) }}" class="btn btn-sm btn-primary">Lihat Detail</a>
+                                <span class="badge bg-{{ $p->pendaftaran->status === 'diterima' ? 'success' : ($p->pendaftaran->status === 'menunggu' ? 'warning' : 'secondary') }}">
+                                    {{ ucfirst($p->pendaftaran->status) }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{{ route('admin.pendaftaran.learns.show', $p->id) }}" class="btn btn-sm btn-info">
+                                    <i class="bi bi-eye"></i> Detail
+                                </a>
                             </td>
                         </tr>
                         @endforeach
@@ -61,7 +73,7 @@
 
 @section('scripts')
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#table1').DataTable();
     });
 </script>

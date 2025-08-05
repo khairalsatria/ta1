@@ -54,18 +54,22 @@
 
     <li class="sidebar-item {{ request()->is('siswa/kelas-saya*') ? 'active' : '' }}">
         <a href="{{ url('siswa/kelas-saya') }}" class='sidebar-link'>
-            <i class="bi bi-grid-fill"></i>
-            <span>Class</span>
+            <i class="bi bi-mortarboard"></i>
+            <span>GenZE Class</span>
         </a>
     </li>
-    @if(auth()->check() && auth()->user()->role === 'mentor')
-    <li class="sidebar-item {{ request()->is('profile') ? 'active' : '' }}">
-        <a href="{{ url('profile') }}" class='sidebar-link'>
-            <i class="bi bi-person-circle"></i>
-            <span>My Profile</span>
+    <li class="sidebar-item {{ request()->is('siswa/guide*') ? 'active' : '' }}">
+        <a href="{{ url('siswa/guide') }}" class='sidebar-link'>
+            <i class="bi bi-pencil-square"></i>
+            <span>GenZE Guide</span>
         </a>
     </li>
-@endif
+<li class="sidebar-item {{ request()->is('siswa/program-saya/learn*') ? 'active' : '' }}">
+        <a href="{{ url('siswa/program-saya/learn') }}" class='sidebar-link'>
+            <i class="bi bi-mic-fill"></i>
+            <span>GenZE Learn</span>
+        </a>
+    </li>
 
 
     @if(auth()->check() && auth()->user()->role === 'mentor' && auth()->user()->kelas_genze)

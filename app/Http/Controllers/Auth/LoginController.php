@@ -9,60 +9,48 @@ use Illuminate\Support\Facades\Auth;
 class LoginController extends Controller
 {
     public function showLoginForm()
-{
-    return redirect()->route('landing.page.home', ['login' => 'modal']);
-}
-
+    {
+        return redirect()->route('landing.page.home', ['login' => 'modal']);
+    }
 
     public function login(Request $request)
-{
-    // Validasi input
-    $request->validate([
-        'login' => 'required|string', // Bisa email atau nohp
-        'password' => 'required|string',
-    ]);
-
-    // Coba login berdasarkan email
-    if (Auth::attempt(['email' => $request->login, 'password' => $request->password], $request->remember)) {
-        // Cek role setelah login
-        return $this->redirectBasedOnRole();
-    }
-
-    // Jika gagal dengan email, coba login berdasarkan nohp
-    if (Auth::attempt(['nohp' => $request->login, 'password' => $request->password], $request->remember)) {
-        // Cek role setelah login
-        return $this->redirectBasedOnRole();
-    }
-
-    // Kalau tetap gagal, kembali ke form login
-    return back()->withErrors([
-        'login' => 'Email/No HP atau password tidak sesuai.',
-    ])->withInput($request->only('login', 'remember'));
-}
-
-protected function redirectBasedOnRole()
-{
-    $role = Auth::user()->role;
-
-    if ($role == 'user') {
-        return redirect()->route('landing.page.home'); // Ganti dari 'home' ke 'landing.page.home'
-    } elseif ($role == 'mentor') {
-        return redirect()->route('mentor.dashboard');
-    } elseif ($role == 'admin') {
-        return redirect()->route('admin.dashboard');
-    }
-
-    return redirect()->route('landing.page.home'); // Default redirect
-}
-
-public function logout(Request $request)
     {
-        // Logout the user
-        Auth::logout();
+        $request->validate([
+            'login' => 'required|string',
+            'password' => 'required|string',
+        ]);
 
-        // Redirect ke halaman home setelah logout
+        $credentialsEmail = ['email' => $request->login, 'password' => $request->password];
+        $credentialsPhone = ['nohp' => $request->login, 'password' => $request->password];
+
+        if (Auth::attempt($credentialsEmail, $request->remember) || Auth::attempt($credentialsPhone, $request->remember)) {
+            return $this->redirectBasedOnRole()->with('success_login', 'Login berhasil! Silakan pilih program untuk didaftarkan.');
+        }
+
+        return redirect()
+            ->back()
+            ->withInput($request->only('login', 'remember'))
+            ->with('error_login', 'Login gagal. Email/No HP atau password salah, silakan coba lagi.');
+    }
+
+    protected function redirectBasedOnRole()
+    {
+        $role = Auth::user()->role;
+
+        if ($role == 'user') {
+            return redirect()->route('landing.page.home');
+        } elseif ($role == 'mentor') {
+            return redirect()->route('mentor.dashboard');
+        } elseif ($role == 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
         return redirect()->route('landing.page.home');
     }
 
-
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        return redirect()->route('landing.page.home')->with('success_logout', 'Anda telah berhasil logout.');
+    }
 }

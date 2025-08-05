@@ -25,7 +25,7 @@ class PageController extends Controller
 
     public function home()
     {
-        $blogs = Blog::with('kategoriBlog')->latest('tanggal_posting')->take(3)->get();
+        $blogs = Blog::all();
         $programs = Program::all();
         $mentors = User::where('role', 'mentor')->get();
         $kontaks = Kontak::all(); // Mengambil semua data kontak
@@ -40,7 +40,6 @@ class PageController extends Controller
     }
     public function detailCourse()
     {
-        $promosi_classes = PromosiClass::all();
 
 
         return view('landing.page.detail-course', compact('promosi_classes'));

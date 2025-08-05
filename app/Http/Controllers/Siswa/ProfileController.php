@@ -25,6 +25,7 @@ class ProfileController extends Controller
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email,' . $user->id,
             'nohp'     => 'nullable|string|max:20',
+            'gender'  => 'nullable|in:Laki-laki,Perempuan',
             'password' => 'nullable|string|min:6|confirmed',
             'photo'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
@@ -41,7 +42,7 @@ class ProfileController extends Controller
             $photoPath = $request->file('photo')->store('photos', 'public');
             $user->photo = $photoPath;
         }
-       
+
         $user->save();
 
         return redirect()->route('profile.edit')->with('success', 'Profil berhasil diperbarui.');

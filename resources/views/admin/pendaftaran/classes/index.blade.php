@@ -38,6 +38,7 @@
                                 <th>Mapel</th>
                                 {{-- <th>Grup Kelas</th> --}}
                                 <th>Jadwal Konfirmasi</th>
+                                <th>Status</th>
                                 <th>Aksi</th>
                                 <th>Detail</th>
                             </tr>
@@ -51,6 +52,11 @@
                                 <td>{{ $class->mataPelajaran->mata_pelajaran ?? '-' }}</td>
                                 {{-- <td>{{ $class->kelasGenze->nama_kelas ?? '-' }}</td> --}}
                                 <td>{{ $class->jadwalKonfirmasi->jadwalkelas ?? 'Belum dikonfirmasi' }}</td>
+                                <td>
+        <span class="badge bg-{{ $class->pendaftaran->status === 'diterima' ? 'success' : ($class->pendaftaran->status === 'menunggu' ? 'warning' : 'secondary') }}">
+            {{ ucfirst($class->pendaftaran->status) }}
+        </span>
+    </td>
                                 <td>
                                     <button type="button"
                                         class="btn btn-sm btn-primary"
@@ -90,7 +96,7 @@
                                                                 </select>
                                                                 <button class="btn btn-primary">Konfirmasi Jadwal</button>
                                                             </form>
-                                                            
+
                                                         </div>
 
                                                         <!-- Tetapkan Kelas -->

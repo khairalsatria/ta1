@@ -39,6 +39,7 @@
     <script src="{{ asset('assets/extensions/simple-datatables/umd/simple-datatables.js') }}"></script>
     <script src="{{ asset('assets/static/js/pages/dashboard.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" defer></script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const table1 = document.querySelector("#table1");

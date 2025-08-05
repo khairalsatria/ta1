@@ -7,10 +7,10 @@
     <div class="d-flex justify-content-between align-items-center flex-wrap">
         <div>
             <h3 class="mb-1 text-primary fw-bold">
-                👩‍🎓 Siswa Kelas: <span class="text-dark">{{ $kelas->nama_kelas }}</span>
+                👩‍🎓 Siswa Kelas : <span class="">{{ $kelas->nama_kelas }}</span>
             </h3>
             <p class="text-muted mb-0">
-                Program: <span class="badge bg-info">{{ $kelas->program->nama_program ?? '-' }}</span>
+                Program: <span class="badge bg-primary">{{ $kelas->program->nama_program ?? '-' }}</span>
             </p>
         </div>
         <a href="{{ route('mentor.kelas.index') }}" class="btn btn-outline-secondary btn-sm shadow-sm">
@@ -99,7 +99,7 @@
 
 {{-- Daftar Siswa --}}
 <div class="card border-0 shadow-sm">
-    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+    <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0 fw-semibold">
             <i class="bi bi-people"></i> Daftar Siswa & Skor
         </h5>
@@ -107,7 +107,7 @@
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table table-hover table-bordered align-middle mb-0">
-                <thead class="table-dark text-center">
+                <thead class="table text-center">
                     <tr>
                         <th style="width:40px;">No</th></th>
                         <th>Nama Siswa</th>

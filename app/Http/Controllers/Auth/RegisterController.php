@@ -10,11 +10,9 @@ use Illuminate\Support\Facades\Auth;
 
 class RegisterController extends Controller
 {
-
-
     public function showRegistrationForm()
     {
-        return view('landing.layout.navbar'); // Ganti dengan view registrasi yang sesuai
+        return view('landing.layout.navbar'); // ganti jika kamu punya form register tersendiri
     }
 
     public function register(Request $request)
@@ -26,19 +24,25 @@ class RegisterController extends Controller
             'password' => 'required|string|min:8|confirmed',
         ]);
 
-        $user = User::create([
-            'name' => trim($request->name),
-            'email' => trim($request->email),
-            'nohp' => trim($request->nohp),
-            'password' => Hash::make($request->password),
-            'role' => 'user', // default role user biasa
-        ]);
+        try {
+            $user = User::create([
+                'name' => trim($request->name),
+                'email' => trim($request->email),
+                'nohp' => trim($request->nohp),
+                'password' => Hash::make($request->password),
+                'role' => 'user',
+            ]);
 
-        Auth::login($user);
-        return redirect()
-        ->route('landing.page.home')
-        ->with('openLoginModal', true)
-        ->with('success', 'Registrasi berhasil! Silakan login.');
+            // Jangan langsung login, biarkan user login sendiri
+            return redirect()
+                ->route('landing.page.home', ['login' => 'modal'])
+                ->with('success_register', 'Registrasi berhasil! Silakan login untuk melanjutkan.');
 
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error_register', 'Registrasi gagal. Silakan isi data dengan benar.');
+        }
     }
 }

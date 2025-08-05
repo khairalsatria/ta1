@@ -108,7 +108,7 @@
             ];
         @endphp
         <div class="card mb-4 shadow-sm">
-            <div class="card-header bg-info text-white">
+            <div class="card-header text-white">
                 <h5 class="mb-0">Soal {{ $i + 1 }}</h5>
             </div>
             <div class="card-body">
@@ -120,9 +120,9 @@
                             $isKunci  = ($huruf === $kunci);
                             $isJawab  = ($huruf === $jawabanDipilih);
                             $bg = '';
-                            if ($isKunci && $isJawab) $bg = 'background-color:#d1e7dd;';
-                            elseif ($isKunci) $bg = 'background-color:#d1e7dd;';
-                            elseif ($isJawab) $bg = 'background-color:#cfe2ff;';
+                            if ($isKunci && $isJawab) $bg ;
+                            elseif ($isKunci) $bg;
+                            elseif ($isJawab) $bg;
                         @endphp
                         <div class="list-group-item d-flex justify-content-between align-items-center" style="{{ $bg }}">
                             <span><strong>{{ $huruf }}.</strong> {{ $teksPilihan === '' ? '-' : $teksPilihan }}</span>
@@ -153,4 +153,3 @@
     @endforeach
 @endif
 @endsection
-        

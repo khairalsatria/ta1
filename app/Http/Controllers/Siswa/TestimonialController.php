@@ -37,7 +37,7 @@ class TestimonialController extends Controller
             'rating' => $request->rating,
         ]);
 
-        return redirect()->route('siswa.testimonial.index')->with('success', 'Testimonial berhasil dikirim.');
+        return redirect()->route('siswa.testimonial.create')->with('success', 'Testimonial berhasil dikirim.');
     }
 
     public function destroy(Testimonial $testimonial)

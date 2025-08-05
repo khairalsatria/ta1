@@ -11,26 +11,27 @@ use Illuminate\Support\Facades\Storage;
 
 class MateriController extends Controller
 {
-    // List materi (hanya materi dari kelas milik mentor ini)
+    // ✅ List materi hanya milik mentor login
     public function index()
     {
-        $materi = MateriPertemuan::whereHas('kelas', function ($q) {
-            $q->where('mentor_id', Auth::id());
+        $materi = MateriPertemuan::whereHas('kelas', function ($query) {
+            $query->where('mentor_id', Auth::id());
         })->with('kelas')->get();
 
         return view('mentor.materi.index', compact('materi'));
     }
 
+    // ✅ Tampilkan form tambah materi
     public function create(Request $request)
-{
-    $kelas_id = $request->query('kelas_id'); // Ambil id kelas dari query string
-    $kelas = KelasGenze::find($kelas_id);    // Cari kelas sesuai id
-    $semua_kelas = KelasGenze::all();
+    {
+        $kelas_id = $request->query('kelas_id');
+        $kelas = KelasGenze::where('mentor_id', Auth::id())->find($kelas_id);
+        $semua_kelas = KelasGenze::where('mentor_id', Auth::id())->get();
 
-    return view('mentor.materi.create', compact('semua_kelas', 'kelas_id', 'kelas'));
-}
+        return view('mentor.materi.create', compact('semua_kelas', 'kelas_id', 'kelas'));
+    }
 
-
+    // ✅ Simpan materi baru
     public function store(Request $request)
     {
         $request->validate([
@@ -43,7 +44,7 @@ class MateriController extends Controller
             'link_rekaman' => 'nullable|url'
         ]);
 
-        // Pastikan kelas_id benar-benar milik mentor login
+        // Validasi kelas milik mentor
         $kelas = KelasGenze::where('mentor_id', Auth::id())->findOrFail($request->kelas_id);
 
         $path = null;
@@ -64,17 +65,18 @@ class MateriController extends Controller
         return redirect()->route('mentor.materi.index')->with('success', 'Materi berhasil ditambahkan.');
     }
 
+    // ✅ Edit materi
     public function edit($id)
     {
-        // Pastikan materi berasal dari kelas milik mentor login
-        $materi = MateriPertemuan::whereHas('kelas', function ($q) {
-            $q->where('mentor_id', Auth::id());
+        $materi = MateriPertemuan::whereHas('kelas', function ($query) {
+            $query->where('mentor_id', Auth::id());
         })->findOrFail($id);
 
         $semua_kelas = KelasGenze::where('mentor_id', Auth::id())->get();
         return view('mentor.materi.edit', compact('materi', 'semua_kelas'));
     }
 
+    // ✅ Update materi
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -87,13 +89,11 @@ class MateriController extends Controller
             'link_rekaman' => 'nullable|url'
         ]);
 
-        $materi = MateriPertemuan::whereHas('kelas', function ($q) {
-            $q->where('mentor_id', Auth::id());
+        $materi = MateriPertemuan::whereHas('kelas', function ($query) {
+            $query->where('mentor_id', Auth::id());
         })->findOrFail($id);
 
-        // Upload file baru jika ada
         if ($request->hasFile('file_pdf')) {
-            // Hapus file lama kalau ada
             if ($materi->file_pdf && Storage::disk('public')->exists($materi->file_pdf)) {
                 Storage::disk('public')->delete($materi->file_pdf);
             }
@@ -111,16 +111,16 @@ class MateriController extends Controller
             'file_pdf' => $materi->file_pdf,
         ]);
 
-        return redirect()->route('mentor.kelas.show', $materi->kelas_id)->with('success', 'Materi berhasil diperbarui.')->with('success', 'Materi berhasil diperbarui.');
+        return redirect()->route('mentor.kelas.show', $materi->kelas_id)->with('success', 'Materi berhasil diperbarui.');
     }
 
+    // ✅ Hapus materi
     public function destroy($id)
     {
-        $materi = MateriPertemuan::whereHas('kelas', function ($q) {
-            $q->where('mentor_id', Auth::id());
+        $materi = MateriPertemuan::whereHas('kelas', function ($query) {
+            $query->where('mentor_id', Auth::id());
         })->findOrFail($id);
 
-        // Hapus file PDF jika ada
         if ($materi->file_pdf && Storage::disk('public')->exists($materi->file_pdf)) {
             Storage::disk('public')->delete($materi->file_pdf);
         }

@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+use App\Http\Controllers\Controller;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -27,6 +28,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'nohp' => 'required|string',
+            'gender' => 'nullable|in:Laki-laki,Perempuan', // Validasi
             'password' => 'required|string|min:6|confirmed',
             'photo' => 'nullable|image|max:2048', // Validasi foto jika ada
         ]);
@@ -36,6 +38,7 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->nohp = $request->nohp;
+        $user->gender = $request->gender;
         $user->role = 'user'; // Set role otomatis sebagai 'user'
         $user->password = Hash::make($request->password);
 
@@ -64,6 +67,8 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $id,
             'nohp' => 'required|string',
+            'gender' => 'nullable|in:Laki-laki,Perempuan', // Valid
+            'role' => 'required|in:user,mentor,admin', // Validasi role
             'photo' => 'nullable|image|max:2048', // Validasi foto jika ada
         ]);
 
@@ -72,6 +77,9 @@ class UserController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->nohp = $request->nohp;
+        $user->gender = $request->gender;
+        $user->role = $request->role; // Update role
+
 
         // Jika ada foto yang diupload
         if ($request->hasFile('photo')) {

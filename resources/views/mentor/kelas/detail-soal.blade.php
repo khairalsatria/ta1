@@ -161,7 +161,7 @@
 {{-- Rekap Per Siswa (yang sudah menjawab) --}}
 @if($jawabanPerUser->isNotEmpty())
     <div class="card border-0 shadow-sm mb-4">
-        <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <div class="card-header d-flex justify-content-between align-items-center">
             <h5 class="mb-0 fw-semibold">
                 <i class="bi bi-people"></i> Rekap Jawaban Siswa
             </h5>
@@ -170,9 +170,9 @@
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0 table-xs">
-                    <thead class="table-success text-center">
+                    <thead class="table text-center">
                         <tr>
-                            <th>#</th>
+                            <th>No</th>
                             <th>Nama Siswa</th>
                             <th>Email</th>
                             <th>Benar</th>
@@ -239,7 +239,7 @@
 
             <div class="accordion-item mb-2 border-0 shadow-sm">
                 <h2 class="accordion-header" id="heading-{{ $soal->id }}">
-                    <button class="accordion-button collapsed"
+                    <button class="accordion-button collapsed bg-primary text-white"
                             type="button"
                             data-bs-toggle="collapse"
                             data-bs-target="#collapse-{{ $soal->id }}"
@@ -272,9 +272,9 @@
                         <h6 class="text-secondary mb-2">Jawaban Siswa:</h6>
                         <div class="table-responsive">
                             <table class="table table-sm table-striped align-middle table-xs mb-0">
-                                <thead class="table-light text-center">
+                                <thead class="table text-center">
                                     <tr>
-                                        <th>#</th>
+                                        <th>No</th>
                                         <th>Nama Siswa</th>
                                         <th>Jawaban</th>
                                         <th>Status</th>

@@ -29,6 +29,7 @@
                 @if(session('success'))
                     <div class="alert alert-success">{{ session('success') }}</div>
                 @endif
+
                 <table class="table table-striped" id="table1">
                     <thead>
                         <tr>
@@ -36,7 +37,7 @@
                             <th>Nama</th>
                             <th>Paket</th>
                             <th>Status</th>
-                            <th>Aksi</th>
+                            <th>Aksi & Detail</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,14 +46,20 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $p->pendaftaran->user->name ?? '-' }}</td>
                             <td>{{ $p->paketGuide->paket_guide ?? '-' }}</td>
-                            <td>{{ ucfirst($p->pendaftaran->status) }}</td>
                             <td>
-                                <a href="{{ route('admin.pendaftaran.guides.show', $p->id) }}" class="btn btn-sm btn-primary">Lihat Detail</a>
+                                <span class="badge bg-{{ $p->pendaftaran->status === 'diterima' ? 'success' : ($p->pendaftaran->status === 'menunggu' ? 'warning' : 'secondary') }}">
+                                    {{ ucfirst($p->pendaftaran->status) }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{{ route('admin.pendaftaran.guides.show', $p->id) }}" class="btn btn-sm btn-info">
+                                    <i class="bi bi-eye"></i> Konfirmasi
                             </td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
+
             </div>
         </div>
     </section>
@@ -61,7 +68,7 @@
 
 @section('scripts')
 <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('#table1').DataTable();
     });
 </script>

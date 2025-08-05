@@ -67,7 +67,7 @@ class SoalController extends Controller
             ->get()
             ->groupBy('user_id');
 
-        
+
 
         return view('mentor.kelas.detail-soal', compact(
             'kelas',
@@ -77,5 +77,81 @@ class SoalController extends Controller
             'jawabanPerUser'
         ));
     }
+
+    public function kelasIndex()
+{
+    $kelasList = KelasGenze::where('mentor_id', Auth::id())->get();
+
+    return view('mentor.soal.kelas-index', compact('kelasList'));
+}
+
+
+    public function index($kelas_id, $pertemuan_ke)
+{
+    $kelas = KelasGenze::where('mentor_id', Auth::id())->findOrFail($kelas_id);
+    $soalList = SoalLatihan::where('kelas_id', $kelas_id)
+                ->where('pertemuan_ke', $pertemuan_ke)
+                ->get();
+
+    return view('mentor.soal.index', compact('kelas', 'pertemuan_ke', 'soalList'));
+}
+
+public function edit($id)
+{
+    $soal = SoalLatihan::findOrFail($id);
+
+    // Pastikan soal milik mentor yang sedang login
+    $kelas = KelasGenze::where('mentor_id', Auth::id())
+                ->findOrFail($soal->kelas_id);
+
+    return view('mentor.soal.edit', compact('soal', 'kelas'));
+}
+
+public function update(Request $request, $id)
+{
+    $request->validate([
+        'pertanyaan' => 'required|string',
+        'pilihan_a' => 'required|string',
+        'pilihan_b' => 'required|string',
+        'pilihan_c' => 'required|string',
+        'pilihan_d' => 'required|string',
+        'jawaban_benar' => 'required|in:a,b,c,d',
+    ]);
+
+    $soal = SoalLatihan::findOrFail($id);
+    $soal->update($request->only([
+        'pertanyaan',
+        'pilihan_a',
+        'pilihan_b',
+        'pilihan_c',
+        'pilihan_d',
+        'jawaban_benar',
+    ]));
+
+    return redirect()->route('mentor.soal.index', [
+        'kelas_id' => $soal->kelas_id,
+        'pertemuan_ke' => $soal->pertemuan_ke,
+    ])->with('success', 'Soal berhasil diperbarui.');
+}
+
+public function destroy($id)
+{
+    $soal = SoalLatihan::findOrFail($id);
+
+    // Pastikan mentor yang menghapus adalah pemilik kelasnya
+    $kelas = KelasGenze::where('mentor_id', Auth::id())->findOrFail($soal->kelas_id);
+
+    $kelasId = $soal->kelas_id;
+    $pertemuanKe = $soal->pertemuan_ke;
+
+    $soal->delete();
+
+    return redirect()->route('mentor.soal.index', [
+        'kelas_id' => $kelasId,
+        'pertemuan_ke' => $pertemuanKe,
+    ])->with('success', 'Soal berhasil dihapus.');
+}
+
+
 }
 

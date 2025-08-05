@@ -20,26 +20,33 @@
 <div class="container py-5">
     <div class="row">
         <div class="col-lg-9 mx-auto">
-            <div class="mb-4">
-                <a href="{{ route('landing.page.blog') }}" class="btn btn-sm btn-outline-secondary rounded-pill shadow-sm">
-                    <i class="fa fa-arrow-left me-1"></i> Kembali ke Blog
-                </a>
-            </div>
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
 
-            <h2 class="fw-bold mb-3 text-dark">{{ $blog->judul }}</h2>
-            <div class="mb-3 text-muted small">
-                <i class="fa fa-calendar-alt me-1 text-success"></i> {{ \Carbon\Carbon::parse($blog->tanggal_posting)->translatedFormat('d F Y') }} |
-                <i class="fa fa-user me-1 text-success"></i> {{ $blog->user->name }} |
-                <i class="fa fa-folder me-1 text-success"></i> {{ $blog->kategoriBlog->kategori_blog ?? 'Uncategorized' }}
-            </div>
+                    <!-- Tombol kembali di kanan atas -->
+                    <div class="d-flex justify-content-end mb-3">
+                        <a href="{{ route('landing.page.blog') }}" class="btn btn-sm btn-outline-secondary rounded-pill shadow-sm">
+                            <i class="fa fa-arrow-left me-1"></i> Kembali ke Blog
+                        </a>
+                    </div>
 
-            <img src="{{ asset('storage/' . $blog->gambar) }}"
-                 class="img-fluid rounded-3 shadow-sm mb-4 w-100"
-                 style="max-height: 450px; object-fit: cover;"
-                 alt="{{ $blog->judul }}">
+                    <h2 class="fw-bold mb-3 text-dark">{{ $blog->judul }}</h2>
+                    <div class="mb-3 text-muted small">
+                        <i class="fa fa-calendar-alt me-1 text-success"></i> {{ \Carbon\Carbon::parse($blog->tanggal_posting)->translatedFormat('d F Y') }} |
+                        <i class="fa fa-user me-1 text-success"></i> {{ $blog->user->name }} |
+                        <i class="fa fa-folder me-1 text-success"></i> {{ $blog->kategoriBlog->kategori_blog ?? 'Uncategorized' }}
+                    </div>
 
-            <div class="blog-content text-dark fs-6 lh-lg">
-                {!! $blog->isi !!}
+                    <img src="{{ asset('storage/' . $blog->gambar) }}"
+                        class="img-fluid rounded-3 shadow-sm mb-4 w-100"
+                        style="max-height: 450px; object-fit: cover;"
+                        alt="{{ $blog->judul }}">
+
+                    <div class="blog-content text-dark fs-6 lh-lg">
+                        {!! $blog->isi !!}
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>

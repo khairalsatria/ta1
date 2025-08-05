@@ -53,6 +53,18 @@
                         @enderror
                     </div>
 
+                    <div class="form-group mb-3"></div>
+                        <label for="gender">Gender</label>
+                    <select class="form-select @error    ('gender') is-invalid @enderror" id="gender" name="gender">
+                        <option value="" selected disabled>Pilih Gender</option>
+                        <option value="Laki-laki" {{ old    ('gender') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                        <option value="Perempuan" {{ old    ('gender') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                    </select>
+                    @error('gender')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                    </div>
+
                     <div class="form-group mb-3">
                         <label for="photo">Foto</label>
                         <input type="file" class="form-control @error('photo') is-invalid @enderror" id="photo" name="photo">

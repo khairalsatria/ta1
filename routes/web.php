@@ -12,12 +12,13 @@ use App\Http\Controllers\Admin\{
     JenjangPendidikanController,
     PaketGuideController,
     KontakController,
-
+    KeuanganController,
     JadwalKelasController,
     JadwalGuide2Controller,
     KategoriBlogController,
     BlogController,
     MediaPartnerController,
+    TestimonialController as AdminTestimonialController,
 
     MentorController,
     UserController,
@@ -52,7 +53,10 @@ use App\Http\Controllers\Mentor\{
 // ==========================
 // LANDING PAGE
 // ==========================
-Route::get('/', fn() => view('welcome'));
+Route::get('/', function () {
+    return redirect('/home');
+});
+
 Route::controller(PageController::class)->group(function () {
     Route::get('/home', 'home')->name('landing.page.home');
     Route::get('/about', 'about')->name('landing.page.about');
@@ -109,7 +113,18 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         'user' => UserController::class,
         'program' => ProgramController::class,
         'pembayaran' => AdminPendaftaranProgramController::class,
+        'testimonial' => AdminTestimonialController::class,
+
+
+
     ]);
+    Route::resource('keuangan', KeuanganController::class)->only([
+    'index', 'create', 'store', 'edit', 'update', 'destroy'
+]);
+
+    Route::get('keuangan/cetak', [KeuanganController::class, 'cetak'])->name('keuangan.cetak');
+
+
 
     // Masukkan di sini:
     Route::post('/pendaftaran/{id}/assign-kelas', [AdminPendaftaranClassController::class, 'assignKelas'])->name('pendaftaran.assignKelas');
@@ -266,13 +281,21 @@ Route::prefix('latihan')->group(function () {
 Route::middleware('auth')->prefix('mentor')->name('mentor.')->group(function () {
     Route::get('/dashboard', [MentorDashboardController::class, 'index'])->name('dashboard');
 
-    // Materi
-   Route::resource('/materi', MentorMateriController::class)->names('materi');
+    Route::resource('/materi', MentorMateriController::class)->names('materi')->except(['show']);
 
+// Soal
+Route::get('/soal', [SoalController::class, 'kelasIndex'])->name('soal.kelas_index');
 
-    // Soal
+    Route::get('/kelas/{kelas_id}/pertemuan/{pertemuan_ke}/soal', [SoalController::class, 'index'])->name('soal.index');
     Route::get('/kelas/{kelas_id}/soal/create', [SoalController::class, 'create'])->name('soal.create');
-    Route::post('/soal', [SoalController::class, 'store'])->name('soal.store');
+    Route::post('/soal/store', [SoalController::class, 'store'])->name('soal.store');
+    Route::get('/soal/{id}/edit', [SoalController::class, 'edit'])->name('soal.edit');
+    Route::put('/soal/{id}/update', [SoalController::class, 'update'])->name('soal.update');
+    Route::delete('/soal/{id}/destroy', [SoalController::class, 'destroy'])->name('soal.destroy');
+
+
+    // Detail jawaban dan rekap
+    Route::get('/kelas/{kelas_id}/pertemuan/{pertemuan_ke}/soal/detail', [SoalController::class, 'detail'])->name('soal.detail');
 
     // Daftar kelas & detail kelas
     Route::get('/kelas', [MentorKelasController::class, 'index'])->name('kelas.index');

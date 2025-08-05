@@ -1,6 +1,11 @@
 <!-- Navbar Start -->
+
+@php use Illuminate\Support\Facades\Auth; @endphp
+
 <div class="container-fluid p-0">
-    <nav class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 px-lg-5">
+   <nav id="mainNavbar" class="navbar navbar-expand-lg bg-white navbar-light py-3 py-lg-0 px-lg-5 shadow-sm">
+
+
        <a href="{{ url('/') }}" class="navbar-brand ml-lg-3">
     <img src="{{ asset('/assets2/img/logo.png') }}" alt="GenZE Logo" style="height: 50px;">
 
@@ -12,43 +17,80 @@
         <div class="collapse navbar-collapse justify-content-between px-lg-3" id="navbarCollapse">
     <div class="navbar-nav mx-auto py-0">
         <a href="{{ url('/home') }}" class="nav-item nav-link {{ request()->is('home') ? 'active' : '' }}">Home</a>
-        <a href="{{ url('/program') }}" class="nav-item nav-link {{ request()->is('program') ? 'active' : '' }}">Course</a>
+        <a href="{{ url('/program') }}" class="nav-item nav-link {{ request()->is('program') ? 'active' : '' }}">Program</a>
         <a href="{{ url('/team') }}" class="nav-item nav-link {{ request()->is('team') ? 'active' : '' }}">Team</a>
         <a href="{{ url('/blog') }}" class="nav-item nav-link {{ request()->is('blog') ? 'active' : '' }}">Blog</a>
 
-        {{-- <a href="{{ url('/testimoni') }}" class="nav-item nav-link {{ request()->is('team') ? 'active' : '' }}">Testimonial</a> --}}
-        {{-- <a href="{{ url('/kontak') }}" class="nav-item nav-link {{ request()->is('team') ? 'active' : '' }}">Contact</a> --}}
         @auth
-        <a href="{{ url('/siswa/dashboard') }}" class="nav-item nav-link {{ request()->is('dashboard') ? 'active' : '' }}">Dashboard</a>
-        {{-- <div class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle {{ request()->is('akun*') || request()->is('status*') || request()->is('programku*') ? 'active' : '' }}"
-                data-bs-toggle="dropdown">Dashboard</a>
-            <div class="dropdown-menu m-0">
-                <a href="{{ url('/profile') }}" class="dropdown-item {{ request()->is('akun') ? 'active' : '' }}">My Profile</a>
-                <a href="{{ url('/siswa/dashboard') }}" class="dropdown-item {{ request()->is('akun') ? 'active' : '' }}">Dashboard</a>
-                <a href="{{ url('/status') }}" class="dropdown-item {{ request()->is('status') ? 'active' : '' }}">Registration</a>
-                <a href="{{ url('/programku') }}" class="dropdown-item {{ request()->is('programku') ? 'active' : '' }}">My Course</a>
-            </div>
-        </div> --}}
-        @endauth
+    @php
+        $role = Auth::user()->role;
+        $dashboardUrl = '#';
+
+        if ($role === 'user') {
+            $dashboardUrl = url('/siswa/dashboard');
+        } elseif ($role === 'mentor') {
+            $dashboardUrl = url('/mentor/dashboard');
+        } elseif ($role === 'admin') {
+            $dashboardUrl = url('/admin/dashboard');
+        }
+    @endphp
+
+    <a href="{{ $dashboardUrl }}"
+       class="nav-item nav-link {{ request()->is('siswa/dashboard') || request()->is('mentor/dashboard') || request()->is('admin/dashboard') ? 'active' : '' }}">
+       Dashboard
+    </a>
+@endauth
+
             </div>
 
             {{-- Login / Authenticated Button --}}
 @auth
-    <div class="d-flex align-items-center gap-2">
-        <!-- Link ke profile -->
-        <a href="{{ url('/profile') }}" class="btn btn-primary py-2 px-4 d-none d-lg-block">
-            {{ auth()->user()->name }}
-        </a>
+   <div class="position-relative">
+    <button id="userDropdownBtn" class="btn btn-outline-primary d-flex align-items-center gap-2">
+        <i class="fas fa-user-circle fs-5"></i>
+        <span>{{ auth()->user()->name }}</span>
+        <i ></i>▼{{-- Panah ke bawah --}}
+    </button>
 
-        <!-- Logout button dengan ikon -->
-        <form method="POST" action="{{ route('logout') }}" class="m-0 p-0">
+
+    <div id="userDropdownMenu" class="dropdown-menu dropdown-menu-end mt-2 shadow-sm border-0 rounded"
+         style="display: none; position: absolute; right: 0; min-width: 220px;">
+        <a class="dropdown-item d-flex align-items-center gap-2" href="{{ url('/profile') }}">
+            <i class="fas fa-user text-primary"></i> Profile
+        </a>
+        <a class="dropdown-item d-flex align-items-center gap-2" href="{{ url('/siswa/status-pendaftaran') }}">
+            <i class="fas fa-history text-warning"></i> Riwayat Pendaftaran
+        </a>
+        <a class="dropdown-item d-flex align-items-center gap-2" href="{{ url('/siswa/testimonial/create') }}">
+            <i class="fas fa-pencil-alt text-dark"></i> Testimonial
+        </a>
+        <div class="dropdown-divider"></div>
+        <a class="dropdown-item d-flex align-items-center gap-2 text-danger" href="#"
+           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
             @csrf
-            <button type="submit" class="btn btn-primary d-none d-lg-block" title="Logout">
-                <i class="fas fa-sign-out-alt"></i>
-            </button>
         </form>
     </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const btn = document.getElementById('userDropdownBtn');
+        const menu = document.getElementById('userDropdownMenu');
+
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+        });
+
+        document.addEventListener('click', function () {
+            menu.style.display = 'none';
+        });
+    });
+</script>
+
+
 @else
     <a href="#" class="btn btn-primary py-2 px-4 d-none d-lg-block" data-toggle="modal" data-target="#loginModal">Login</a>
 @endauth
@@ -58,6 +100,41 @@
     </nav>
 </div>
 <!-- Navbar End -->
+
+@if(session('success_register'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success_register') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
+@if(session('error_register'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ session('error_register') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
+@if(session('success_login'))
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ session('success_login') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
+@if(session('error_login'))
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        {{ session('error_login') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
+
+@if(session('success_logout'))
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        {{ session('success_logout') }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+@endif
 
 <!--Modal Login-->
 
@@ -94,21 +171,23 @@
                         </div>
 
                         <!-- Password Input -->
-                        <div class="form-group mb-4">
-                            <label for="passwordLogin" class="form-label fw-semibold text-dark">Password</label>
-                            <div class="input-group">
-                                <span class="input-group-text bg-white">
-                                    <i class="bi bi-lock-fill text-muted"></i>
-                                </span>
-                                <input type="password" id="passwordLogin" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Enter your password" required>
-                                <span class="input-group-text bg-white toggle-password" style="cursor: pointer;" onclick="togglePassword()">
-                                    <i class="fa fa-eye text-muted" id="togglePasswordIcon"></i>
-                                </span>
-                            </div>
-                            @error('password')
-                                <small class="text-danger">{{ $message }}</small>
-                            @enderror
-                        </div>
+<div class="form-group mb-4">
+    <label for="passwordLogin" class="form-label fw-semibold text-dark">Password</label>
+    <div class="input-group">
+        <span class="input-group-text bg-white">
+            <i class="bi bi-lock-fill text-muted"></i>
+        </span>
+        <input type="password" id="passwordLogin" class="form-control @error('password') is-invalid @enderror" name="password" placeholder="Enter your password" required>
+        <span class="input-group-text bg-white toggle-password" style="cursor: pointer;" onclick="togglePassword('passwordLogin', 'togglePasswordIcon')">
+            <i class="fa fa-eye text-muted" id="togglePasswordIcon"></i>
+        </span>
+    </div>
+    @error('password')
+        <small class="text-danger">{{ $message }}</small>
+    @enderror
+</div>
+
+
 
                         <!-- Submit Button -->
                         <button type="submit" class="btn w-100 rounded-3 fw-bold py-2" style="background-color: #3ddc97; color: white;">
@@ -135,16 +214,7 @@
 </div>
 
 <!-- Toggle password visibility script -->
-<script>
-function togglePassword() {
-    const passwordInput = document.getElementById('passwordLogin');
-    const icon = document.getElementById('togglePasswordIcon');
-    const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-    passwordInput.setAttribute('type', type);
-    icon.classList.toggle('fa-eye');
-    icon.classList.toggle('fa-eye-slash');
-}
-</script>
+
 
 <!-- CSS -->
 <style>
@@ -265,8 +335,9 @@ function togglePassword() {
                         </div>
 
                         <button type="submit" class="btn w-100 rounded-3 fw-bold py-2" style="background-color: #3ddc97; color: white;">
-                            <i href="#" data-dismiss="modal" data-toggle="modal" data-target="#loginModal" class="bi bi-person-plus me-2"></i>Sign Up
-                        </button>
+    <i class="bi bi-person-plus me-2"></i>Register
+</button>
+
                     </form>
 
                     <!-- Google Login -->
@@ -289,24 +360,6 @@ function togglePassword() {
 </div>
 
 
-<!-- Toggle Password Script -->
-<script>
-    function togglePassword(inputId, iconId) {
-        const input = document.getElementById(inputId);
-        const icon = document.getElementById(iconId);
-        const isPasswordVisible = input.getAttribute('type') === 'text';
-
-        input.setAttribute('type', isPasswordVisible ? 'password' : 'text');
-
-        if (isPasswordVisible) {
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
-        } else {
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
-        }
-    }
-    </script>
 
 
 <!-- CSS (gunakan juga di layout utama jika belum ada) -->
@@ -358,6 +411,7 @@ function togglePassword() {
         });
     </script>
 @endif
+
 
 
 

@@ -3,7 +3,9 @@
 <div class="sidebar-header position-relative">
 <div class="d-flex justify-content-between align-items-center">
     <div class="logo">
-        <a href="index.html"><img src="./assets/compiled/svg/logo.svg" alt="Logo" srcset=""></a>
+        <a href="index.html">
+        <img src="/assets2/img/logo.png" alt="Logo" style="width: 120px; height: auto;">
+    </a>
     </div>
     <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -49,12 +51,7 @@
         </a>
     </li>
 
-    <li class="sidebar-item {{ request()->is('admin/program*') ? 'active' : '' }}">
-        <a href="{{ url('admin/program') }}" class='sidebar-link'>
-            <i class="bi bi-union"></i>
-            <span>Program</span>
-        </a>
-    </li>
+
 
     <li class="sidebar-item has-sub {{ request()->is('admin/user*') || request()->is('admin/mentor*') || request()->is('') || request()->is('') || request()->is('') ? 'active' : '' }}">
         <a href="#" class='sidebar-link'>
@@ -71,25 +68,34 @@
         </ul>
     </li>
 
-    <li class="sidebar-item has-sub {{ request()->is('admin/pembayaran*') || request()->is('admin/pendaftaran/classes/data*') || request()->is('admin/pendaftaran/guides/data*') || request()->is('') || request()->is('') ? 'active' : '' }}">
+    <li class="sidebar-item has-sub {{ request()->is('admin/pendaftaran/classes/data*') || request()->is('admin/pendaftaran/guides/data*') || request()->is('') || request()->is('') ? 'active' : '' }}">
         <a href="#" class='sidebar-link'>
             <i class="bi bi-person-check-fill"></i>
             <span>Pendaftaran</span>
         </a>
         <ul class="submenu">
-            <li class="submenu-item {{ request()->is('admin/pembayaran') ? 'active' : '' }}">
-                <a href="{{ url('admin/pembayaran') }}" class="submenu-link">Pembayaran</a>
-            </li>
             <li class="submenu-item {{ request()->is('admin/pendaftaran/classes/data*') ? 'active' : '' }}">
-                <a href="{{ url('admin/pendaftaran/classes/data') }}" class="submenu-link">Pendaftar Class</a>
+                <a href="{{ url('admin/pendaftaran/classes/data') }}" class="submenu-link">Pendaftaran Class</a>
             </li>
             <li class="submenu-item {{ request()->is('admin/pendaftaran/guides/data*') ? 'active' : '' }}">
-                <a href="{{ url('admin/pendaftaran/guides/data') }}" class="submenu-link">Pendaftar Guide</a>
+                <a href="{{ url('admin/pendaftaran/guides/data') }}" class="submenu-link">Pendaftaran Guide</a>
             </li>
             <li class="submenu-item {{ request()->is('') ? 'active' : '' }}">
-                <a href="{{ url('admin/pendaftaran/learns/data') }}" class="submenu-link">Pendaftar Learn</a>
+                <a href="{{ url('admin/pendaftaran/learns/data') }}" class="submenu-link">Pendaftaran Learn</a>
             </li>
         </ul>
+    </li>
+    <li class="sidebar-item {{ request()->is('admin/program*') ? 'active' : '' }}">
+        <a href="{{ url('admin/program') }}" class='sidebar-link'>
+            <i class="bi bi-union"></i>
+            <span>Program</span>
+        </a>
+    </li>
+    <li class="sidebar-item {{ request()->is('admin/keuangan*') ? 'active' : '' }}">
+        <a href="{{ url('admin/keuangan') }}" class='sidebar-link'>
+            <i class="bi bi-cash"></i>
+            <span>Keuangan</span>
+        </a>
     </li>
 
     <li class="sidebar-item has-sub {{ request()->is('admin/kelas*') || request()->is('admin/jenis_kelas*') || request()->is('admin/jenjang_pendidikan*') || request()->is('admin/mata_pelajaran*') || request()->is('admin/jadwal_kelas*') || request()->is('admin/soal*') ? 'active' : '' }}">
@@ -144,30 +150,21 @@
             <span>GenZE Learn</span>
         </a>
     </li> --}}
-
-    <li class="sidebar-item {{ request()->is('admin/kontak*') ? 'active' : '' }}">
-        <a href="{{ url('admin/kontak') }}" class='sidebar-link'>
-            <i class="bi bi-globe"></i>
-            <span>Kontak</span>
+    <li class="sidebar-item has-sub {{ request()->is('admin/learn-events*') || request()->is('admin/learn-events*') ? 'active' : '' }}">
+        <a href="#" class='sidebar-link'>
+            <i class="bi bi-mic-fill"></i>
+            <span>GenZE Learn</span>
         </a>
-    </li>
-    <li class="sidebar-item {{ request()->is('') ? 'active' : '' }}">
-        <a href="{{ url('') }}" class='sidebar-link'>
-            <i class="bi bi-bank2"></i>
-            <span>Media Partners</span>
-        </a>
-    </li>
 
-    <li class="sidebar-item {{ request()->is('') ? 'active' : '' }}">
-        <a href="{{ url('') }}" class='sidebar-link'>
-            <i class="bi bi-telegram"></i>
-            <span>Testimoni</span>
-        </a>
+        <ul class="submenu">
+            <li class="submenu-item {{ request()->is('admin/learn-events*') ? 'active' : '' }}">
+                <a href="{{ url('/admin/learn-events') }}" class="submenu-link">Kelola Sertifikat</a>
+            </li>
+        </ul>
     </li>
-
     <li class="sidebar-item has-sub {{ request()->is('admin/blog*') || request()->is('admin/blog*') ? 'active' : '' }}">
         <a href="#" class='sidebar-link'>
-            <i class="bi bi-mortarboard"></i>
+            <i class="bi bi-megaphone"></i>
             <span>Blogs</span>
         </a>
 
@@ -180,6 +177,28 @@
             </li>
         </ul>
     </li>
+
+    <li class="sidebar-item {{ request()->is('admin/kontak*') ? 'active' : '' }}">
+        <a href="{{ url('admin/kontak') }}" class='sidebar-link'>
+            <i class="bi bi-globe"></i>
+            <span>Kontak</span>
+        </a>
+    </li>
+    <li class="sidebar-item {{ request()->is('admin/media-partners') ? 'active' : 'admin/media-partners' }}">
+        <a href="{{ url('admin/media-partners') }}" class='sidebar-link'>
+            <i class="bi bi-bank2"></i>
+            <span>Media Partners</span>
+        </a>
+    </li>
+
+    <li class="sidebar-item {{ request()->is('admin/testimonial') ? 'active' : 'admin/testimonial' }}">
+        <a href="{{ url('admin/testimonial') }}" class='sidebar-link'>
+            <i class="bi bi-telegram"></i>
+            <span>Testimoni</span>
+        </a>
+    </li>
+
+
 
 
 

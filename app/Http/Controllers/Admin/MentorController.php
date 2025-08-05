@@ -29,6 +29,7 @@ class MentorController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'nohp' => 'required|string',
+            'gender' => 'nullable|in:Laki-laki,Perempuan', // Validasi
             'password' => 'required|string|min:6|confirmed',
             'photo' => 'nullable|image|max:2048', // Validasi foto jika ada
         ]);
@@ -38,6 +39,7 @@ class MentorController extends Controller
         $mentor->name = $request->name;
         $mentor->email = $request->email;
         $mentor->nohp = $request->nohp;
+        $mentor->gender = $request->gender;
         $mentor->role = 'mentor'; // Set role otomatis sebagai 'mentor'
         $mentor->password = Hash::make($request->password);
 
@@ -66,6 +68,8 @@ class MentorController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $id,
             'nohp' => 'required|string',
+            'gender' => 'nullable|in:Laki-laki,Perempuan', // Valid
+            'role' => 'required|in:user,mentor,admin', // Validasi role
             'photo' => 'nullable|image|max:2048', // Validasi foto jika ada
         ]);
 
@@ -74,6 +78,9 @@ class MentorController extends Controller
         $mentor->name = $request->name;
         $mentor->email = $request->email;
         $mentor->nohp = $request->nohp;
+        $mentor->gender = $request->gender;
+        $mentor->role = $request->role; // Update role
+
 
         // Jika ada foto yang diupload
         if ($request->hasFile('photo')) {

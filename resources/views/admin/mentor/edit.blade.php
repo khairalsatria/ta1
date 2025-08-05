@@ -55,6 +55,31 @@
                     </div>
 
                     <div class="form-group mb-3">
+                        <label for="gender">Gender</label>
+                        <select class="form-control @error('gender') is-invalid @enderror" id="gender" name="gender">
+                            <option value="" disabled selected>Pilih Gender</option>
+                            <option value="Laki-laki" {{ old('gender', $mentor->gender) == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                            <option value="Perempuan" {{ old('gender', $mentor->gender) == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                        </select>
+                        @error('gender')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="bio">Role</label>
+                        <select class="form-control @error('role') is-invalid @enderror" id="role" name="role">
+                            <option value="user" {{ $mentor->role == 'user' ? 'selected' : '' }}>User</option>
+                            <option value="mentor" {{ $mentor->role == 'mentor' ? 'selected' : '' }}>Mentor</option>
+                            <option value="admin" {{ $mentor->role == 'admin' ? 'selected' : '' }}>Admin</option>
+                        </select>
+                        @error('role')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+
+                    <div class="form-group mb-3">
                         <label for="photo">Foto</label><br>
                         @if ($mentor->photo)
                             <img src="{{ asset('storage/' . $mentor->photo) }}" alt="Foto Mentor" width="150" class="mb-2"><br>

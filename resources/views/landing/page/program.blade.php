@@ -6,11 +6,11 @@
 <!-- Header Start -->
 <div class="jumbotron jumbotron-fluid page-header position-relative overlay-bottom mb-5">
     <div class="container text-center py-5">
-        <h1 class="text-white display-4 font-weight-bold" style="text-shadow: 2px 2px 10px rgba(0,0,0,0.7);">Courses</h1>
+        <h1 class="text-white display-4 font-weight-bold" style="text-shadow: 2px 2px 10px rgba(0,0,0,0.7);">Programs</h1>
         <div class="d-inline-flex text-white mt-3 font-weight-semibold">
             <p class="m-0 text-uppercase"><a class="text-white" href="{{ url('/') }}">Home</a></p>
             <i class="fa fa-angle-double-right pt-1 px-3"></i>
-            <p class="m-0 text-uppercase text-white">Courses</p>
+            <p class="m-0 text-uppercase text-white">Programs</p>
         </div>
     </div>
 </div>
@@ -19,7 +19,7 @@
 <!-- Courses Start -->
 <div class="container py-5">
     <div class="text-center mb-5">
-        <h6 class="text-success text-uppercase font-weight-bold mb-2">Our Courses</h6>
+        <h6 class="text-success text-uppercase font-weight-bold mb-2">Our Programs</h6>
         <h1 class="display-5 font-weight-bold text-dark">Discover Programs That Empower You</h1>
         <p class="text-muted mx-auto" style="max-width: 600px;">Explore various programs taught by experienced instructors and join hundreds of successful learners today.</p>
     </div>
