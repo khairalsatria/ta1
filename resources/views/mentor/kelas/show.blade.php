@@ -13,6 +13,10 @@
                 <h5 class="mb-1 fw-bold">Kelas Aktif :
                     <span>{{ $kelas->nama_kelas }}</span>
                 </h5>
+                <p class="mb-0 text-muted small">
+    Jadwal Kelas: {{ $kelas->jadwalKelas->jadwalkelas ?? 'Belum diatur' }}
+</p>
+
                 <p class="mb-0 text-muted small">Berikut adalah materi, progress, dan pertemuan dari kelas ini.</p>
             </div>
         </div>

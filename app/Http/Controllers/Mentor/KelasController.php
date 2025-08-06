@@ -14,7 +14,7 @@ class KelasController extends Controller
     public function index()
     {
         $kelas = KelasGenze::where('mentor_id', Auth::id())
-            ->with('program:id,nama_program')
+           ->with(['program:id,nama_program', 'jadwalKelas'])
             ->withCount(['siswa', 'materi'])
             ->get();
 
@@ -26,6 +26,7 @@ class KelasController extends Controller
         $kelas = KelasGenze::where('mentor_id', Auth::id())
             ->with([
                 'program:id,nama_program',
+                'jadwalKelas',
                 'materi' => fn($q) => $q->orderBy('pertemuan_ke', 'asc'),
             ])
             ->findOrFail($id);

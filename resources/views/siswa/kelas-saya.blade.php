@@ -80,6 +80,14 @@
                         {{ $kelasList->firstWhere('kelas_id', $kelasDipilihId)->kelasGenze->nama_kelas ?? '-' }}
                     </span>
                 </h5>
+                @php
+    $jadwalTetap = $kelasList->firstWhere('kelas_id', $kelasDipilihId)->kelasGenze->jadwalKelas->jadwalkelas ?? null;
+@endphp
+
+@if($jadwalTetap)
+    <p class="mb-0 text-muted small">🕒 Jadwal Tetap: {{ $jadwalTetap }}</p>
+@endif
+
                 <p class="mb-0 text-muted small">Berikut adalah materi, progress, dan pertemuan dari kelas ini.</p>
             </div>
         </div>

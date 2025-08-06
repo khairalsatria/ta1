@@ -15,8 +15,12 @@
 <body>
 
 <h4 style="text-align:center;">
-    Laporan Keuangan Bulan {{ \Carbon\Carbon::createFromFormat('!m', $bulan)->translatedFormat('F') }} {{ $tahun }}
+    Laporan Keuangan Periode
+    {{ \Carbon\Carbon::parse($tanggalAwal)->translatedFormat('F Y') }}
+    -
+    {{ \Carbon\Carbon::parse($tanggalAkhir)->translatedFormat('F Y') }}
 </h4>
+
 
     <div class="summary">
         <p><strong>Pemasukan Manual:</strong> Rp {{ number_format($totalPemasukanManual, 0, ',', '.') }}</p>

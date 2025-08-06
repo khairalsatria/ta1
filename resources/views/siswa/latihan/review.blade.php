@@ -114,6 +114,11 @@
             <div class="card-body">
                 <p class="fw-bold fs-5">{{ $soal->pertanyaan }}</p>
 
+@if($soal->gambar_soal)
+    <img src="{{ asset('storage/' . $soal->gambar_soal) }}" alt="Gambar Soal" class="img-fluid my-3" style="max-height: 250px;">
+@endif
+
+
                 <div class="list-group mb-3">
                     @foreach($pilihanList as $huruf => $teksPilihan)
                         @php

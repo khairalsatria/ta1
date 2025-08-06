@@ -1,6 +1,5 @@
 @php use Illuminate\Support\Str; @endphp
 
-
 @extends('mentor.layout.main')
 
 @section('content')
@@ -19,6 +18,7 @@
                 <tr>
                     <th>No</th>
                     <th>Pertanyaan</th>
+                    <th>Gambar</th>
                     <th>Jawaban Benar</th>
                     <th>Aksi</th>
                 </tr>
@@ -28,15 +28,25 @@
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ Str::limit($soal->pertanyaan, 60) }}</td>
+
+                    {{-- Tampilkan gambar jika ada --}}
+                    <td>
+                        @if($soal->gambar_soal)
+                            <img src="{{ asset('storage/' . $soal->gambar_soal) }}" alt="Gambar Soal" style="max-width: 100px; max-height: 100px;">
+                        @else
+                            <span class="text-muted">-</span>
+                        @endif
+                    </td>
+
                     <td>{{ strtoupper($soal->jawaban_benar) }}</td>
                     <td>
                         <a href="{{ route('mentor.soal.edit', $soal->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                        {{-- Tambahkan tombol hapus jika diperlukan --}}
+
                         <form action="{{ route('mentor.soal.destroy', $soal->id) }}" method="POST" style="display:inline-block;" onsubmit="return confirm('Yakin ingin menghapus soal ini?');">
-        @csrf
-        @method('DELETE')
-        <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
-    </form>
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                        </form>
                     </td>
                 </tr>
                 @endforeach

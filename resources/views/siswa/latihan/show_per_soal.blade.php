@@ -20,6 +20,11 @@
             <div class="card-body">
                 <h5 class="fw-semibold">{{ $currentSoal->pertanyaan }}</h5>
 
+@if($currentSoal->gambar_soal)
+    <img src="{{ asset('storage/' . $currentSoal->gambar_soal) }}" alt="Gambar Soal" class="img-fluid my-3" style="max-height: 250px;">
+@endif
+
+
                 <div class="mt-3">
                     @foreach(['a', 'b', 'c', 'd'] as $opt)
                         <div class="form-check mb-2 ps-4">

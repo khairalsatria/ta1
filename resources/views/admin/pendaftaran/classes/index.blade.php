@@ -100,26 +100,31 @@
                                                         </div>
 
                                                         <!-- Tetapkan Kelas -->
-                                                        <div class="col-md-6 mb-4">
-                                                            <h6>Tetapkan Kelas</h6>
-                                                            @if($class->jadwalkelas_konfirmasi)
-                                                            <form method="POST"
-                                                                action="{{ route('admin.pendaftaran.assignKelas', $class->id) }}">
-                                                                @csrf
-                                                                <select name="kelas_id" class="form-select mb-3">
-                                                                    @foreach($daftar_kelas as $kelas)
-                                                                    <option value="{{ $kelas->id }}"
-                                                                        @selected($class->kelas_id == $kelas->id)>
-                                                                        {{ $kelas->nama_kelas }}
-                                                                    </option>
-                                                                    @endforeach
-                                                                </select>
-                                                                <button class="btn btn-success">Tetapkan Kelas</button>
-                                                            </form>
-                                                            @else
-                                                            <div class="text-muted">Jadwal belum dikonfirmasi.</div>
-                                                            @endif
-                                                        </div>
+                                                       <div class="col-md-6 mb-4">
+    <h6>Tetapkan Kelas</h6>
+
+    @if($class->jadwalkelas_konfirmasi)
+        <form method="POST" action="{{ route('admin.pendaftaran.assignKelas', $class->id) }}">
+            @csrf
+            <select name="kelas_id" class="form-select mb-3">
+                @foreach($daftar_kelas as $kelas)
+                    @php
+                        $terisi = $kelas->siswa->count();
+                        $sisa = $kelas->sisaKuota();
+                        $jadwal = $kelas->jadwalKelas->jadwalkelas ?? 'Tidak ada jadwal';
+                    @endphp
+                    <option value="{{ $kelas->id }}" @selected($class->kelas_id == $kelas->id)>
+                        {{ $kelas->nama_kelas }} - Jadwal: {{ $jadwal }} - Kuota: {{ $kelas->kuota }} - Terisi: {{ $terisi }} - Sisa: {{ $sisa }}
+                    </option>
+                @endforeach
+            </select>
+            <button class="btn btn-success">Tetapkan Kelas</button>
+        </form>
+    @else
+        <div class="text-muted">Jadwal belum dikonfirmasi.</div>
+    @endif
+</div>
+
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">

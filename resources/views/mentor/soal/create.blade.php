@@ -3,7 +3,7 @@
 @section('content')
 <h2 class="text-xl font-bold mb-4">Tambah Soal Latihan untuk {{ $kelas->nama_kelas }}</h2>
 
-<form action="{{ route('mentor.soal.store') }}" method="POST">
+<form action="{{ route('mentor.soal.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <input type="hidden" name="kelas_id" value="{{ $kelas->id }}">
 
@@ -12,6 +12,9 @@
 
     <label>Pertanyaan:</label>
     <textarea name="pertanyaan" class="form-control mb-2" required></textarea>
+
+    <label>Upload Gambar Soal (Opsional):</label>
+    <input type="file" name="gambar_soal" class="form-control mb-2">
 
     @foreach(['a', 'b', 'c', 'd'] as $opt)
         <label>Pilihan {{ strtoupper($opt) }}:</label>

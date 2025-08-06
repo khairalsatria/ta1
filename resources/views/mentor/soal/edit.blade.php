@@ -4,7 +4,7 @@
 <div class="container">
     <h4>Edit Soal - {{ $kelas->nama_kelas }}</h4>
 
-    <form action="{{ route('mentor.soal.update', $soal->id) }}" method="POST">
+    <form action="{{ route('mentor.soal.update', $soal->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -14,32 +14,31 @@
         </div>
 
         <div class="mb-3">
-            <label for="pilihan_a" class="form-label">Pilihan A</label>
-            <input type="text" name="pilihan_a" class="form-control" value="{{ old('pilihan_a', $soal->pilihan_a) }}" required>
+            <label for="gambar_soal" class="form-label">Gambar Soal (Opsional)</label>
+            <input type="file" name="gambar_soal" class="form-control">
+
+            @if($soal->gambar_soal)
+                <p class="mt-2">Gambar Saat Ini:</p>
+                <img src="{{ asset('storage/' . $soal->gambar_soal) }}" alt="Gambar Soal" class="img-fluid" style="max-width: 300px;">
+            @endif
         </div>
 
+        @foreach(['a', 'b', 'c', 'd'] as $opt)
         <div class="mb-3">
-            <label for="pilihan_b" class="form-label">Pilihan B</label>
-            <input type="text" name="pilihan_b" class="form-control" value="{{ old('pilihan_b', $soal->pilihan_b) }}" required>
+            <label for="pilihan_{{ $opt }}" class="form-label">Pilihan {{ strtoupper($opt) }}</label>
+            <input type="text" name="pilihan_{{ $opt }}" class="form-control"
+                value="{{ old('pilihan_' . $opt, $soal->{'pilihan_' . $opt}) }}" required>
         </div>
-
-        <div class="mb-3">
-            <label for="pilihan_c" class="form-label">Pilihan C</label>
-            <input type="text" name="pilihan_c" class="form-control" value="{{ old('pilihan_c', $soal->pilihan_c) }}" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="pilihan_d" class="form-label">Pilihan D</label>
-            <input type="text" name="pilihan_d" class="form-control" value="{{ old('pilihan_d', $soal->pilihan_d) }}" required>
-        </div>
+        @endforeach
 
         <div class="mb-3">
             <label for="jawaban_benar" class="form-label">Jawaban Benar</label>
             <select name="jawaban_benar" class="form-control" required>
-                <option value="a" {{ $soal->jawaban_benar == 'a' ? 'selected' : '' }}>A</option>
-                <option value="b" {{ $soal->jawaban_benar == 'b' ? 'selected' : '' }}>B</option>
-                <option value="c" {{ $soal->jawaban_benar == 'c' ? 'selected' : '' }}>C</option>
-                <option value="d" {{ $soal->jawaban_benar == 'd' ? 'selected' : '' }}>D</option>
+                @foreach(['a','b','c','d'] as $opt)
+                    <option value="{{ $opt }}" {{ $soal->jawaban_benar == $opt ? 'selected' : '' }}>
+                        {{ strtoupper($opt) }}
+                    </option>
+                @endforeach
             </select>
         </div>
 

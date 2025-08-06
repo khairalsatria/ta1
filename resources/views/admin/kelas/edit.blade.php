@@ -64,6 +64,22 @@
                     </div>
 
                     <div class="form-group mb-3">
+    <label for="jadwal_kelas_id">Jadwal Kelas</label>
+    <select name="jadwal_kelas_id" id="jadwal_kelas_id" class="form-control @error('jadwal_kelas_id') is-invalid @enderror" required>
+        <option value="">-- Pilih Jadwal --</option>
+        @foreach($jadwal_kelas as $j)
+            <option value="{{ $j->id_jadwalkelas }}" {{ old('jadwal_kelas_id', $kelas->jadwal_kelas_id) == $j->id_jadwalkelas ? 'selected' : '' }}>
+                {{ $j->jadwalkelas }}
+            </option>
+        @endforeach
+    </select>
+    @error('jadwal_kelas_id')
+        <div class="invalid-feedback">{{ $message }}</div>
+    @enderror
+</div>
+
+
+                    <div class="form-group mb-3">
                         <label for="kuota">Kuota</label>
                         <input type="number" class="form-control @error('kuota') is-invalid @enderror" id="kuota" name="kuota" value="{{ old('kuota', $kelas->kuota) }}" required>
                         @error('kuota')

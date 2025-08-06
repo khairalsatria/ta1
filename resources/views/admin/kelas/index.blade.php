@@ -37,6 +37,7 @@
                             <th>No</th>
                             <th>Nama Kelas</th>
                             <th>Mentor</th>
+                            <th>Jadwal</th>
                             <th>Kuota</th>
                             <th>Aksi</th>
                         </tr>
@@ -47,6 +48,7 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $k->nama_kelas }}</td>
                             <td>{{ $k->mentor->name ?? '-' }}</td>
+                            <td>{{ $k->jadwalKelas->jadwalkelas ?? '-' }}</td>
                             <td>{{ $k->kuota }}</td>
                             <td>
                                 <a href="{{ route('admin.kelas.edit', $k->id) }}" class="btn btn-warning btn-sm">Edit</a>

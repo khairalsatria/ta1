@@ -18,12 +18,13 @@ class SoalController extends Controller
         return view('mentor.soal.create', compact('kelas'));
     }
 
-    public function store(Request $request)
+ public function store(Request $request)
     {
         $request->validate([
             'kelas_id' => 'required|exists:kelas_genze,id',
             'pertemuan_ke' => 'required|integer|min:1|max:8',
             'pertanyaan' => 'required|string',
+            'gambar_soal' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'pilihan_a' => 'required|string',
             'pilihan_b' => 'required|string',
             'pilihan_c' => 'required|string',
@@ -31,10 +32,18 @@ class SoalController extends Controller
             'jawaban_benar' => 'required|in:a,b,c,d',
         ]);
 
-        SoalLatihan::create($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('gambar_soal')) {
+            $path = $request->file('gambar_soal')->store('soal_gambar', 'public');
+            $data['gambar_soal'] = $path;
+        }
+
+        SoalLatihan::create($data);
 
         return redirect()->route('mentor.dashboard')->with('success', 'Soal berhasil ditambahkan.');
     }
+
 
    public function detail($kelasId, $pertemuanKe)
     {
@@ -107,32 +116,42 @@ public function edit($id)
     return view('mentor.soal.edit', compact('soal', 'kelas'));
 }
 
-public function update(Request $request, $id)
-{
-    $request->validate([
-        'pertanyaan' => 'required|string',
-        'pilihan_a' => 'required|string',
-        'pilihan_b' => 'required|string',
-        'pilihan_c' => 'required|string',
-        'pilihan_d' => 'required|string',
-        'jawaban_benar' => 'required|in:a,b,c,d',
-    ]);
+ public function update(Request $request, $id)
+    {
+        $request->validate([
+            'pertanyaan' => 'required|string',
+            'gambar_soal' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'pilihan_a' => 'required|string',
+            'pilihan_b' => 'required|string',
+            'pilihan_c' => 'required|string',
+            'pilihan_d' => 'required|string',
+            'jawaban_benar' => 'required|in:a,b,c,d',
+        ]);
 
-    $soal = SoalLatihan::findOrFail($id);
-    $soal->update($request->only([
-        'pertanyaan',
-        'pilihan_a',
-        'pilihan_b',
-        'pilihan_c',
-        'pilihan_d',
-        'jawaban_benar',
-    ]));
+        $soal = SoalLatihan::findOrFail($id);
 
-    return redirect()->route('mentor.soal.index', [
-        'kelas_id' => $soal->kelas_id,
-        'pertemuan_ke' => $soal->pertemuan_ke,
-    ])->with('success', 'Soal berhasil diperbarui.');
-}
+        $data = $request->only([
+            'pertanyaan',
+            'pilihan_a',
+            'pilihan_b',
+            'pilihan_c',
+            'pilihan_d',
+            'jawaban_benar',
+        ]);
+
+        if ($request->hasFile('gambar_soal')) {
+            $path = $request->file('gambar_soal')->store('soal_gambar', 'public');
+            $data['gambar_soal'] = $path;
+        }
+
+        $soal->update($data);
+
+        return redirect()->route('mentor.soal.index', [
+            'kelas_id' => $soal->kelas_id,
+            'pertemuan_ke' => $soal->pertemuan_ke,
+        ])->with('success', 'Soal berhasil diperbarui.');
+    }
+
 
 public function destroy($id)
 {

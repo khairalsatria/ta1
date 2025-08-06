@@ -118,17 +118,21 @@ public function index()
 
 public function cetak(Request $request)
 {
-    $bulan = $request->input('bulan'); // format: 01, 02, ..., 12
-    $tahun = $request->input('tahun'); // format: 2025, 2024, etc.
+    $bulanDari = $request->input('bulan_dari');
+    $tahunDari = $request->input('tahun_dari');
+    $bulanSampai = $request->input('bulan_sampai');
+    $tahunSampai = $request->input('tahun_sampai');
 
-    // Validasi sederhana
-    if (!$bulan || !$tahun) {
-        return redirect()->back()->with('error', 'Bulan dan tahun harus dipilih untuk mencetak laporan.');
+    if (!$bulanDari || !$tahunDari || !$bulanSampai || !$tahunSampai) {
+        return redirect()->back()->with('error', 'Periode harus dipilih lengkap.');
     }
 
-    // Ambil data manual dari keuangan
-    $manualKeuangans = Keuangan::whereMonth('tanggal', $bulan)
-        ->whereYear('tanggal', $tahun)
+    // Buat tanggal awal dan akhir periode
+    $tanggalAwal = Carbon::createFromDate($tahunDari, $bulanDari, 1)->startOfMonth();
+    $tanggalAkhir = Carbon::createFromDate($tahunSampai, $bulanSampai, 1)->endOfMonth();
+
+    // Data manual
+    $manualKeuangans = Keuangan::whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir])
         ->select(
             'id',
             'tanggal',
@@ -138,12 +142,11 @@ public function cetak(Request $request)
             DB::raw("'manual' as sumber")
         );
 
-    // Ambil data dari pendaftaran program
+    // Data dari pendaftaran program
     $pendaftaranKeuangans = DB::table('pendaftaran_programs')
         ->join('programs', 'pendaftaran_programs.tipe_program', '=', 'programs.id')
         ->where('pendaftaran_programs.status', 'diterima')
-        ->whereMonth('pendaftaran_programs.created_at', $bulan)
-        ->whereYear('pendaftaran_programs.created_at', $tahun)
+        ->whereBetween('pendaftaran_programs.created_at', [$tanggalAwal, $tanggalAkhir])
         ->select(
             DB::raw("NULL as id"),
             'pendaftaran_programs.created_at as tanggal',
@@ -159,34 +162,32 @@ public function cetak(Request $request)
         ->get();
 
     $totalPemasukanManual = Keuangan::where('jenis_transaksi', 'pemasukan')
-        ->whereMonth('tanggal', $bulan)
-        ->whereYear('tanggal', $tahun)
+        ->whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir])
         ->sum('jumlah');
 
     $totalPemasukanPendaftaran = PendaftaranProgram::where('status', 'diterima')
-        ->whereMonth('created_at', $bulan)
-        ->whereYear('created_at', $tahun)
+        ->whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])
         ->sum('harga');
 
     $totalPengeluaran = Keuangan::where('jenis_transaksi', 'pengeluaran')
-        ->whereMonth('tanggal', $bulan)
-        ->whereYear('tanggal', $tahun)
+        ->whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir])
         ->sum('jumlah');
 
     $totalSaldo = $totalPemasukanManual + $totalPemasukanPendaftaran - $totalPengeluaran;
 
-    $pdf = Pdf::loadView('admin.keuangan.cetak', compact(
-        'keuangans',
-        'totalPemasukanManual',
-        'totalPemasukanPendaftaran',
-        'totalPengeluaran',
-        'totalSaldo',
-        'bulan',
-        'tahun'
-    ));
+    $pdf = Pdf::loadView('admin.keuangan.cetak', [
+        'keuangans' => $keuangans,
+        'totalPemasukanManual' => $totalPemasukanManual,
+        'totalPemasukanPendaftaran' => $totalPemasukanPendaftaran,
+        'totalPengeluaran' => $totalPengeluaran,
+        'totalSaldo' => $totalSaldo,
+        'tanggalAwal' => $tanggalAwal,
+        'tanggalAkhir' => $tanggalAkhir,
+    ]);
 
-    return $pdf->download("laporan-keuangan-{$bulan}-{$tahun}.pdf");
+    return $pdf->download("laporan-keuangan-{$tanggalAwal->format('Ym')}_to_{$tanggalAkhir->format('Ym')}.pdf");
 }
+
 
 
 }

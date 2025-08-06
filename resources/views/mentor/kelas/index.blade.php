@@ -43,6 +43,10 @@
                             <div class="card-body">
                                 <ul class="list-group">
                                     <li class="list-group-item">
+    📅 Jadwal: {{ $k->jadwalKelas->jadwalkelas ?? 'Belum diatur' }}
+</li>
+
+                                    <li class="list-group-item">
                                         👨‍🎓 <strong>{{ $k->siswa_count }}</strong> Siswa Terdaftar
                                     </li>
                                     <li class="list-group-item">

@@ -17,7 +17,8 @@ class KelasGenze extends Model
     protected $table = 'kelas_genze';
 
     protected $fillable = [
-        'nama_kelas', 'program_id', 'mentor_id', 'kuota', 'deskripsi', 'link_zoom_default'
+        'nama_kelas', 'program_id', 'mentor_id', 'kuota', 'deskripsi', 'link_zoom_default',
+        'jadwal_kelas_id'
     ];
 
      public function program()
@@ -48,4 +49,15 @@ public function semuaSiswa()
 {
     return $this->hasMany(MateriPertemuan::class, 'kelas_id');
 }
+
+public function jadwalKelas()
+{
+    return $this->belongsTo(JadwalKelas::class, 'jadwal_kelas_id', 'id_jadwalkelas');
+}
+
+public function sisaKuota()
+{
+    return $this->kuota - $this->siswa()->count();
+}
+
 }

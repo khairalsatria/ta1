@@ -61,37 +61,60 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
         <h5 class="card-title m-0">Data Keuangan</h5>
-
-        <div class="d-flex flex-wrap align-items-center gap-2">
-            <a href="{{ route('admin.keuangan.create') }}" class="btn btn-primary btn-sm">
+ <a href="{{ route('admin.keuangan.create') }}" class="btn btn-primary btn-sm">
                 + Tambah Transaksi
             </a>
+        <div class="d-flex flex-wrap align-items-center gap-2">
 
-            <a href="{{ route('admin.keuangan.cetak') }}" target="_blank" class="btn btn-secondary btn-sm">
+
+            {{-- <a href="{{ route('admin.keuangan.cetak') }}" target="_blank" class="btn btn-secondary btn-sm">
                 <i class="bi bi-printer"></i> Semua
-            </a>
+            </a> --}}
 
             <form action="{{ route('admin.keuangan.cetak') }}" method="GET" class="d-flex align-items-center gap-2" target="_blank">
-                <select name="bulan" class="form-select form-select-sm" required>
-                    <option value="">Pilih Bulan</option>
-                    @for($m = 1; $m <= 12; $m++)
-                        <option value="{{ sprintf('%02d', $m) }}">
-                            {{ DateTime::createFromFormat('!m', $m)->format('F') }}
-                        </option>
-                    @endfor
-                </select>
+    <div class="d-flex flex-column">
 
-                <select name="tahun" class="form-select form-select-sm" required>
-                    <option value="">Pilih Tahun</option>
-                    @for($y = now()->year; $y >= 2020; $y--)
-                        <option value="{{ $y }}">{{ $y }}</option>
-                    @endfor
-                </select>
+        <label class="form-label mb-0 small">Dari</label>
+        <div class="d-flex gap-1">
+            <select name="bulan_dari" class="form-select form-select-sm" required>
+                <option value="">Bulan</option>
+                @for($m = 1; $m <= 12; $m++)
+                    <option value="{{ sprintf('%02d', $m) }}">{{ DateTime::createFromFormat('!m', $m)->format('F') }}</option>
+                @endfor
+            </select>
+            <select name="tahun_dari" class="form-select form-select-sm" required>
+                <option value="">Tahun</option>
+                @for($y = now()->year; $y >= 2020; $y--)
+                    <option value="{{ $y }}">{{ $y }}</option>
+                @endfor
+            </select>
+        </div>
+    </div>
 
-                <button type="submit" class="btn btn-secondary btn-sm">
-                    <i class="bi bi-printer"></i>Bulan
-                </button>
-            </form>
+    <div class="d-flex flex-column">
+        <label class="form-label mb-0 small">Sampai</label>
+        <div class="d-flex gap-1">
+            <select name="bulan_sampai" class="form-select form-select-sm" required>
+                <option value="">Bulan</option>
+                @for($m = 1; $m <= 12; $m++)
+                    <option value="{{ sprintf('%02d', $m) }}">{{ DateTime::createFromFormat('!m', $m)->format('F') }}</option>
+                @endfor
+            </select>
+            <select name="tahun_sampai" class="form-select form-select-sm" required>
+                <option value="">Tahun</option>
+                @for($y = now()->year; $y >= 2020; $y--)
+                    <option value="{{ $y }}">{{ $y }}</option>
+                @endfor
+            </select>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-secondary btn-sm mt-4">
+        <i class="bi bi-printer"></i> Periode
+    </button>
+</form>
+
+
         </div>
     </div>
 

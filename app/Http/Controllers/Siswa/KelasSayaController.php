@@ -15,7 +15,8 @@ class KelasSayaController extends Controller
 {
     $user = Auth::user();
 
-    $kelasList = PendaftaranClasses::with('kelasGenze')
+   $kelasList = PendaftaranClasses::with('kelasGenze.jadwalKelas')
+
         ->whereHas('pendaftaran', fn($q) => $q->where('user_id', $user->id))
         ->get();
 

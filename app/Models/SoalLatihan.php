@@ -13,6 +13,7 @@ class SoalLatihan extends Model
 
     protected $fillable = [
         'kelas_id', 'pertemuan_ke', 'pertanyaan',
+        'gambar_soal',
         'pilihan_a', 'pilihan_b', 'pilihan_c', 'pilihan_d',
         'jawaban_benar'
     ];
