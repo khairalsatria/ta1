@@ -76,15 +76,52 @@ public function tawarkanJadwalAlternatif(Request $request, $id)
 public function assignKelas(Request $request, $id)
 {
     $request->validate([
-        'kelas_id' => 'required|exists:kelas_genze,id'
+        'kelas_id' => 'required|exists:kelas_genze,id',
     ]);
 
-    $pendaftaran = PendaftaranClasses::findOrFail($id);
+    $pendaftaran = PendaftaranClasses::with('pendaftaran')->findOrFail($id);
+
+    // Pastikan user_id tersedia via relasi
+    if (!$pendaftaran->pendaftaran || !$pendaftaran->pendaftaran->user_id) {
+        return redirect()->back()->with('error', 'User tidak ditemukan.');
+    }
+
+    $userId = $pendaftaran->pendaftaran->user_id;
+
+    // Cek apakah user sudah tergabung dalam kelas yang sama
+    $sudahTerdaftar = PendaftaranClasses::where('kelas_id', $request->kelas_id)
+        ->whereHas('pendaftaran', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })
+        ->exists();
+
+    if ($sudahTerdaftar) {
+        return redirect()->back()->with('error', 'Siswa sudah terdaftar di kelas ini.');
+    }
+
+    // Lanjutkan menetapkan kelas
     $pendaftaran->kelas_id = $request->kelas_id;
     $pendaftaran->save();
 
-    return redirect()->route('admin.pendaftaran.classes.index', $id)
+    return redirect()->route('admin.pendaftaran.classes.index')
         ->with('success', 'Kelas berhasil ditetapkan.');
 }
+
+public function destroy($id)
+{
+    $pendaftaranClass = PendaftaranClasses::with('pendaftaran')->findOrFail($id);
+
+    if (!in_array($pendaftaranClass->pendaftaran->status, ['ditolak', 'menunggu'])) {
+        return redirect()->route('admin.pendaftaran.classes.index')
+            ->with('error', 'Pendaftaran hanya dapat dihapus jika statusnya ditolak atau menunggu.');
+    }
+
+    $pendaftaranClass->delete();
+
+    return redirect()->route('admin.pendaftaran.classes.index')
+        ->with('success', 'Pendaftaran berhasil dihapus.');
+}
+
+
 
 }

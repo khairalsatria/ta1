@@ -165,7 +165,7 @@
                 <h6 class="text-muted mb-1">Saldo Akhir</h6>
                 <h5 class="font-bold">Rp {{ number_format($totalSaldo, 0, ',', '.') }}</h5>
             </div>
-            <i class="bi bi-wallet2 fs-3"></i>
+            <i class="bi bi-wallet2 fs-3 text-success"></i>
         </div>
     </div>
 </div>

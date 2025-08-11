@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Program;
+
 
 class ProgramController extends Controller
 {
@@ -106,4 +108,21 @@ class ProgramController extends Controller
 
         return redirect()->route('admin.program.index')->with('success', 'Program berhasil diperbarui.');
     }
+
+    // Hapus program
+public function destroy($id)
+{
+    $program = Program::findOrFail($id);
+
+    // Hapus gambar dari storage jika ada
+    if ($program->gambar && Storage::disk('public')->exists($program->gambar)) {
+        Storage::disk('public')->delete($program->gambar);
+    }
+
+    // Hapus data program
+    $program->delete();
+
+    return redirect()->route('admin.program.index')->with('success', 'Program berhasil dihapus.');
+}
+
 }

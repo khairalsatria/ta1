@@ -150,7 +150,7 @@
             <span>GenZE Learn</span>
         </a>
     </li> --}}
-    <li class="sidebar-item has-sub {{ request()->is('admin/learn-events*') || request()->is('admin/learn-events*') ? 'active' : '' }}">
+    <li class="sidebar-item has-sub {{ request()->is('admin/learn-events*') || request()->is('admin/learn-events*')  ? 'active' : '' }}">
         <a href="#" class='sidebar-link'>
             <i class="bi bi-mic-fill"></i>
             <span>GenZE Learn</span>
@@ -158,11 +158,11 @@
 
         <ul class="submenu">
             <li class="submenu-item {{ request()->is('admin/learn-events*') ? 'active' : '' }}">
-                <a href="{{ url('/admin/learn-events') }}" class="submenu-link">Kelola Sertifikat</a>
+                <a href="{{ url('/admin/learn-events') }}" class="submenu-link">Sertifikat</a>
             </li>
         </ul>
     </li>
-    <li class="sidebar-item has-sub {{ request()->is('admin/blog*') || request()->is('admin/blog*') ? 'active' : '' }}">
+    <li class="sidebar-item has-sub {{ request()->is('admin/blog*') || request()->is('admin/blog*') || request()->is('admin/kategori_blog*') ? 'active' : '' }}">
         <a href="#" class='sidebar-link'>
             <i class="bi bi-megaphone"></i>
             <span>Blogs</span>
@@ -177,6 +177,26 @@
             </li>
         </ul>
     </li>
+
+    {{-- <li class="sidebar-item has-sub {{ request()->is('admin/kontak*') || request()->is('admin/media_partners*') || request()->is('admin/testimonial*') || request()->is('admin/faq*')  ? 'active' : '' }}">
+        <a href="#" class='sidebar-link'>
+            <i class="bi bi-others"></i>
+            <span>Menu Lainnya</span>
+        </a>
+        <ul class="submenu">
+            <li class="submenu-item {{ request()->is('admin/kontak*') ? 'active' : '' }}">
+                <a href="{{ url('/admin/kontak') }}" class="submenu-link">Kontak</a>
+            <li class="submenu-item {{ request()->is('admin/media_partners*') ? 'active' : '' }}">
+                <a href="{{ url('/admin/media_partners') }}" class="submenu-link">Media Partner</a>
+            </li>
+            <li class="submenu-item {{ request()->is('admin/testimonial*') ? 'active' : '' }}">
+                <a href="{{ url('/admin/testimonial') }}" class="submenu-link">Testimonial</a>
+            </li>
+            <li class="submenu-item {{ request()->is('admin/faq*') ? 'active' : '' }}">
+                <a href="{{ url('/admin/faq') }}" class="submenu-link">FAQ</a>
+            </li>
+        </ul>
+    </li> --}}
 
     <li class="sidebar-item {{ request()->is('admin/kontak*') ? 'active' : '' }}">
         <a href="{{ url('admin/kontak') }}" class='sidebar-link'>
@@ -195,6 +215,13 @@
         <a href="{{ url('admin/testimonial') }}" class='sidebar-link'>
             <i class="bi bi-telegram"></i>
             <span>Testimoni</span>
+        </a>
+    </li>
+
+     <li class="sidebar-item {{ request()->is('admin/faq') ? 'active' : 'admin/faq' }}">
+        <a href="{{ url('admin/faq') }}" class='sidebar-link'>
+            <i class="bi bi-question-circle"></i>
+            <span>FAQ</span>
         </a>
     </li>
 

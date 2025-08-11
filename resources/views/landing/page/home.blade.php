@@ -95,7 +95,7 @@
         </div>
         <div class="col-lg-6 order-1 order-lg-2">
             <div class="rounded overflow-hidden shadow-sm" style="max-height: 400px;">
-                <img src="{{ asset('assets2/img/home4.jpeg') }}" class="img-fluid w-100 h-100" style="object-fit: cover;" alt="Why Choose Us">
+                <img src="{{ asset('assets2/img/home5.jpg') }}" class="img-fluid w-100 h-100" style="object-fit: cover;" alt="Why Choose Us">
             </div>
         </div>
     </div>
@@ -356,35 +356,27 @@
         <div class="row align-items-start">
             <!-- FAQ Section -->
             <div class="col-lg-7 mb-4 mb-lg-0">
-                <div id="faqAccordion">
-                    @php
-                        $faqs = [
-                            ['question' => 'Apa itu GenZE Class?', 'answer' => 'GenZE Class adalah program bimbingan belajar yang menyediakan kelas online dan offline.'],
-                            ['question' => 'Bagaimana cara mendaftar?', 'answer' => 'Isi form pendaftaran di website dan pilih jadwal yang sesuai.'],
-                            ['question' => 'Apakah saya bisa memilih lebih dari satu jadwal?', 'answer' => 'Ya, Anda bisa memilih hingga 3 pilihan jadwal.'],
-                            ['question' => 'Apa yang saya dapat setelah bergabung?', 'answer' => 'Akses materi PDF, soal latihan, rekaman sesi, dan Zoom Meeting untuk belajar.']
-                        ];
-                    @endphp
-
-                    @foreach($faqs as $index => $faq)
-                    <div class="card border-0 mb-3 shadow-sm">
-                        <div class="card-header bg-white p-3 d-flex justify-content-between align-items-center cursor-pointer"
-                             data-bs-toggle="collapse"
-                             data-bs-target="#faq{{ $index }}"
-                             aria-expanded="false"
-                             aria-controls="faq{{ $index }}">
-                            <span class="fw-semibold">{{ $faq['question'] }}</span>
-                            <span class="text-success fs-5">+</span>
-                        </div>
-                        <div id="faq{{ $index }}" class="collapse" data-bs-parent="#faqAccordion">
-                            <div class="card-body text-muted">
-                                {{ $faq['answer'] }}
-                            </div>
-                        </div>
+    <div id="faqAccordion">
+        @foreach($faqs as $index => $faq)
+            <div class="card border-0 mb-3 shadow-sm">
+                <div class="card-header bg-white p-3 d-flex justify-content-between align-items-center cursor-pointer"
+                     data-bs-toggle="collapse"
+                     data-bs-target="#faq{{ $index }}"
+                     aria-expanded="false"
+                     aria-controls="faq{{ $index }}">
+                    <span class="fw-semibold">{{ $faq->question }}</span>
+                    <span class="text-success fs-5">+</span>
+                </div>
+                <div id="faq{{ $index }}" class="collapse" data-bs-parent="#faqAccordion">
+                    <div class="card-body text-muted">
+                        {{ $faq->answer }}
                     </div>
-                    @endforeach
                 </div>
             </div>
+        @endforeach
+    </div>
+</div>
+
 
             <!-- Testimonials -->
             <div class="col-lg-5">

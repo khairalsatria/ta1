@@ -16,6 +16,7 @@ use App\Models\JadwalGuide2;
 use App\Models\PaketGuide;
 use App\Models\Testimonial;
 use App\Models\Blog;
+use App\Models\Faq;
 use App\Models\MataPelajaran;
 
 
@@ -23,15 +24,25 @@ use App\Models\MataPelajaran;
 class PageController extends Controller
 {
 
-    public function home()
-    {
-        $blogs = Blog::all();
-        $programs = Program::all();
-        $mentors = User::where('role', 'mentor')->get();
-        $kontaks = Kontak::all(); // Mengambil semua data kontak
-        $testimonials = Testimonial::with('user')->latest()->take(6)->get(); // atau ->inRandomOrder()
-        return view('landing.page.home', compact('programs', 'mentors', 'testimonials','kontaks', 'blogs'));
-    }
+public function home()
+{
+    $blogs = Blog::all();
+    $programs = Program::all();
+    $mentors = User::where('role', 'mentor')->get();
+    $kontaks = Kontak::all();
+    $testimonials = Testimonial::with('user')->latest()->take(6)->get();
+    $faqs = Faq::all(); // Ambil data dari database
+
+    return view('landing.page.home', compact(
+        'blogs',
+        'programs',
+        'mentors',
+        'kontaks',
+        'testimonials',
+        'faqs' // Kirim ke blade
+    ));
+}
+
 
 
     public function about()

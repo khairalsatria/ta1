@@ -7,8 +7,8 @@
 @section('content')
 <div class="page-heading mb-4 d-flex justify-content-between align-items-center">
     <h3 class="font-bold mb-0">Selamat Datang, Mentor {{ Auth::user()->name }}</h3>
-    <a href="{{ url('/profile') }}" class="btn btn-outline-primary btn-sm">
-        <i class="iconly-boldSetting"></i> Home
+    <a href="{{ url('/profile') }}" class="btn btn-primary btn-sm">
+        <i class="iconly-home "></i> Home
     </a>
 </div>
 

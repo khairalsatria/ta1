@@ -159,4 +159,29 @@ class PendaftaranGuideController extends Controller
 
         return back()->with('success', 'Data berhasil dihapus.');
     }
+    public function destroy($id)
+{
+    $pendaftaran = PendaftaranGuides::findOrFail($id);
+
+    // Cek status pendaftaran, hanya bisa hapus jika status 'ditolak' atau 'menunggu'
+    $status = $pendaftaran->pendaftaran->status ?? null;
+
+    if (!in_array($status, ['ditolak', 'menunggu'])) {
+        return redirect()->back()->with('error', 'Data hanya bisa dihapus jika status menunggu atau ditolak.');
+    }
+
+    // Sebelum hapus, juga hapus file hasil yang terkait (jika ada)
+    foreach ($pendaftaran->hasilFiles as $file) {
+        if ($file->file_hasil && Storage::disk('public')->exists($file->file_hasil)) {
+            Storage::disk('public')->delete($file->file_hasil);
+        }
+        $file->delete();
+    }
+
+    // Hapus pendaftaran
+    $pendaftaran->delete();
+
+    return redirect()->route('admin.pendaftaran.guides.index')->with('success', 'Pendaftaran berhasil dihapus.');
+}
+
 }

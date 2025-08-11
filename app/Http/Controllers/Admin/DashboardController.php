@@ -55,6 +55,22 @@ $totalSaldo = $totalPemasukanManual + $totalPemasukanPendaftaran - $totalPengelu
     $jumlahLaki = User::where('role', 'user')->where('gender', 'Laki-laki')->count();
     $jumlahPerempuan = User::where('role', 'user')->where('gender', 'Perempuan')->count();
 
+     
+// Ambil jumlah pendaftaran per tipe program
+$pendaftaranPerTipe = PendaftaranProgram::select('tipe_program', DB::raw('count(*) as total'))
+    ->groupBy('tipe_program')
+    ->pluck('total', 'tipe_program');
+
+// Tipe program yang diinginkan, urut tetap
+$tipeLabels = ['GenZE Class', 'GenZE Guide', 'GenZE Learn'];
+
+// Ambil datanya, kalau tidak ada isi 0
+$tipeData = [];
+foreach ($tipeLabels as $tipe) {
+    $tipeData[] = $pendaftaranPerTipe->get($tipe, 0);
+}
+
+
     return view('admin.dashboard', compact(
         'user', // <--- Sertakan ini
         'jumlahPendaftaran',
@@ -69,6 +85,8 @@ $totalSaldo = $totalPemasukanManual + $totalPemasukanPendaftaran - $totalPengelu
         'jumlahLaki',
         'jumlahPerempuan',
         'totalSaldo',
+        'tipeLabels',
+        'tipeData'
     ));
 }
 

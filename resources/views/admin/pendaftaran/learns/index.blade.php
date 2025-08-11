@@ -42,7 +42,7 @@
                             <th>Nama</th>
                             <th>Instansi</th>
                             <th>Status</th>
-                            <th>Detail</th>
+                            <th>Detail & Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -57,10 +57,25 @@
                                 </span>
                             </td>
                             <td>
-                                <a href="{{ route('admin.pendaftaran.learns.show', $p->id) }}" class="btn btn-sm btn-info">
-                                    <i class="bi bi-eye"></i> Detail
-                                </a>
-                            </td>
+    <a href="{{ route('admin.pendaftaran.learns.show', $p->id) }}" class="btn btn-sm btn-info">
+        <i class="bi bi-eye"></i> Detail
+    </a>
+
+    <form action="{{ route('admin.pendaftaran.learns.destroy', $p->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus pendaftaran ini?');">
+        @csrf
+        @method('DELETE')
+        @if(in_array($p->pendaftaran->status, ['ditolak', 'menunggu']))
+            <button type="submit" class="btn btn-sm btn-danger">
+                <i class="bi bi-trash"></i> Hapus
+            </button>
+        @else
+            <button type="button" class="btn btn-sm btn-secondary" disabled>
+                <i class="bi bi-trash"></i> Hapus
+            </button>
+        @endif
+    </form>
+</td>
+
                         </tr>
                         @endforeach
                     </tbody>

@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\{
     BlogController,
     MediaPartnerController,
     TestimonialController as AdminTestimonialController,
+    FaqController,
 
     MentorController,
     UserController,
@@ -108,13 +109,13 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         'jadwal_guide2' => JadwalGuide2Controller::class,
         'kategori_blog' => KategoriBlogController::class,
         'blog' => BlogController::class,
-        'media-partners' => MediaPartnerController::class,
+        'media_partner' => MediaPartnerController::class,
         'mentor' => MentorController::class,
         'user' => UserController::class,
         'program' => ProgramController::class,
         'pembayaran' => AdminPendaftaranProgramController::class,
         'testimonial' => AdminTestimonialController::class,
-
+        'faq' => FaqController::class,
 
 
     ]);
@@ -134,6 +135,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     // Pendaftaran Class
     Route::prefix('pendaftaran/classes')->name('pendaftaran.classes.')->group(function () {
         Route::get('/data', [AdminPendaftaranClassController::class, 'index'])->name('index');
+        Route::delete('/{id}', [AdminPendaftaranClassController::class, 'destroy'])->name('destroy');
         Route::get('/{id}', [AdminPendaftaranClassController::class, 'show'])->name('show');
         Route::put('/{id}/konfirmasi', [AdminPendaftaranClassController::class, 'konfirmasiJadwal'])->name('konfirmasi');
         Route::post('{id}/alternatif', [AdminPendaftaranClassController::class, 'tawarkanJadwalAlternatif'])
@@ -153,6 +155,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
                 Route::get('/data', [AdminPendaftaranGuideController::class, 'index'])
                     ->name('index');
 
+                // DELETE
+Route::delete('/{id}', [AdminPendaftaranGuideController::class, 'destroy'])->name('destroy');
                 // DETAIL
                 // /admin/pendaftaran/guides/{id}
                 Route::get('/{id}', [AdminPendaftaranGuideController::class, 'show'])
@@ -184,6 +188,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     // Pendaftaran Learn
     Route::prefix('pendaftaran/learns')->name('pendaftaran.learns.')->group(function () {
         Route::get('/data', [AdminPendaftaranLearnController::class, 'index'])->name('index');
+        Route::delete('/{id}', [AdminPendaftaranLearnController::class, 'destroy'])->name('destroy');
         Route::get('/{id}', [AdminPendaftaranLearnController::class, 'show'])->name('show');
         Route::post('/{id}/verifikasi', [AdminPendaftaranLearnController::class, 'verifikasiPembayaran'])->name('verifikasi');
         Route::post('/{id}/upload-sertifikat', [AdminPendaftaranLearnController::class, 'uploadSertifikat'])->name('uploadSertifikat');

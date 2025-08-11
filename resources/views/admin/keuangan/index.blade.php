@@ -71,48 +71,22 @@
                 <i class="bi bi-printer"></i> Semua
             </a> --}}
 
-            <form action="{{ route('admin.keuangan.cetak') }}" method="GET" class="d-flex align-items-center gap-2" target="_blank">
+            <form action="{{ route('admin.keuangan.cetak') }}" method="GET" class="d-flex align-items-end gap-2 flex-wrap" target="_blank">
     <div class="d-flex flex-column">
-
-        <label class="form-label mb-0 small">Dari</label>
-        <div class="d-flex gap-1">
-            <select name="bulan_dari" class="form-select form-select-sm" required>
-                <option value="">Bulan</option>
-                @for($m = 1; $m <= 12; $m++)
-                    <option value="{{ sprintf('%02d', $m) }}">{{ DateTime::createFromFormat('!m', $m)->format('F') }}</option>
-                @endfor
-            </select>
-            <select name="tahun_dari" class="form-select form-select-sm" required>
-                <option value="">Tahun</option>
-                @for($y = now()->year; $y >= 2020; $y--)
-                    <option value="{{ $y }}">{{ $y }}</option>
-                @endfor
-            </select>
-        </div>
+        <label for="tanggal_awal" class="form-label mb-0 small">Tanggal Awal</label>
+        <input type="date" name="tanggal_awal" id="tanggal_awal" class="form-control form-control-sm" required>
     </div>
 
     <div class="d-flex flex-column">
-        <label class="form-label mb-0 small">Sampai</label>
-        <div class="d-flex gap-1">
-            <select name="bulan_sampai" class="form-select form-select-sm" required>
-                <option value="">Bulan</option>
-                @for($m = 1; $m <= 12; $m++)
-                    <option value="{{ sprintf('%02d', $m) }}">{{ DateTime::createFromFormat('!m', $m)->format('F') }}</option>
-                @endfor
-            </select>
-            <select name="tahun_sampai" class="form-select form-select-sm" required>
-                <option value="">Tahun</option>
-                @for($y = now()->year; $y >= 2020; $y--)
-                    <option value="{{ $y }}">{{ $y }}</option>
-                @endfor
-            </select>
-        </div>
+        <label for="tanggal_akhir" class="form-label mb-0 small">Tanggal Akhir</label>
+        <input type="date" name="tanggal_akhir" id="tanggal_akhir" class="form-control form-control-sm" required>
     </div>
 
-    <button type="submit" class="btn btn-secondary btn-sm mt-4">
-        <i class="bi bi-printer"></i> Periode
+    <button type="submit" class="btn btn-secondary btn-sm mt-auto">
+        <i class="bi bi-printer"></i> Cetak PDF
     </button>
 </form>
+
 
 
         </div>

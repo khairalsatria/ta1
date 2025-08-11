@@ -49,4 +49,22 @@ class PendaftaranLearnController extends Controller
 
         return back()->with('success', 'Sertifikat berhasil diunggah.');
     }
+
+    public function destroy($id)
+{
+    $pendaftaran = PendaftaranLearns::findOrFail($id);
+
+    // Cek status pendaftaran, hanya bisa hapus jika status 'ditolak' atau 'menunggu'
+    $status = $pendaftaran->pendaftaran->status ?? null;
+
+    if (!in_array($status, ['ditolak', 'menunggu'])) {
+        return redirect()->back()->with('error', 'Data hanya bisa dihapus jika status menunggu atau ditolak.');
+    }
+
+    // Hapus pendaftaran
+    $pendaftaran->delete();
+
+    return redirect()->route('admin.pendaftaran.learns.index')->with('success', 'Pendaftaran berhasil dihapus.');
+}
+
 }

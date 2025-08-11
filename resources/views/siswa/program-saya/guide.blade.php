@@ -1,5 +1,3 @@
-@php use Illuminate\Support\Facades\Auth; @endphp
-
 @extends('siswa.layout.main')
 
 @section('title', 'My Guide Program')
@@ -29,130 +27,130 @@
             <div class="alert alert-success shadow-sm rounded">{{ session('success') }}</div>
         @endif
 
-        <div class="card border-0 shadow-lg rounded-3">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">
-                    <i class="bi bi-card-list"></i> Detail Pendaftaran
-                </h5>
-                @if($pendaftaranGuide)
-                    <span class="badge bg-light text-primary">
-                        Paket {{ $pendaftaranGuide->paketGuide->paket_guide ?? $pendaftaranGuide->paket_guide }}
-                    </span>
-                @endif
-            </div>
-            <div class="card-body">
-                @if($pendaftaranGuide)
-                    <div class="mb-3">
-                        <p class="mb-1">
-                            <strong>Harga:</strong>
-                            <span class="text-success fw-semibold">
-                                Rp{{ number_format($pendaftaranGuide->pendaftaran->harga, 0, ',', '.') }}
-                            </span>
-                        </p>
-                        <p class="mb-1">
-                            <strong>Status Pembayaran:</strong>
-                            @switch($pendaftaranGuide->pendaftaran->status)
-                                @case('pending')
-                                    <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split"></i> Menunggu Pembayaran</span>
-                                    @break
-                                @case('paid')
-                                    <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Lunas</span>
-                                    @break
-                                @case('failed')
-                                    <span class="badge bg-danger"><i class="bi bi-x-circle-fill"></i> Gagal</span>
-                                    @break
-                                @case('diterima')
-                                    <span class="badge bg-info text-dark"><i class="bi bi-check-circle"></i> Diterima</span>
-                                    @break
-                                @default
-                                    <span class="badge bg-secondary">-</span>
-                            @endswitch
-                        </p>
+        @if($pendaftaranGuides->count() > 0)
+            @foreach($pendaftaranGuides as $guide)
+                <div class="card shadow-sm border-0 mb-3">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-1 text-primary fw-bold">
+                                {{ $guide->paketGuide->paket_guide ?? $guide->paket_guide }}
+                            </h5>
+                            <small class="text-muted">
+                                Harga: Rp{{ number_format($guide->pendaftaran->harga, 0, ',', '.') }}
+                            </small><br>
+                            <small>
+                                Status:
+                                @switch($guide->pendaftaran->status)
+                                    @case('pending')
+                                        <span class="badge bg-warning text-dark"><i class="bi bi-hourglass-split"></i> Pending</span>
+                                        @break
+                                    @case('paid')
+                                        <span class="badge bg-success"><i class="bi bi-check-circle-fill"></i> Lunas</span>
+                                        @break
+                                    @case('failed')
+                                        <span class="badge bg-danger"><i class="bi bi-x-circle-fill"></i> Gagal</span>
+                                        @break
+                                    @case('diterima')
+                                        <span class="badge bg-info text-dark"><i class="bi bi-check-circle"></i> Diterima</span>
+                                        @break
+                                    @default
+                                        <span class="badge bg-secondary">-</span>
+                                @endswitch
+                            </small>
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm"
+                                type="button"
+                                data-bs-toggle="collapse"
+                                data-bs-target="#detail-{{ $guide->id }}"
+                                aria-expanded="false"
+                                aria-controls="detail-{{ $guide->id }}">
+                            <i class="bi bi-eye"></i> Lihat Detail
+                        </button>
                     </div>
 
-                    {{-- Paket 2: Jadwal dan Link Zoom --}}
-                    @if($pendaftaranGuide->paket_guide == 2)
-                        <div class="mt-3">
-                            <h6 class="fw-bold text-primary"><i class="bi bi-calendar-check"></i> Jadwal</h6>
-                            <ul class="list-group mb-2">
-                                @forelse($pendaftaranGuide->jadwalguide2_pilihan ?? [] as $jadwal)
-                                    <li class="list-group-item"><i class="bi bi-clock"></i> {{ $jadwal }}</li>
-                                @empty
-                                    <li class="list-group-item text-muted">Belum ada jadwal yang dipilih.</li>
-                                @endforelse
-                            </ul>
-                            <p><strong>Jadwal Konfirmasi:</strong>
-                                <span class="text-dark">
-                                    {{ $pendaftaranGuide->jadwalKonfirmasi->jadwalguide2 ?? 'Belum dikonfirmasi' }}
-                                </span>
-                            </p>
-                        </div>
-
-                        @if($pendaftaranGuide->pendaftaran->status == 'diterima')
-                            <div class="mt-3">
-                                <h6 class="fw-bold text-primary"><i class="bi bi-camera-video"></i> Link Zoom</h6>
-                                @forelse($pendaftaranGuide->hasilFiles as $hf)
-                                    @if($hf->link_zoom)
-                                        <a href="{{ $hf->link_zoom }}" class="btn btn-outline-primary btn-sm mt-1" target="_blank">
-                                            <i class="bi bi-camera-video"></i> Join Zoom {{ $hf->keterangan ? ' - '.$hf->keterangan : '' }}
-                                        </a>
-                                    @endif
-                                @empty
-                                    <p class="text-muted">Belum ada link Zoom.</p>
-                                @endforelse
-                            </div>
-                        @endif
-                    @endif
-
-                    {{-- Paket 1 & 3: File Upload dan File Hasil --}}
-                    @if(in_array($pendaftaranGuide->paket_guide, [1,3]))
-                        <div class="mt-4">
-                            <h6 class="fw-bold text-primary"><i class="bi bi-file-earmark-text"></i> File Siswa</h6>
-                            @if($pendaftaranGuide->file_upload)
-                                <a href="{{ asset('storage/' . $pendaftaranGuide->file_upload) }}" target="_blank" class="btn btn-outline-info btn-sm">
-                                    <i class="bi bi-download"></i> Lihat File
-                                </a>
-                            @else
-                                <p class="text-muted">Belum ada file diunggah.</p>
-                            @endif
-                        </div>
-
-                        <div class="mt-4">
-                            <h6 class="fw-bold text-primary"><i class="bi bi-folder-check"></i> File Hasil dari Admin</h6>
-                            @if ($pendaftaranGuide->hasilFiles->count() > 0)
-                                <ul class="list-group">
-                                    @foreach($pendaftaranGuide->hasilFiles as $file)
-                                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                                            <div>
-                                                <a href="{{ asset('storage/' . $file->file_hasil) }}" target="_blank" class="text-primary">
-                                                    <i class="bi bi-file-earmark-arrow-down"></i> {{ basename($file->file_hasil) }}
-                                                </a>
-                                                @if ($file->keterangan)
-                                                    <small class="text-muted d-block">({{ $file->keterangan }})</small>
-                                                @endif
-                                            </div>
-                                            <span class="badge bg-light text-muted">{{ $file->created_at->format('d M Y') }}</span>
-                                        </li>
-                                    @endforeach
+                    <div class="collapse" id="detail-{{ $guide->id }}">
+                        <div class="card-body border-top">
+                            {{-- Paket 2: Jadwal & Zoom --}}
+                            @if($guide->paket_guide == 2)
+                                <h6 class="fw-bold text-primary"><i class="bi bi-calendar-check"></i> Jadwal</h6>
+                                <ul class="list-group mb-2">
+                                    @forelse($guide->jadwalguide2_pilihan ?? [] as $jadwal)
+                                        <li class="list-group-item"><i class="bi bi-clock"></i> {{ $jadwal }}</li>
+                                    @empty
+                                        <li class="list-group-item text-muted">Belum ada jadwal.</li>
+                                    @endforelse
                                 </ul>
-                            @else
-                                <p class="text-muted">Belum ada file hasil dari admin.</p>
+                                <p><strong>Jadwal Konfirmasi:</strong>
+                                    {{ $guide->jadwalKonfirmasi->jadwalguide2 ?? 'Belum dikonfirmasi' }}
+                                </p>
+
+                                @if($guide->pendaftaran->status == 'diterima')
+                                    <h6 class="fw-bold text-primary"><i class="bi bi-camera-video"></i> Link Zoom</h6>
+                                    @forelse($guide->hasilFiles as $hf)
+                                        @if($hf->link_zoom)
+                                            <a href="{{ $hf->link_zoom }}" target="_blank" class="btn btn-outline-primary btn-sm mb-1">
+                                                <i class="bi bi-camera-video"></i> Join Zoom {{ $hf->keterangan ? ' - '.$hf->keterangan : '' }}
+                                            </a>
+                                        @endif
+                                    @empty
+                                        <p class="text-muted">Belum ada link Zoom.</p>
+                                    @endforelse
+                                @endif
+                            @endif
+
+                            {{-- Paket 1 & 3: File Upload & Hasil --}}
+                            @if(in_array($guide->paket_guide, [1,3]))
+                                <h6 class="fw-bold text-primary mt-3"><i class="bi bi-file-earmark-text"></i> File Siswa</h6>
+                                @if($guide->file_upload)
+                                    <a href="{{ asset('storage/' . $guide->file_upload) }}" target="_blank" class="btn btn-outline-info btn-sm">
+                                        <i class="bi bi-download"></i> Lihat File
+                                    </a>
+                                @else
+                                    <p class="text-muted">Belum ada file diunggah.</p>
+                                @endif
+
+                                <h6 class="fw-bold text-primary mt-3"><i class="bi bi-folder-check"></i> File Hasil Admin</h6>
+                                @if ($guide->hasilFiles->count() > 0)
+                                    <ul class="list-group">
+                                        @foreach($guide->hasilFiles as $file)
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <div>
+                                                    <a href="{{ asset('storage/' . $file->file_hasil) }}" target="_blank" class="text-primary">
+                                                        <i class="bi bi-file-earmark-arrow-down"></i> {{ basename($file->file_hasil) }}
+                                                    </a>
+                                                    @if ($file->keterangan)
+                                                        <small class="text-muted d-block">({{ $file->keterangan }})</small>
+                                                    @endif
+                                                </div>
+                                                <span class="badge  text-muted">{{ $file->created_at->format('d M Y') }}</span>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                @else
+                                    <p class="text-muted">Belum ada file hasil admin.</p>
+                                @endif
+                            @endif
+
+                            {{-- Tombol Bayar --}}
+                            @if($guide->pendaftaran->status == 'pending' && $guide->pendaftaran->link_pembayaran)
+                                <a href="{{ $guide->pendaftaran->link_pembayaran }}" target="_blank" class="btn btn-success mt-3">
+                                    <i class="bi bi-credit-card"></i> Bayar Sekarang
+                                </a>
                             @endif
                         </div>
-                    @endif
+                    </div>
+                </div>
+            @endforeach
 
-                    {{-- Tombol Bayar --}}
-                    @if($pendaftaranGuide->pendaftaran->status == 'pending' && $pendaftaranGuide->pendaftaran->link_pembayaran)
-                        <a href="{{ $pendaftaranGuide->pendaftaran->link_pembayaran }}"
-                           target="_blank" class="btn btn-success mt-3">
-                            <i class="bi bi-credit-card"></i> Bayar Sekarang
-                        </a>
-                    @endif
-                @else
-                    <p class="text-muted">Belum ada pendaftaran GenZE Guide.</p>
-                @endif
-            </div>
-        </div>
+            {{-- Pagination --}}
+            @if($pendaftaranGuides->hasPages())
+                <div class="mt-4 d-flex justify-content-center">
+                    {{ $pendaftaranGuides->links('pagination::bootstrap-5') }}
+                </div>
+            @endif
+        @else
+            <p class="text-muted">Belum ada pendaftaran GenZE Guide.</p>
+        @endif
     </section>
 </div>
 @endsection

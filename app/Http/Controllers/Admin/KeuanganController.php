@@ -118,18 +118,15 @@ public function index()
 
 public function cetak(Request $request)
 {
-    $bulanDari = $request->input('bulan_dari');
-    $tahunDari = $request->input('tahun_dari');
-    $bulanSampai = $request->input('bulan_sampai');
-    $tahunSampai = $request->input('tahun_sampai');
+    $tanggalAwal = $request->input('tanggal_awal');
+    $tanggalAkhir = $request->input('tanggal_akhir');
 
-    if (!$bulanDari || !$tahunDari || !$bulanSampai || !$tahunSampai) {
-        return redirect()->back()->with('error', 'Periode harus dipilih lengkap.');
+    if (!$tanggalAwal || !$tanggalAkhir) {
+        return redirect()->back()->with('error', 'Tanggal awal dan akhir harus diisi.');
     }
 
-    // Buat tanggal awal dan akhir periode
-    $tanggalAwal = Carbon::createFromDate($tahunDari, $bulanDari, 1)->startOfMonth();
-    $tanggalAkhir = Carbon::createFromDate($tahunSampai, $bulanSampai, 1)->endOfMonth();
+    $tanggalAwal = Carbon::parse($tanggalAwal)->startOfDay();
+    $tanggalAkhir = Carbon::parse($tanggalAkhir)->endOfDay();
 
     // Data manual
     $manualKeuangans = Keuangan::whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir])
@@ -185,7 +182,7 @@ public function cetak(Request $request)
         'tanggalAkhir' => $tanggalAkhir,
     ]);
 
-    return $pdf->download("laporan-keuangan-{$tanggalAwal->format('Ym')}_to_{$tanggalAkhir->format('Ym')}.pdf");
+    return $pdf->download("laporan-keuangan-{$tanggalAwal->format('Ymd')}_to_{$tanggalAkhir->format('Ymd')}.pdf");
 }
 
 

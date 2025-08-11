@@ -64,15 +64,14 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('admin.program.edit', $program->id) }}" class="btn btn-sm btn-warning">Edit</a>
-                                {{-- Jika butuh delete:
-                                <form action="{{ route('admin.program.destroy', $program->id) }}" method="POST" style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus program ini?')">Hapus</button>
-                                </form>
-                                --}}
-                            </td>
+    <a href="{{ route('admin.program.edit', $program->id) }}" class="btn btn-sm btn-warning">Edit</a>
+    <form action="{{ route('admin.program.destroy', $program->id) }}" method="POST" style="display:inline;">
+        @csrf
+        @method('DELETE')
+        <button class="btn btn-sm btn-danger" onclick="return confirm('Yakin ingin menghapus program ini?')">Hapus</button>
+    </form>
+</td>
+
                         </tr>
                         @endforeach
                     </tbody>
