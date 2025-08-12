@@ -253,20 +253,47 @@
                 </h2>
                 <div id="collapse-{{ $soal->id }}" class="accordion-collapse collapse" aria-labelledby="heading-{{ $soal->id }}" data-bs-parent="#soalAccordion">
                     <div class="accordion-body">
-                        <p class="fw-bold fs-5 mb-3">{{ $soal->pertanyaan }}</p>
+                        <p class="fw-bold fs-5 mb-3">
+    {{ $soal->pertanyaan }}
+</p>
 
-                        {{-- Pilihan A-D dengan highlight kunci --}}
-                        <div class="list-group mb-4 review-pilihan">
-                            @foreach($pilihanList as $huruf => $teksPilihan)
-                                @php $isKunci = (strtoupper($huruf) === strtoupper($soal->jawaban_benar ?? '')); @endphp
-                                <div class="list-group-item d-flex justify-content-between align-items-center {{ $isKunci ? 'is-kunci' : '' }}">
-                                    <span><strong>{{ $huruf }}.</strong> {{ $teksPilihan === '' ? '-' : $teksPilihan }}</span>
-                                    @if($isKunci)
-                                        <span class="badge bg-success">Kunci</span>
-                                    @endif
-                                </div>
-                            @endforeach
-                        </div>
+{{-- Gambar soal --}}
+@if($soal->gambar_soal)
+    <div class="mb-3">
+        <a href="{{ asset('storage/' . $soal->gambar_soal) }}" target="_blank">
+            <img src="{{ asset('storage/' . $soal->gambar_soal) }}" alt="Gambar Soal" style="max-width: 200px; height: auto; cursor: pointer;">
+        </a>
+    </div>
+@endif
+
+{{-- Pilihan A-D dengan highlight kunci --}}
+<div class="list-group mb-4 review-pilihan">
+    @foreach($pilihanList as $huruf => $teksPilihan)
+        @php
+            $isKunci = (strtoupper($huruf) === strtoupper($soal->jawaban_benar ?? ''));
+            $gbrOpt  = 'gambar_pilihan_' . strtolower($huruf);
+        @endphp
+        <div class="list-group-item d-flex flex-column {{ $isKunci ? 'is-kunci' : '' }}">
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <span>
+                    <strong>{{ $huruf }}.</strong> {{ $teksPilihan === '' ? '-' : $teksPilihan }}
+                </span>
+                @if($isKunci)
+                    <span class="badge bg-success">Kunci</span>
+                @endif
+            </div>
+
+            {{-- Gambar opsi --}}
+            @if($soal->$gbrOpt)
+                <div class="mt-2">
+                    <a href="{{ asset('storage/' . $soal->$gbrOpt) }}" target="_blank">
+                        <img src="{{ asset('storage/' . $soal->$gbrOpt) }}" alt="Gambar Pilihan {{ $huruf }}" style="max-width: 120px; height: auto; cursor: pointer;">
+                    </a>
+                </div>
+            @endif
+        </div>
+    @endforeach
+</div>
 
                         {{-- Jawaban siswa untuk soal ini --}}
                         <h6 class="text-secondary mb-2">Jawaban Siswa:</h6>

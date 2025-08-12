@@ -204,10 +204,10 @@
             <span>Kontak</span>
         </a>
     </li>
-    <li class="sidebar-item {{ request()->is('admin/media-partners') ? 'active' : 'admin/media-partners' }}">
-        <a href="{{ url('admin/media-partners') }}" class='sidebar-link'>
+    <li class="sidebar-item {{ request()->is('admin/media_partner') ? 'active' : 'admin/media_partner' }}">
+        <a href="{{ url('admin/media_partner') }}" class='sidebar-link'>
             <i class="bi bi-bank2"></i>
-            <span>Media Partners</span>
+            <span>Media Partner</span>
         </a>
     </li>
 

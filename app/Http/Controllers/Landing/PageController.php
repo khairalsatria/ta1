@@ -31,7 +31,13 @@ public function home()
     $mentors = User::where('role', 'mentor')->get();
     $kontaks = Kontak::all();
     $testimonials = Testimonial::with('user')->latest()->take(6)->get();
-    $faqs = Faq::all(); // Ambil data dari database
+    $faqs = Faq::all();
+
+    // Hitung jumlah
+    $jumlahPrograms = $programs->count();
+    $jumlahMentor = $mentors->count();
+    $jumlahSiswa = User::where('role', 'user')->count();
+    $jumlahBlog = $blogs->count();
 
     return view('landing.page.home', compact(
         'blogs',
@@ -39,9 +45,14 @@ public function home()
         'mentors',
         'kontaks',
         'testimonials',
-        'faqs' // Kirim ke blade
+        'faqs',
+        'jumlahPrograms',
+        'jumlahMentor',
+        'jumlahSiswa',
+        'jumlahBlog'
     ));
 }
+
 
 
 

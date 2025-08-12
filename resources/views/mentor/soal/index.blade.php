@@ -36,39 +36,58 @@
 
                 @if($soalList->count())
                     <table class="table table-striped" id="table1">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Pertanyaan</th>
-                                <th>Gambar</th>
-                                <th>Jawaban Benar</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach($soalList as $index => $soal)
-                            <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ Str::limit($soal->pertanyaan, 60) }}</td>
-                                <td>
-                                    @if($soal->gambar_soal)
-                                        <img src="{{ asset('storage/' . $soal->gambar_soal) }}" alt="Gambar Soal" style="max-width: 100px; max-height: 100px;">
-                                    @else
-                                        -
-                                    @endif
-                                </td>
-                                <td>{{ strtoupper($soal->jawaban_benar) }}</td>
-                                <td>
-                                    <a href="{{ route('mentor.soal.edit', $soal->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                    <form action="{{ route('mentor.soal.destroy', $soal->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus soal ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
+<thead>
+<tr>
+    <th>No</th>
+    <th>Pertanyaan</th>
+    <th>Gambar</th>
+    <th>Pilihan Jawaban</th>
+    <th>Jawaban Benar</th>
+    <th>Aksi</th>
+</tr>
+</thead>
+<tbody>
+@foreach($soalList as $index => $soal)
+<tr>
+    <td>{{ $index + 1 }}</td>
+    <td>{{ Str::limit($soal->pertanyaan, 60) }}</td>
+    <td>
+    @if($soal->gambar_soal)
+        <a href="{{ asset('storage/' . $soal->gambar_soal) }}" target="_blank">
+            <img src="{{ asset('storage/' . $soal->gambar_soal) }}" style="max-width: 100px; cursor: pointer;">
+        </a>
+    @else
+        -
+    @endif
+</td>
+<td>
+    @foreach(['a','b','c','d'] as $opt)
+        <div>
+            <strong>{{ strtoupper($opt) }}:</strong> {{ $soal->{'pilihan_'.$opt} }}
+            @php $gbrOpt = 'gambar_pilihan_'.$opt; @endphp
+            @if($soal->$gbrOpt)
+                <br>
+                <a href="{{ asset('storage/' . $soal->$gbrOpt) }}" target="_blank">
+                    <img src="{{ asset('storage/' . $soal->$gbrOpt) }}" style="max-width: 80px; cursor: pointer;">
+                </a>
+            @endif
+        </div>
+    @endforeach
+</td>
+
+    <td>{{ strtoupper($soal->jawaban_benar) }}</td>
+    <td>
+        <a href="{{ route('mentor.soal.edit', $soal->id) }}" class="btn btn-warning btn-sm">Edit</a>
+        <form action="{{ route('mentor.soal.destroy', $soal->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus soal ini?')">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
+        </form>
+    </td>
+</tr>
+@endforeach
+</tbody>
+
                     </table>
                 @else
                     <p class="text-muted">Belum ada soal ditambahkan untuk pertemuan ini.</p>

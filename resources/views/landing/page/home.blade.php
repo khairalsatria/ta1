@@ -28,31 +28,32 @@
             <h2 class="display-5 font-weight-bold text-dark mb-4">First Choice for Online Education Anywhere</h2>
             <p class="text-muted">Kami hadir untuk memberikan akses pendidikan berkualitas tinggi di mana pun kamu berada. Dengan pengajar profesional dan materi terkini, kami membimbingmu mencapai masa depan yang lebih cerah.</p>
             <div class="row text-center mt-4">
-                <div class="col-6 col-md-3 mb-3">
-                    <div class="bg-success text-white py-3 rounded shadow">
-                        <h3 class="mb-1" data-toggle="counter-up">123</h3>
-                        <small>Subjects</small>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3 mb-3">
-                    <div class="bg-primary text-white py-3 rounded shadow">
-                        <h3 class="mb-1" data-toggle="counter-up">1234</h3>
-                        <small>Programs</small>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3 mb-3">
-                    <div class="bg-secondary text-white py-3 rounded shadow">
-                        <h3 class="mb-1" data-toggle="counter-up">123</h3>
-                        <small>Instructors</small>
-                    </div>
-                </div>
-                <div class="col-6 col-md-3 mb-3">
-                    <div class="bg-warning text-white py-3 rounded shadow">
-                        <h3 class="mb-1" data-toggle="counter-up">1234</h3>
-                        <small>Students</small>
-                    </div>
-                </div>
-            </div>
+    <div class="col-6 col-md-3 mb-3">
+        <div class="bg-success text-white py-3 rounded shadow">
+            <h3 class="mb-1" data-toggle="counter-up">{{ $jumlahBlog }}</h3>
+            <small>Blog</small>
+        </div>
+    </div>
+    <div class="col-6 col-md-3 mb-3">
+        <div class="bg-primary text-white py-3 rounded shadow">
+            <h3 class="mb-1" data-toggle="counter-up">{{ $jumlahPrograms }}</h3>
+            <small>Programs</small>
+        </div>
+    </div>
+    <div class="col-6 col-md-3 mb-3">
+        <div class="bg-secondary text-white py-3 rounded shadow">
+            <h3 class="mb-1" data-toggle="counter-up">{{ $jumlahMentor }}</h3>
+            <small>Mentors</small>
+        </div>
+    </div>
+    <div class="col-6 col-md-3 mb-3">
+        <div class="bg-warning text-white py-3 rounded shadow">
+            <h3 class="mb-1" data-toggle="counter-up">{{ $jumlahSiswa }}</h3>
+            <small>Students</small>
+        </div>
+    </div>
+</div>
+
         </div>
     </div>
 </div>

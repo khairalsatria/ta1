@@ -50,11 +50,16 @@
                     <hr>
                     <h6>Pilihan Jawaban</h6>
                     @foreach(['a', 'b', 'c', 'd'] as $opt)
-                        <div class="mb-3">
-                            <label class="form-label">Pilihan {{ strtoupper($opt) }}:</label>
-                            <input type="text" name="pilihan_{{ $opt }}" class="form-control" required>
-                        </div>
-                    @endforeach
+    <div class="mb-3">
+        <label class="form-label">Pilihan {{ strtoupper($opt) }} (Teks):</label>
+        <input type="text" name="pilihan_{{ $opt }}" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Gambar Pilihan {{ strtoupper($opt) }} (Opsional):</label>
+        <input type="file" name="gambar_pilihan_{{ $opt }}" class="form-control">
+    </div>
+@endforeach
+
 
                     <div class="mb-3">
                         <label class="form-label">Jawaban Benar (a/b/c/d):</label>

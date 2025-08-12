@@ -18,7 +18,8 @@ class PendaftaranClassController extends Controller
         'pendaftaran.user',
         'jadwalKonfirmasi',
         'kelasGenze'
-    ])->get();
+    ])->orderBy('created_at', 'desc') // Urutkan dari terbaru
+    ->get();
 
     $daftar_kelas = KelasGenze::all();
 

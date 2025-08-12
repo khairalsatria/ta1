@@ -7,14 +7,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\KelasGenze;
 use App\Models\JawabanSoalLatihan;
 class SoalLatihan extends Model
-
 {
     use HasFactory;
 
     protected $fillable = [
-        'kelas_id', 'pertemuan_ke', 'pertanyaan',
+        'kelas_id',
+        'pertemuan_ke',
+        'pertanyaan',
         'gambar_soal',
-        'pilihan_a', 'pilihan_b', 'pilihan_c', 'pilihan_d',
+        'pilihan_a',
+        'gambar_pilihan_a',
+        'pilihan_b',
+        'gambar_pilihan_b',
+        'pilihan_c',
+        'gambar_pilihan_c',
+        'pilihan_d',
+        'gambar_pilihan_d',
         'jawaban_benar'
     ];
 
@@ -24,19 +32,18 @@ class SoalLatihan extends Model
     }
 
     public function jawaban()
-{
-    return $this->hasMany(JawabanSoalLatihan::class, 'soal_id');
-}
-
-public function getKunciJawabanTeksAttribute()
-{
-    switch ($this->jawaban_benar) {
-        case 'A': return $this->pilihan_a;
-        case 'B': return $this->pilihan_b;
-        case 'C': return $this->pilihan_c;
-        case 'D': return $this->pilihan_d;
-        default: return null;
+    {
+        return $this->hasMany(JawabanSoalLatihan::class, 'soal_id');
     }
-}
 
+    public function getKunciJawabanTeksAttribute()
+    {
+        switch ($this->jawaban_benar) {
+            case 'A': return $this->pilihan_a;
+            case 'B': return $this->pilihan_b;
+            case 'C': return $this->pilihan_c;
+            case 'D': return $this->pilihan_d;
+            default: return null;
+        }
+    }
 }

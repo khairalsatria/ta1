@@ -112,48 +112,56 @@
                 <h5 class="mb-0">Soal {{ $i + 1 }}</h5>
             </div>
             <div class="card-body">
-                <p class="fw-bold fs-5">{{ $soal->pertanyaan }}</p>
+    <p class="fw-bold fs-5">{{ $soal->pertanyaan }}</p>
 
-@if($soal->gambar_soal)
-    <img src="{{ asset('storage/' . $soal->gambar_soal) }}" alt="Gambar Soal" class="img-fluid my-3" style="max-height: 250px;">
-@endif
+    {{-- Gambar soal --}}
+    @if($soal->gambar_soal)
+        <div class="my-3">
+            <a href="{{ asset('storage/' . $soal->gambar_soal) }}" target="_blank">
+                <img src="{{ asset('storage/' . $soal->gambar_soal) }}" alt="Gambar Soal"
+                     class="img-fluid" style="max-height: 250px; cursor: pointer;">
+            </a>
+        </div>
+    @endif
 
+    <div class="list-group mb-3">
+        @foreach($pilihanList as $huruf => $teksPilihan)
+            @php
+                $isKunci  = ($huruf === $kunci);
+                $isJawab  = ($huruf === $jawabanDipilih);
+                $bg = '';
+                // logika warna background (kalau mau ditambahkan)
+                $gambarOptKey = 'gambar_pilihan_' . strtolower($huruf);
+            @endphp
 
-                <div class="list-group mb-3">
-                    @foreach($pilihanList as $huruf => $teksPilihan)
-                        @php
-                            $isKunci  = ($huruf === $kunci);
-                            $isJawab  = ($huruf === $jawabanDipilih);
-                            $bg = '';
-                            if ($isKunci && $isJawab) $bg ;
-                            elseif ($isKunci) $bg;
-                            elseif ($isJawab) $bg;
-                        @endphp
-                        <div class="list-group-item d-flex justify-content-between align-items-center" style="{{ $bg }}">
-                            <span><strong>{{ $huruf }}.</strong> {{ $teksPilihan === '' ? '-' : $teksPilihan }}</span>
-                            <span>
-                                @if($isJawab)
-                                    <span class="badge bg-primary me-1">Jawaban Kamu</span>
-                                @endif
-                                @if($isKunci)
-                                    <span class="badge bg-success">Kunci</span>
-                                @endif
-                            </span>
-                        </div>
-                    @endforeach
+            <div class="list-group-item">
+                <div class="d-flex justify-content-between align-items-center">
+                    <span><strong>{{ $huruf }}.</strong> {{ $teksPilihan === '' ? '-' : $teksPilihan }}</span>
+                    <span>
+                        @if($isJawab)
+                            <span class="badge bg-primary me-1">Jawaban Kamu</span>
+                        @endif
+                        @if($isKunci)
+                            <span class="badge bg-success">Kunci</span>
+                        @endif
+                    </span>
                 </div>
 
-                @if($jawabanSiswa)
-                    <p class="mt-2">
-                        Jawaban Kamu: <strong>{{ $jawabanDipilih ?: '-' }}</strong>
-                        @if($jawabanSiswa->benar)
-                            <span class="badge bg-success">Benar</span>
-                        @else
-                            <span class="badge bg-danger">Salah</span>
-                        @endif
-                    </p>
+                {{-- Gambar opsi jika ada --}}
+                @if(!empty($soal->$gambarOptKey))
+                    <div class="mt-2">
+                        <a href="{{ asset('storage/' . $soal->$gambarOptKey) }}" target="_blank">
+                            <img src="{{ asset('storage/' . $soal->$gambarOptKey) }}"
+                                 alt="Gambar Pilihan {{ $huruf }}"
+                                 class="img-fluid" style="max-height: 150px; cursor: pointer;">
+                        </a>
+                    </div>
                 @endif
             </div>
+        @endforeach
+    </div>
+</div>
+
         </div>
     @endforeach
 @endif

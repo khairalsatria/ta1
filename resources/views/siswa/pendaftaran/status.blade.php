@@ -31,19 +31,43 @@
         <h4 class="text-center text-success fw-bold mb-4">Detail Pendaftaran</h4>
 
         <div class="row g-3 mb-4">
-            <div class="col-md-6">
-                <div class="bg-light rounded p-3 shadow-sm h-100">
-                    <small class="text-muted">Program</small>
-                    <h5 class="mb-0">{{ $pendaftaran->program->nama_program }}</h5>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="bg-light rounded p-3 shadow-sm h-100">
-                    <small class="text-muted">Harga</small>
-                    <h5 class="mb-0">Rp{{ number_format($pendaftaran->harga, 0, ',', '.') }}</h5>
-                </div>
-            </div>
+    <div class="col-md-6">
+        <div class="bg-light rounded p-3 shadow-sm h-100">
+            <small class="text-muted">Program</small>
+            <h5 class="mb-0">{{ $pendaftaran->program->nama_program }}</h5>
         </div>
+    </div>
+    <div class="col-md-6">
+        <div class="bg-light rounded p-3 shadow-sm h-100">
+            <small class="text-muted">Harga</small>
+            <h5 class="mb-0">Rp{{ number_format($pendaftaran->harga, 0, ',', '.') }}</h5>
+        </div>
+    </div>
+</div>
+
+{{-- Tambahan: Mata Pelajaran & Kelas --}}
+@if ($pendaftaran->pendaftaranClass)
+<div class="row g-3 mb-4">
+    <div class="col-md-6">
+        <div class="bg-light rounded p-3 shadow-sm h-100">
+            <small class="text-muted">Mata Pelajaran</small>
+            <h5 class="mb-0">
+                {{ $pendaftaran->pendaftaranClass->mataPelajaran->mata_pelajaran ?? '-' }}
+            </h5>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="bg-light rounded p-3 shadow-sm h-100">
+            <small class="text-muted">Kelas Siswa</small>
+            <h5 class="mb-0">
+                {{ $pendaftaran->pendaftaranClass->kelasGenze->nama_kelas ?? 'Belum ditetapkan' }}
+            </h5>
+        </div>
+    </div>
+</div>
+@endif
+
+
 
         <!-- Status Badge -->
         @php

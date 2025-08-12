@@ -70,6 +70,7 @@ body {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Template Javascript -->
     <script src="{{ asset('assets2/js/main.js') }}"></script>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <script>
     function togglePassword(inputId = 'passwordLogin', iconId = 'togglePasswordIcon') {
         const input = document.getElementById(inputId);
@@ -148,7 +149,7 @@ body {
                 }
             }
         });
-    
+
 
         $(".blog-carousel").owlCarousel({
             loop: true,

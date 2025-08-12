@@ -17,26 +17,43 @@
         @csrf
 
         <div class="card shadow-sm border-start border-4 border-primary mb-4">
-            <div class="card-body">
-                <h5 class="fw-semibold">{{ $currentSoal->pertanyaan }}</h5>
+    <div class="card-body">
+        <h5 class="fw-semibold">{{ $currentSoal->pertanyaan }}</h5>
 
-@if($currentSoal->gambar_soal)
-    <img src="{{ asset('storage/' . $currentSoal->gambar_soal) }}" alt="Gambar Soal" class="img-fluid my-3" style="max-height: 250px;">
-@endif
-
-
-                <div class="mt-3">
-                    @foreach(['a', 'b', 'c', 'd'] as $opt)
-                        <div class="form-check mb-2 ps-4">
-                            <input class="form-check-input" type="radio" name="jawaban" id="opt_{{ $opt }}" value="{{ $opt }}" required>
-                            <label class="form-check-label" for="opt_{{ $opt }}">
-                                <strong>{{ strtoupper($opt) }}.</strong> {{ $currentSoal['pilihan_' . $opt] }}
-                            </label>
-                        </div>
-                    @endforeach
-                </div>
+        {{-- Gambar soal --}}
+        @if($currentSoal->gambar_soal)
+            <div class="my-3">
+                <a href="{{ asset('storage/' . $currentSoal->gambar_soal) }}" target="_blank">
+                    <img src="{{ asset('storage/' . $currentSoal->gambar_soal) }}" alt="Gambar Soal"
+                         class="img-fluid" style="max-height: 250px; cursor: pointer;">
+                </a>
             </div>
+        @endif
+
+        <div class="mt-3">
+            @foreach(['a', 'b', 'c', 'd'] as $opt)
+                @php $gbrOpt = 'gambar_pilihan_' . $opt; @endphp
+                <div class="form-check mb-3 ps-4">
+                    <input class="form-check-input" type="radio" name="jawaban" id="opt_{{ $opt }}" value="{{ $opt }}" required>
+                    <label class="form-check-label" for="opt_{{ $opt }}">
+                        <strong>{{ strtoupper($opt) }}.</strong> {{ $currentSoal['pilihan_' . $opt] }}
+                    </label>
+
+                    {{-- Gambar opsi --}}
+                    @if($currentSoal->$gbrOpt)
+                        <div class="mt-2">
+                            <a href="{{ asset('storage/' . $currentSoal->$gbrOpt) }}" target="_blank">
+                                <img src="{{ asset('storage/' . $currentSoal->$gbrOpt) }}" alt="Gambar Pilihan {{ strtoupper($opt) }}"
+                                     style="max-height: 150px; cursor: pointer;" class="img-fluid">
+                            </a>
+                        </div>
+                    @endif
+                </div>
+            @endforeach
         </div>
+    </div>
+</div>
+
 
        <div class="d-flex justify-content-between align-items-center mt-4">
     {{-- Tombol Sebelumnya --}}

@@ -79,7 +79,7 @@
                     <h5 class="text-primary">Pertemuan {{ $m->pertemuan_ke }}: {{ $m->judul }}</h5>
                     <ul class="list-unstyled ms-3">
                         @if($m->file_pdf)
-                            {{-- <li>📄 <a href="{{ Storage::url($m->file_pdf) }}" target="_blank">Download Materi (PDF)</a></li> --}}
+                            <li>📄 <a href="{{ asset('storage/' . $m->file_pdf) }}" target="_blank">Download Materi (PDF)</a></li>
                         @endif
                         @if($m->link_zoom)
                             <li>🔗 <a href="{{ $m->link_zoom }}" target="_blank" class="text-success">Gabung Zoom</a></li>

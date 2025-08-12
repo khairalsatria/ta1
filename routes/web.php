@@ -2,7 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Landing\PageController;
-use App\Http\Controllers\Auth\{GoogleController, LoginController, RegisterController};
+use App\Http\Controllers\Auth\{GoogleController, LoginController, RegisterController,
+    ForgotPasswordController, ResetPasswordController};
 use App\Http\Controllers\{MidtransWebhookController,PendaftaranClassController, PendaftaranGuideController, PendaftaranLearnController};
 
 use App\Http\Controllers\Admin\{
@@ -344,6 +345,17 @@ Route::middleware('auth')->group(function () {
 // WEBHOOK (Midtrans)
 // ==========================
 Route::post('/midtrans/webhook', [MidtransWebhookController::class, 'handle']);
+
+// Halaman form lupa password
+Route::get('password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+// Kirim email reset password
+Route::post('password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+
+// Halaman form reset password (dari link email)
+Route::get('password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+// Proses ganti password
+Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
+
 
 
 

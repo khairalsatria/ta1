@@ -56,14 +56,33 @@
 
                     {{-- Pilihan Jawaban --}}
                     @foreach(['a', 'b', 'c', 'd'] as $opt)
-                        <div class="form-group mb-3">
-                            <label for="pilihan_{{ $opt }}">Pilihan {{ strtoupper($opt) }}</label>
-                            <input type="text" id="pilihan_{{ $opt }}" name="pilihan_{{ $opt }}"
-                                class="form-control @error('pilihan_'.$opt) is-invalid @enderror"
-                                value="{{ old('pilihan_'.$opt, $soal->{'pilihan_'.$opt}) }}" required>
-                            @error('pilihan_'.$opt)<div class="invalid-feedback">{{ $message }}</div>@enderror
-                        </div>
-                    @endforeach
+    <div class="form-group mb-3">
+        <label for="pilihan_{{ $opt }}">Pilihan {{ strtoupper($opt) }} (Teks)</label>
+        <input type="text" id="pilihan_{{ $opt }}" name="pilihan_{{ $opt }}"
+            class="form-control @error('pilihan_'.$opt) is-invalid @enderror"
+            value="{{ old('pilihan_'.$opt, $soal->{'pilihan_'.$opt}) }}" required>
+        @error('pilihan_'.$opt)<div class="invalid-feedback">{{ $message }}</div>@enderror
+    </div>
+
+    {{-- Gambar Lama --}}
+    <div class="form-group mb-2">
+        <label>Gambar Pilihan {{ strtoupper($opt) }} Sebelumnya:</label><br>
+        @php $gambarOpt = 'gambar_pilihan_'.$opt; @endphp
+        @if($soal->$gambarOpt)
+            <img src="{{ asset('storage/' . $soal->$gambarOpt) }}" alt="Gambar Pilihan {{ strtoupper($opt) }}" style="max-width: 200px;">
+        @else
+            <span class="text-muted">-</span>
+        @endif
+    </div>
+
+    {{-- Upload Baru --}}
+    <div class="form-group mb-3">
+        <label for="gambar_pilihan_{{ $opt }}">Upload Gambar Baru Pilihan {{ strtoupper($opt) }} (Opsional)</label>
+        <input type="file" id="gambar_pilihan_{{ $opt }}" name="gambar_pilihan_{{ $opt }}" class="form-control @error('gambar_pilihan_'.$opt) is-invalid @enderror">
+        @error('gambar_pilihan_'.$opt)<div class="invalid-feedback">{{ $message }}</div>@enderror
+    </div>
+@endforeach
+
 
                     {{-- Jawaban Benar --}}
                     <div class="form-group mb-3">

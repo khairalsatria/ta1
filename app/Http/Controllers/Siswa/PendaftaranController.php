@@ -22,20 +22,24 @@ class PendaftaranController extends Controller
 
 
     public function status($id)
-    {
-        $userId = Auth::id();
+{
+    $userId = Auth::id();
 
-        $pendaftaran = PendaftaranProgram::with([
-                'program',
-                'pendaftaranClass.jadwalKonfirmasi',
-                'pendaftaranClass.jadwalAlternatif',
-                'pendaftaranGuide.jadwalKonfirmasi',
-                'pendaftaranLearn'
-            ])
-            ->where('id', $id)
-            ->where('user_id', $userId)
-            ->firstOrFail();
+    $pendaftaran = PendaftaranProgram::with([
+        'program',
+        'pendaftaranClass.jadwalKonfirmasi',
+        'pendaftaranClass.jadwalAlternatif',
+        'pendaftaranClass.mataPelajaran',
+        'pendaftaranClass.kelasGenze',
+        'pendaftaranGuide.jadwalKonfirmasi',
+        'pendaftaranLearn'
+    ])
+    ->where('id', $id)
+    ->where('user_id', $userId)
+    ->firstOrFail();
 
-        return view('siswa.pendaftaran.status', compact('pendaftaran'));
-    }
+
+    return view('siswa.pendaftaran.status', compact('pendaftaran'));
+}
+
 }
