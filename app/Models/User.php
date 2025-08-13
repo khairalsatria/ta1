@@ -25,28 +25,40 @@ class User extends Authenticatable
         'role',
         'photo',
         'google_id',
+        'must_set_password', // kolom baru
     ];
 
+    /**
+     * Relasi ke tabel pendaftaran_program
+     */
     public function pendaftaranPrograms()
     {
         return $this->hasMany(PendaftaranProgram::class, 'user_id');
     }
 
+    /**
+     * Relasi ke kelas yang dikelola mentor
+     */
     public function kelasYangDikelola()
-{
-    return $this->hasMany(KelasGenze::class, 'mentor_id');
-}
+    {
+        return $this->hasMany(KelasGenze::class, 'mentor_id');
+    }
 
-public function pendaftaranKelas()
-{
-    return $this->hasOne(PendaftaranClasses::class, 'pendaftaran_id', 'id');
-}
+    /**
+     * Relasi ke pendaftaran kelas
+     */
+    public function pendaftaranKelas()
+    {
+        return $this->hasOne(PendaftaranClasses::class, 'pendaftaran_id', 'id');
+    }
 
-public function kelas_genze()
-{
-    return $this->hasMany(KelasGenze::class, 'mentor_id');
-}
-
+    /**
+     * Relasi ke kelas_genze
+     */
+    public function kelas_genze()
+    {
+        return $this->hasMany(KelasGenze::class, 'mentor_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -58,6 +70,7 @@ public function kelas_genze()
         'remember_token',
     ];
 
+
     /**
      * The attributes that should be cast.
      *
@@ -65,5 +78,6 @@ public function kelas_genze()
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'must_set_password' => 'boolean', // supaya otomatis jadi true/false
     ];
 }

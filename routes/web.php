@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Landing\PageController;
 use App\Http\Controllers\Auth\{GoogleController, LoginController, RegisterController,
-    ForgotPasswordController, ResetPasswordController};
+    ForgotPasswordController, ResetPasswordController, SetPasswordController};
 use App\Http\Controllers\{MidtransWebhookController,PendaftaranClassController, PendaftaranGuideController, PendaftaranLearnController};
 
 use App\Http\Controllers\Admin\{
@@ -357,6 +357,10 @@ Route::get('password/reset/{token}', [ResetPasswordController::class, 'showReset
 Route::post('password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
 
 
+Route::middleware('auth')->group(function () {
+    Route::get('/set-password', [SetPasswordController::class, 'showForm'])->name('user.set.password.form');
+    Route::post('/set-password', [SetPasswordController::class, 'store'])->name('user.set.password');
+});
 
 
 

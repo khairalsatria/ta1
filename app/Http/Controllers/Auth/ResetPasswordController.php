@@ -32,7 +32,8 @@ class ResetPasswordController extends Controller
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user) use ($request) {
                 $user->forceFill([
-                    'password' => Hash::make($request->password)
+                    'password' => Hash::make($request->password),
+                    'must_set_password' => false, // tandai sudah set password manual
                 ])->save();
 
                 Auth::login($user); // Auto login setelah reset

@@ -24,7 +24,16 @@ class LoginController extends Controller
         $credentialsPhone = ['nohp' => $request->login, 'password' => $request->password];
 
         if (Auth::attempt($credentialsEmail, $request->remember) || Auth::attempt($credentialsPhone, $request->remember)) {
-            return $this->redirectBasedOnRole()->with('success_login', 'Login berhasil! Silakan pilih program untuk didaftarkan.');
+
+            // Cek apakah user harus set password terlebih dahulu
+            if (Auth::user()->must_set_password) {
+                Auth::logout();
+                return redirect()->route('user.set.password.form')
+                    ->with('toast_info', 'Silakan login dengan Google lalu atur password manual terlebih dahulu.');
+            }
+
+            return $this->redirectBasedOnRole()
+                ->with('success_login', 'Login berhasil! Silakan pilih program untuk didaftarkan.');
         }
 
         return redirect()
@@ -37,15 +46,12 @@ class LoginController extends Controller
     {
         $role = Auth::user()->role;
 
-        if ($role == 'user') {
-            return redirect()->route('landing.page.home');
-        } elseif ($role == 'mentor') {
-            return redirect()->route('mentor.dashboard');
-        } elseif ($role == 'admin') {
-            return redirect()->route('admin.dashboard');
-        }
-
-        return redirect()->route('landing.page.home');
+        return match ($role) {
+            'user'   => redirect()->route('landing.page.home'),
+            'mentor' => redirect()->route('mentor.dashboard'),
+            'admin'  => redirect()->route('admin.dashboard'),
+            default  => redirect()->route('landing.page.home'),
+        };
     }
 
     public function logout(Request $request)
