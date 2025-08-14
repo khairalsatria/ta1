@@ -9,7 +9,7 @@
     <meta content="Free HTML Templates" name="description">
 
     <!-- Favicon -->
-    <link rel="icon" href="{{ asset('assets2/img/favicon.ico') }}">
+    <link rel="icon" href="{{ asset('assets2/img/logo-atas.png') }}">
 
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
