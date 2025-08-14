@@ -70,20 +70,32 @@
 
 
         <!-- Status Badge -->
-        @php
-            $badgeClass = match($pendaftaran->status) {
-                'menunggu' => 'bg-warning',
-                'diterima' => 'bg-success',
-                'ditolak' => 'bg-danger',
-                default => 'bg-secondary'
-            };
-        @endphp
-        <div class="text-center my-4">
-            <small class="text-muted d-block mb-2">Status</small>
-            <span class="badge {{ $badgeClass }} text-white rounded-pill py-2 px-4 text-uppercase shadow-sm">
-                {{ ucfirst($pendaftaran->status) }}
-            </span>
-        </div>
+        <!-- Status Badge -->
+@php
+    $badgeClass = match($pendaftaran->status) {
+        'menunggu' => 'bg-warning',
+        'diterima' => 'bg-success',
+        'ditolak' => 'bg-danger',
+        default => 'bg-secondary'
+    };
+@endphp
+<div class="text-center my-4">
+    <small class="text-muted d-block mb-2">Status</small>
+    <span class="badge {{ $badgeClass }} text-white rounded-pill py-2 px-4 text-uppercase shadow-sm">
+        {{ ucfirst($pendaftaran->status) }}
+    </span>
+</div>
+
+<!-- Notifikasi invoice jika sudah diterima -->
+@if ($pendaftaran->status === 'diterima')
+    <div class="alert alert-success text-center shadow-sm rounded-pill fw-semibold">
+        <i class="bi bi-envelope-check me-2"></i>
+        Invoice pembayaran telah dikirim ke email Anda ({{ $pendaftaran->user->email ?? '-' }}).
+        <br>
+        Silakan cek kotak masuk atau folder spam.
+    </div>
+@endif
+
 
         <!-- Conditional Information -->
         @php $tampilkanTombolBayar = false; @endphp
