@@ -110,7 +110,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         'jadwal_guide2' => JadwalGuide2Controller::class,
         'kategori_blog' => KategoriBlogController::class,
         'blog' => BlogController::class,
-        'media_partner' => MediaPartnerController::class,
+        'media-partners' => MediaPartnerController::class,
         'mentor' => MentorController::class,
         'user' => UserController::class,
         'program' => ProgramController::class,
